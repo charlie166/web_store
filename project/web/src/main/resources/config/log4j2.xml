@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
+	<properties>
+	 	<property name="LOG_HOME">./logs/</property>
+ 	</properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
       		<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36}[%line] - %msg%n"/>
     	</Console>
   	</Appenders>
   	<Loggers>
-    	<Root level="error">
+    	<Root level="ERROR">
       		<AppenderRef ref="Console"/>
     	</Root>
     	<Logger name="cn.charlie166.web.store" level="debug" additivity="false">
