@@ -13,6 +13,34 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 	
-	<context:component-scan base-package="cn.charlie166.web.store.service"/>
+	<!-- 扫描 service -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<context:component-scan base-package="cn.charlie166.web.store.service" />
+
+	<!-- 使用JDBC事物 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 使用@Transactional注解方式配置事务 -->	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- AOP配置事物 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="select*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception" />			
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置AOP切面 -->
+	<aop:config>
+        <aop:pointcut id="transactionPointcut" expression="(execution(* cn.charlie166.*.*.service..*.*(..)))
+        													or (@annotation(org.springframework.transaction.annotation.Transactional))"/>
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
 	
 </beans>
