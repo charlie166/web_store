@@ -1,6 +1,7 @@
 package cn.charlie166.web.store.tools.test;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +29,7 @@ public class JsoupTest {
 			for (Element headline : newsHeadlines) {
 				String linkTitle = headline.attr("title");
 				String absUrl = headline.absUrl("href");
-				String string = String.format("%s\t%s", linkTitle, absUrl);
+				String string = String.format("%s\t%s", linkTitle, URLDecoder.decode(absUrl, "UTF-8"));
 				System.out.println(string);
 			}
 		} catch (IOException e) {

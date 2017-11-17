@@ -16,18 +16,18 @@ public class StringUtils {
 	 * @return 
 	 * @since tools 1.0.0
 	 */
-	public static boolean isNullOrBlank(String str) {
+	public static boolean isNullOrTrimBlank(String str) {
 		return str == null || "".equals(str.trim());
 	}
 	
 	/**
-	 * @description 判断字符串是否不为null或空字符串
+	 * @description 判断字符串是否有内容
 	 * @author <a href="mailto:charlie166@163.com">李阳</a> 
 	 * @param str
 	 * @return 
 	 * @since tools 1.0.0
 	 */
-	public static boolean isNotNullAndBlank(String str) {
-		return !StringUtils.isNotNullAndBlank(str);
+	public static boolean hasContent(String str) {
+		return !StringUtils.isNullOrTrimBlank(str);
 	}
 }
