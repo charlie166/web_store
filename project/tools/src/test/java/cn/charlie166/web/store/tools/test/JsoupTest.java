@@ -9,6 +9,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import cn.charlie166.web.store.tools.CustomException;
+import cn.charlie166.web.store.tools.FileUtils;
+
 /**
 * @ClassName: JsoupTest 
 * @Description: JSOUP工具测试类
@@ -23,7 +26,12 @@ public class JsoupTest {
 	@Test
 	public void testHtml(){
 		try {
-			Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
+			Document doc = Jsoup.connect("https://item.jd.com/5089273.html").get();
+			try {
+				FileUtils.storeFile("F:/upload/test.html", doc.toString());
+			} catch (CustomException e) {
+				e.printStackTrace();
+			}
 			System.out.println("title:" + doc.title());
 			Elements newsHeadlines = doc.select("#mp-itn b a");
 			for (Element headline : newsHeadlines) {
