@@ -11,6 +11,9 @@ package cn.charlie166.web.store.tools;
  */
 public class ExceptionCodes {
 
+	/**通用----缺少必要参数***/
+	public static final String COMMON_PARAM_ABSENT = "paramAbsent";
+	
 	/**文件----创建目录出现异常***/
 	public static final String FILE_CREATE_DIRECTORY = "createDirectoryException";
 	/**文件----创建文件出现异常***/
