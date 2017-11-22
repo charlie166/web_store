@@ -2,6 +2,8 @@ package cn.charlie166.web.store.controller;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import cn.charlie166.web.store.tools.CustomException;
+
 /**
  * @description 基础控制器，所有控制器均需要继承此类
  * @author <a href="mailto:charlie166@163.com">李阳</a> 
@@ -14,11 +16,13 @@ public class BaseController {
 	/**
 	 * @description 统一异常处理方法
 	 * @author <a href="mailto:charlie166@163.com">李阳</a> 
-	 * @param excption 
+	 * @param exception 
 	 * @since web 1.0.0
 	 */
 	@ExceptionHandler
-	public void exceptionHandler(Exception excption) {
-		
+	public void exceptionHandler(Exception exception) {
+		if(exception instanceof CustomException){
+		} else {
+		}
 	}
 }

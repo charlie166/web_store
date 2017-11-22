@@ -3,6 +3,7 @@ package cn.charlie166.web.store.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.charlie166.web.store.dao.BookmarkDao;
 import cn.charlie166.web.store.dao.DemoDao;
 import cn.charlie166.web.store.service.inter.DemoService;
 
@@ -21,8 +22,12 @@ public class DemoServiceImpl implements DemoService {
 	@Autowired
 	private DemoDao demoDao;
 	
+	@Autowired
+	private BookmarkDao bookmarkDao;
+	
 	@Override
 	public int selectDemoCount() {
+		bookmarkDao.selectCount("哈");
 		return demoDao.selectDemoCount();
 	}
 
