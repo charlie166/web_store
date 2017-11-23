@@ -30,6 +30,10 @@ public class CustomException extends Exception {
 		super(throwable);
 		this.code = code;
 	}
+	public CustomException(String code, String message, Throwable throwable){
+		super(message, throwable);
+		this.code = code;
+	}
 
 	public String getCode() {
 		return code;
@@ -49,5 +53,9 @@ public class CustomException extends Exception {
 	
 	public static CustomException instance(String code, Throwable throwable){
 		return new CustomException(code, throwable);
+	}
+	
+	public static CustomException instance(String code, String message, Throwable throwable){
+		return new CustomException(code, message, throwable);
 	}
 }

@@ -20,4 +20,9 @@ public class ExceptionCodes {
 	public static final String FILE_CREATE_FILE = "createFileException";
 	/**文件----复制文件出现异常***/
 	public static final String FILE_COPY_FILE = "createFileException";
+	
+	/**校验----校验不通过**/
+	public static final String CHECK_FAILED = "checkFailed";
+	/**校验----下标超过参数长度**/
+	public static final String CHECK_PARAM_LENGTH_EXCEED = "paramLengthExceed";
 }

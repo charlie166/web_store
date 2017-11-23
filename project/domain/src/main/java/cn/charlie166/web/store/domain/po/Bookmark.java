@@ -15,13 +15,13 @@ import cn.charlie166.web.store.domain.annotation.StringCheck;
 public class Bookmark extends BaseEntity {
 
 	/**书签标题**/
-	@StringCheck(maxLength = 100, mustHasContent = true)
+	@StringCheck(maxLength = 100, maxLengthTip = "标题长度不能超过%s", mustHasContent = true)
 	private String title;
 	/**引用地址**/
-	@StringCheck(maxLength = 255)
+	@StringCheck(maxLength = 255, maxLengthTip = "地址长度不能超过%s")
 	private String link;
 	/**书签内容**/
-	@StringCheck(mustHasContent = true)
+	@StringCheck(mustHasContent = true, mustHasContentTip = "内容必须")
 	private String content;
 	
 	public String getTitle() {

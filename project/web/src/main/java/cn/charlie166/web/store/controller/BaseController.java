@@ -24,5 +24,6 @@ public class BaseController {
 		if(exception instanceof CustomException){
 		} else {
 		}
+		exception.printStackTrace();
 	}
 }
