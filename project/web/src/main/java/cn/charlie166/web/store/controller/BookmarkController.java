@@ -21,6 +21,7 @@ public class BookmarkController extends BaseController{
 	 * @return 
 	 * @since web 1.0.0
 	 */
+	@RequestMapping(value = "/add.do")
 	public ModelAndView addPage() {
 		ModelAndView view = new ModelAndView("bookmark/add");
 		return view;
