@@ -35,4 +35,7 @@
 	    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
     
+    <!-- UEDITOR配置 -->
+    <bean class="cn.charlie166.web.store.plugin.ueditor.UeditorConfigManager"></bean>
+    
 </beans>
