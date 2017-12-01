@@ -1,7 +1,7 @@
 package cn.charlie166.web.store.plugin.ueditor;
 
+import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +19,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.PropertySources;
 
 import cn.charlie166.web.store.plugin.ueditor.define.ActionMap;
+import cn.charlie166.web.store.tools.JsonUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
 import com.google.common.collect.Sets;
@@ -38,6 +39,8 @@ public class UeditorConfigManager {
 	public static final String UE_PROP_PREFFIX = "ue.";
 	/**配置信息***/
 	public static final Map<String, String> CONFIG_MAP = new HashMap<String, String>();
+	/**不返回前端的配置键**/
+	public static final Set<String> FILTER_KEYS = Sets.newHashSet("rootPath");
 	/**配置中，值为数组的键名**/
 	public static final Set<String> KEYS_OF_ARRAY = Sets.newHashSet("imageAllowFiles", "catcherLocalDomain", "catcherAllowFiles", "videoAllowFiles",
 		"fileAllowFiles", "imageManagerAllowFiles", "fileManagerAllowFiles");
@@ -134,12 +137,31 @@ public class UeditorConfigManager {
 	 */
 	private String[] getStringArrayOfConfig(String key){
 		String str = this.getStringOfConfig(key);
-		if(str != null){
+		if(str != null && UeditorConfigManager.KEYS_OF_ARRAY.contains(key)){
 			String split_symbol = ",";
 			List<String> list = Arrays.asList(str.split(split_symbol)).stream().filter(one -> one != null).map(one -> one.trim()).collect(Collectors.toList());
 			return list.toArray(new String[list.size()]);
 		}
 		return new String[0];
+	}
+	
+	/**
+	* @Title: getSettingJsonString 
+	* @Description: 获取可以返回前端的JSON字符串
+	* @return
+	 */
+	public String getSettingJsonString(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(!UeditorConfigManager.CONFIG_MAP.isEmpty()){
+			UeditorConfigManager.CONFIG_MAP.forEach((k, v) -> {
+				/**过滤掉不返回的**/
+				if(!UeditorConfigManager.FILTER_KEYS.contains(k)){
+					map.put(k, v);
+				}
+			});
+			return JsonUtils.toJson(map);
+		}
+		return "";
 	}
 	
 	/***
@@ -201,6 +223,24 @@ public class UeditorConfigManager {
 		conf.put("savePath", savePath);
 //		conf.put("rootPath", this.rootPath);
 		return conf;
-		
 	}
+	
+	/**
+	* @Title: getRootPath 
+	* @Description: 获取保存附件的根路径
+	* @return
+	 */
+    public static String getRootPath() {
+    	String rootPath = "./";
+    	if(UeditorConfigManager.CONFIG_MAP.containsKey("rootPath")){
+    		String s = UeditorConfigManager.CONFIG_MAP.get("rootPath");
+    		if(StringUtils.hasContent(s)){
+    			rootPath = UeditorConfigManager.CONFIG_MAP.get("rootPath");
+    		}
+    	}
+    	if(!rootPath.endsWith("/") && !rootPath.endsWith("\\")){
+    		rootPath += File.separatorChar;
+    	}
+        return rootPath;
+    }
 }

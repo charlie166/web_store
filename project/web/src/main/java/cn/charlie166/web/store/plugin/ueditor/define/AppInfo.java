@@ -26,6 +26,8 @@ public class AppInfo {
 	public static final int NOT_EXIST = 302;
 	
 	public static final int ILLEGAL = 401;
+	
+	public static final int PARAM_ERROR = 501;
 
 	public static Map<Integer, String> info = new HashMap<Integer, String>(){
 		private static final long serialVersionUID = 1L;
@@ -63,6 +65,8 @@ public class AppInfo {
 			put(AppInfo.NOT_EXIST, "\u6307\u5B9A\u8DEF\u5F84\u5E76\u4E0D\u5B58\u5728");
 			/**callback参数名不合法**/
 			put(AppInfo.ILLEGAL, "Callback\u53C2\u6570\u540D\u4E0D\u5408\u6CD5");
+			/**参数错误**/
+			put(AppInfo.PARAM_ERROR, "参数错误");
 		}
 	};
 	

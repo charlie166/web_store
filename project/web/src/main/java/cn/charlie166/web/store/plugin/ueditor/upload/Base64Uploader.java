@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.charlie166.web.store.plugin.ueditor.ConfigManager;
 import cn.charlie166.web.store.plugin.ueditor.PathFormat;
+import cn.charlie166.web.store.plugin.ueditor.UeditorConfigManager;
 import cn.charlie166.web.store.plugin.ueditor.define.AppInfo;
 import cn.charlie166.web.store.plugin.ueditor.define.BaseState;
 import cn.charlie166.web.store.plugin.ueditor.define.FileType;
@@ -23,10 +23,9 @@ public final class Base64Uploader {
 			return new BaseState(false, AppInfo.MAX_SIZE);
 		}
 		String suffix = FileType.getSuffix("JPG");
-		String savePath = PathFormat.parse((String) conf.get("savePath"),
-				(String) conf.get("filename"));
+		String savePath = PathFormat.parse((String) conf.get("savePath"), (String) conf.get("filename"));
 		savePath = savePath + suffix;
-		String rootPath = ConfigManager.getRootPath(request,conf);
+		String rootPath = UeditorConfigManager.getRootPath();
 		String physicalPath = rootPath + savePath;
 		State storageState = StorageManager.saveBinaryFile(data, physicalPath);
 		if (storageState.isSuccess()) {

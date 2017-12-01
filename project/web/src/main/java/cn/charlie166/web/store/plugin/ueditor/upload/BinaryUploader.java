@@ -14,8 +14,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import cn.charlie166.web.store.plugin.ueditor.ConfigManager;
 import cn.charlie166.web.store.plugin.ueditor.PathFormat;
+import cn.charlie166.web.store.plugin.ueditor.UeditorConfigManager;
 import cn.charlie166.web.store.plugin.ueditor.define.AppInfo;
 import cn.charlie166.web.store.plugin.ueditor.define.BaseState;
 import cn.charlie166.web.store.plugin.ueditor.define.FileType;
@@ -54,8 +54,7 @@ public class BinaryUploader {
 				return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
 			}
 			savePath = PathFormat.parse(savePath, originFileName);
-			//modified by Ternence
-            String rootPath = ConfigManager.getRootPath(request,conf);
+            String rootPath = UeditorConfigManager.getRootPath();
             String physicalPath = rootPath + savePath;
 			InputStream is = fileStream.openStream();
 			State storageState = StorageManager.saveFileByInputStream(is, physicalPath, maxSize);
