@@ -43,7 +43,7 @@ public class UeditorActionEntrance {
 	* @return
 	 */
 	public String exec(String action, String callback, HttpServletRequest req){
-		if(StringUtils.hasContent(action)){
+		if(!StringUtils.hasContent(action)){
 			return new BaseState(false, AppInfo.PARAM_ERROR).toJSONString();
 		} else {
 			this.actionType = action;

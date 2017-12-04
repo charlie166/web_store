@@ -28,6 +28,8 @@ public class AppInfo {
 	public static final int ILLEGAL = 401;
 	
 	public static final int PARAM_ERROR = 501;
+	
+	public static final int SERVER_ERROR = 502;
 
 	public static Map<Integer, String> info = new HashMap<Integer, String>(){
 		private static final long serialVersionUID = 1L;
@@ -67,6 +69,8 @@ public class AppInfo {
 			put(AppInfo.ILLEGAL, "Callback\u53C2\u6570\u540D\u4E0D\u5408\u6CD5");
 			/**参数错误**/
 			put(AppInfo.PARAM_ERROR, "参数错误");
+			/**服务器错误**/
+			put(AppInfo.SERVER_ERROR, "服务器错误");
 		}
 	};
 	

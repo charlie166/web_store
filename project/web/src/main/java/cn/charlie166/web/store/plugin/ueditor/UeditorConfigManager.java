@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.PropertySource;
@@ -44,13 +42,14 @@ public class UeditorConfigManager {
 	/**配置中，值为数组的键名**/
 	public static final Set<String> KEYS_OF_ARRAY = Sets.newHashSet("imageAllowFiles", "catcherLocalDomain", "catcherAllowFiles", "videoAllowFiles",
 		"fileAllowFiles", "imageManagerAllowFiles", "fileManagerAllowFiles");
+	/**需要处理通用访问前缀的键**/
+	public static final Set<String> VIEW_PREFFIX = Sets.newHashSet("imageUrlPrefix", "scrawlUrlPrefix", "snapscreenUrlPrefix",
+		"catcherUrlPrefix", "videoUrlPrefix", "fileUrlPrefix", "imageManagerUrlPrefix", "fileManagerUrlPrefix");
 	/**涂鸦上传filename定义**/
 	private final static String SCRAWL_FILE_NAME = "scrawl";
 	/**远程图片抓取filename定义***/
 	private final static String REMOTE_FILE_NAME = "remote";
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Autowired
 	private PropertySourcesPlaceholderConfigurer propertyConfigurer;
 	
@@ -59,13 +58,19 @@ public class UeditorConfigManager {
 		PropertySources sources = propertyConfigurer.getAppliedPropertySources();
 		for(PropertySource<?> ps: sources){
 			Object object = ps.getSource();
-			logger.debug(String.format("资源:%s---类型:%s", ps.getName(), object.getClass().getName()));
 			/**从中提取ueditor的配置**/
 			if("localProperties".equals(ps.getName()) && object.getClass() == Properties.class){
 				Properties prop = (Properties) object;
+				/**通用添加的前缀**/
+				final String commonPreffix = prop.containsKey("ue.commonPreffix") ? prop.get("ue.commonPreffix").toString() : "";
 				prop.forEach((k, v) -> {
 					if(k != null && k.toString().startsWith(UE_PROP_PREFFIX)){
-						UeditorConfigManager.CONFIG_MAP.put(k.toString().substring(UE_PROP_PREFFIX.length()), v.toString());
+						String key = k.toString().substring(UE_PROP_PREFFIX.length());
+						String val = v.toString();
+						if(UeditorConfigManager.VIEW_PREFFIX.contains(key)){
+							val = commonPreffix + v;
+						}
+						UeditorConfigManager.CONFIG_MAP.put(key, val);
 					}
 				});
 			}
@@ -156,7 +161,12 @@ public class UeditorConfigManager {
 			UeditorConfigManager.CONFIG_MAP.forEach((k, v) -> {
 				/**过滤掉不返回的**/
 				if(!UeditorConfigManager.FILTER_KEYS.contains(k)){
-					map.put(k, v);
+					/**如果是数组的，转换为数组类型返回**/
+					if(UeditorConfigManager.KEYS_OF_ARRAY.contains(k)){
+						map.put(k, this.getStringArrayOfConfig(k));
+					} else {
+						map.put(k, v);
+					}
 				}
 			});
 			return JsonUtils.toJson(map);

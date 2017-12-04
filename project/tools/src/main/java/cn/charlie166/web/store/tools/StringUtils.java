@@ -30,4 +30,15 @@ public class StringUtils {
 	public static boolean hasContent(String str) {
 		return !StringUtils.isNullOrTrimBlank(str);
 	}
+	
+	/**
+	* @Title: hasContent 
+	* @Description: 将对象转换为字符串判断是否有内容
+	* @param obj
+	* @return
+	 */
+	public static boolean hasContent(Object obj){
+		return obj != null && StringUtils.hasContent(obj.toString());
+	}
+	
 }

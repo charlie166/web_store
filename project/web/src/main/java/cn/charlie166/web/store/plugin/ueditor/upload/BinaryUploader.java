@@ -1,18 +1,19 @@
 package cn.charlie166.web.store.plugin.ueditor.upload;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import cn.charlie166.web.store.plugin.ueditor.PathFormat;
 import cn.charlie166.web.store.plugin.ueditor.UeditorConfigManager;
@@ -23,8 +24,9 @@ import cn.charlie166.web.store.plugin.ueditor.define.State;
 
 public class BinaryUploader {
 
+	private static Logger logger = LoggerFactory.getLogger(BinaryUploader.class);
+	
 	public static final State save(HttpServletRequest request, Map<String, Object> conf) {
-		FileItemStream fileStream = null;
 		boolean isAjaxUpload = request.getHeader("X_Requested_With") != null;
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			return new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
@@ -33,43 +35,45 @@ public class BinaryUploader {
         if (isAjaxUpload) {
             upload.setHeaderEncoding("UTF-8");
         }
-		try {
-			FileItemIterator iterator = upload.getItemIterator(request);
-			while (iterator.hasNext()) {
-				fileStream = iterator.next();
-				if (!fileStream.isFormField())
-					break;
-				fileStream = null;
+        State retState = new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
+        try {
+			if(request instanceof MultipartRequest) {
+				MultipartRequest req =	(MultipartRequest)request;
+				Map<String, MultipartFile> map = req.getFileMap();
+				if(map != null && !map.isEmpty()){
+					Collection<MultipartFile> cmf = map.values();
+					if(cmf != null && cmf.size() > 0){
+						String savePath = (String) conf.get("savePath");
+						for(MultipartFile mf : cmf){
+							String originFileName = mf.getOriginalFilename();
+							String suffix = FileType.getSuffixByFilename(originFileName);
+							originFileName = originFileName.substring(0, originFileName.length() - suffix.length());
+							savePath = savePath + suffix;
+							long maxSize = ((Long) conf.get("maxSize")).longValue();
+							if (!validType(suffix, (String[]) conf.get("allowFiles"))) {
+								return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
+							}
+							savePath = PathFormat.parse(savePath, originFileName);
+				            String rootPath = UeditorConfigManager.getRootPath();
+				            String physicalPath = rootPath + savePath;
+							InputStream is = mf.getInputStream();
+							State storageState = StorageManager.saveFileByInputStream(is, physicalPath, maxSize);
+							is.close();
+							if (storageState.isSuccess()) {
+								storageState.putInfo("url", PathFormat.format(savePath));
+								storageState.putInfo("type", suffix);
+								storageState.putInfo("original", originFileName + suffix);
+							}
+							return storageState;
+						}
+					}
+				}
 			}
-			if (fileStream == null) {
-				return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
-			}
-			String savePath = (String) conf.get("savePath");
-			String originFileName = fileStream.getName();
-			String suffix = FileType.getSuffixByFilename(originFileName);
-			originFileName = originFileName.substring(0, originFileName.length() - suffix.length());
-			savePath = savePath + suffix;
-			long maxSize = ((Long) conf.get("maxSize")).longValue();
-			if (!validType(suffix, (String[]) conf.get("allowFiles"))) {
-				return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
-			}
-			savePath = PathFormat.parse(savePath, originFileName);
-            String rootPath = UeditorConfigManager.getRootPath();
-            String physicalPath = rootPath + savePath;
-			InputStream is = fileStream.openStream();
-			State storageState = StorageManager.saveFileByInputStream(is, physicalPath, maxSize);
-			is.close();
-			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
-				storageState.putInfo("type", suffix);
-				storageState.putInfo("original", originFileName + suffix);
-			}
-			return storageState;
-		} catch (FileUploadException e) {
-			return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
-		} catch (IOException e) {
+		} catch (Exception e) {
+			BinaryUploader.logger.error("上传出现异常", e);
+			retState = new BaseState(false, AppInfo.SERVER_ERROR);
 		}
-		return new BaseState(false, AppInfo.IO_ERROR);
+		return retState;
 	}
 
 	private static boolean validType(String type, String[] allowTypes) {
