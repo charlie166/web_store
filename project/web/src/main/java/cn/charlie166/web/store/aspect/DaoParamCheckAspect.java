@@ -1,9 +1,11 @@
 package cn.charlie166.web.store.aspect;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import cn.charlie166.web.store.domain.annotation.ParamCheck;
 import cn.charlie166.web.store.domain.annotation.StringCheck;
+import cn.charlie166.web.store.domain.enums.ParamCheckType;
 import cn.charlie166.web.store.tools.ClassUtils;
 import cn.charlie166.web.store.tools.CustomException;
 import cn.charlie166.web.store.tools.ExceptionCodes;
@@ -56,12 +59,13 @@ public class DaoParamCheckAspect {
 				if(index >= args.length){
 					throw CustomException.instance(ExceptionCodes.CHECK_PARAM_LENGTH_EXCEED);
 				}
-				/**当前参数**/
+				/**当前变量参数值**/
 				Object currentParam = args[index ++];
-				Field[] allFields = ClassUtils.getAllField(p.getType());
 				ParamCheck[] annotations = p.getAnnotationsByType(ParamCheck.class);
-				for(Annotation anno: annotations){
-					if(anno.annotationType() == ParamCheck.class){
+				for(ParamCheck pc: annotations){
+					/**参数为单个校验对象**/
+					if(pc.type() == ParamCheckType.SINGLE) {
+						Field[] allFields = ClassUtils.getAllField(p.getType());
 						for(Field f: allFields){
 							/**必须为字符串类型**/
 							if(f.getType() == String.class){
@@ -73,10 +77,24 @@ public class DaoParamCheckAspect {
 								}
 							}
 						}
+					} else if(pc.type() == ParamCheckType.LIST) {/**校验参数为列表**/
+						/**参数必须为列表**/
+						Class<?> pType = p.getType();
+						if(pType == List.class) {
+							Type parameterizedType = p.getParameterizedType();
+//							if(parameterizedType instanceof ParameterizedTypeImpl) {
+//								
+//							}
+							parameterizedType.getClass().getName();
+							parameterizedType.getTypeName();
+							Executable declaringExecutable = p.getDeclaringExecutable();
+							System.out.println("..........");
+						}
 					}
 				}
 			}
 		}
+		throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT, "强行异常");
 	}
 	
 	/**
