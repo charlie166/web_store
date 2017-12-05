@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import cn.charlie166.web.store.domain.enums.ParamCheckType;
+
 /**
 * @ClassName: ParamCheck 
 * @Description: 标识是否校验参数
@@ -20,4 +22,10 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ParamCheck {
 
-}	
+	/**
+	* @Title: type 
+	* @Description: 设置校验数据类型. 是列表还是单个校验还是什么
+	* @return
+	 */
+	ParamCheckType type() default ParamCheckType.SINGLE;
+}

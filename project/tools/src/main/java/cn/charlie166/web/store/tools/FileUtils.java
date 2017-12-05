@@ -96,6 +96,10 @@ public class FileUtils {
 		}
 	}
 	
+	public static void readFile(Path path){
+		
+	}
+	
 	public static void main(String[] args) {
 		Path path = Paths.get("F:/upload/charlie166");
 		try {
