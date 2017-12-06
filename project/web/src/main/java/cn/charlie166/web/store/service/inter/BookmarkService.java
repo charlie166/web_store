@@ -1,5 +1,8 @@
 package cn.charlie166.web.store.service.inter;
 
+import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.domain.po.Bookmark;
+
 /**
 * @ClassName: BookmarkService 
 * @Description: 书签操作服务接口
@@ -11,4 +14,10 @@ package cn.charlie166.web.store.service.inter;
  */
 public interface BookmarkService {
 
+	/**
+	* @Title: addSubmit 
+	* @Description: 新增提交
+	* @param bookmark
+	 */
+	public void addSubmit(Bookmark bookmark) throws CustomException;
 }
