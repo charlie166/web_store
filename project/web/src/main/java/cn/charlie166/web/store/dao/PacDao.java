@@ -26,4 +26,11 @@ public interface PacDao {
 	* @return
 	 */
 	public int batchInsert(@ParamCheck(type = ParamCheckType.LIST) @Param(value = "list") List<PacModel> list);
+	
+	/**
+	* @Title: selectList 
+	* @Description: 查询所有列表
+	* @return
+	 */
+	public List<PacModel> selectAll();
 }

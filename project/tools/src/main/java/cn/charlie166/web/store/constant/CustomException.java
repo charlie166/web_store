@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.tools;
+package cn.charlie166.web.store.constant;
 
 /**
 * @ClassName: CustomException 

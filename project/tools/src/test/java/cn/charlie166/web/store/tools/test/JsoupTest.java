@@ -9,7 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
-import cn.charlie166.web.store.tools.CustomException;
+import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.tools.FileUtils;
 
 /**

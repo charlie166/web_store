@@ -1,6 +1,5 @@
 package cn.charlie166.web.store.aspect;
 
-import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -15,13 +14,14 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.domain.annotation.ParamCheck;
 import cn.charlie166.web.store.domain.annotation.StringCheck;
 import cn.charlie166.web.store.domain.enums.ParamCheckType;
 import cn.charlie166.web.store.tools.ClassUtils;
-import cn.charlie166.web.store.tools.CustomException;
-import cn.charlie166.web.store.tools.ExceptionCodes;
 import cn.charlie166.web.store.tools.StringUtils;
 
 /**
@@ -81,20 +81,42 @@ public class DaoParamCheckAspect {
 						/**参数必须为列表**/
 						Class<?> pType = p.getType();
 						if(pType == List.class) {
-							Type parameterizedType = p.getParameterizedType();
-//							if(parameterizedType instanceof ParameterizedTypeImpl) {
-//								
-//							}
-							parameterizedType.getClass().getName();
-							parameterizedType.getTypeName();
-							Executable declaringExecutable = p.getDeclaringExecutable();
-							System.out.println("..........");
+							/**当前参数是列表**/
+							@SuppressWarnings("unchecked")
+							List<Object> listParam = (List<Object>) currentParam;
+							if(!CollectionUtils.isEmpty(listParam)){
+								try {
+									Type parameterizedType = p.getParameterizedType();
+									Field field = parameterizedType.getClass().getDeclaredField("actualTypeArguments");
+									field.setAccessible(true);
+									Type[] types = (Type[]) field.get(parameterizedType);
+									if(types != null && types.length > 0){
+										String clsName = types[0].getTypeName();
+										Class<?> forName = Class.forName(clsName);
+										Field[] allFields = ClassUtils.getAllField(forName);
+										for(Field f: allFields){
+											/**必须为字符串类型**/
+											if(f.getType() == String.class){
+												StringCheck[] annotationsByType = f.getAnnotationsByType(StringCheck.class);
+												if(annotationsByType.length > 0){
+													/**这个注解目前就处理第一个**/
+													StringCheck sc1 = annotationsByType[0];
+													for(Object obj: listParam){
+														this.checkField(f, sc1, obj);
+													}
+												}
+											}
+										}
+									}
+								} catch (NoSuchFieldException | SecurityException | IllegalAccessException | ClassNotFoundException e) {
+									e.printStackTrace();
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-		throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT, "强行异常");
 	}
 	
 	/**

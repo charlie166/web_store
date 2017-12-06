@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.tools;
+package cn.charlie166.web.store.constant;
 
 /**
 * @ClassName: ExceptionCodes 
@@ -29,4 +29,7 @@ public class ExceptionCodes {
 	public static final String CHECK_FAILED = "checkFailed";
 	/**校验----下标超过参数长度**/
 	public static final String CHECK_PARAM_LENGTH_EXCEED = "paramLengthExceed";
+	
+	/**PAC----域名已存在**/
+	public static final String PAC_DOMAIN_EXISTS = "domainExists";
 }

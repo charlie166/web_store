@@ -7,9 +7,14 @@
 	<insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO pac(domain, description, flag)
 		VALUES
-		<foreach collection="list" item="one" open="(" close=")" separator=",">
+		<foreach collection="list" item="one" separator=",">
 			(#{one.domain}, #{one.description}, #{one.flag})
 		</foreach>
 	</insert>
+	
+	<!-- 查询所有数据 -->
+	<select id="selectAll" resultType="cn.charlie166.web.store.domain.po.PacModel">
+		SELECT * FROM pac
+	</select>
 
 </mapper>

@@ -2,7 +2,7 @@ package cn.charlie166.web.store.controller;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import cn.charlie166.web.store.tools.CustomException;
+import cn.charlie166.web.store.constant.CustomException;
 
 /**
  * @description 基础控制器，所有控制器均需要继承此类

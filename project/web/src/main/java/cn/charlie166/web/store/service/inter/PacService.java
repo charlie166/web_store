@@ -2,6 +2,7 @@ package cn.charlie166.web.store.service.inter;
 
 import java.util.List;
 
+import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.domain.po.PacModel;
 
 /**
@@ -21,7 +22,7 @@ public interface PacService {
 	* @param pac
 	* @return
 	 */
-	public int insertOne(PacModel pac);
+	public int insertOne(PacModel pac) throws CustomException;
 	
 	/**
 	* @Title: insertBatch 
@@ -29,5 +30,5 @@ public interface PacService {
 	* @param pacList
 	* @return
 	 */
-	public int insertBatch(List<PacModel> pacList);
+	public int insertBatch(List<PacModel> pacList) throws CustomException;
 }
