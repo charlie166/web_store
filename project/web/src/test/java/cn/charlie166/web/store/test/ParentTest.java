@@ -1,10 +1,10 @@
 package cn.charlie166.web.store.test;
 
-import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @description 项目单元测试父类
@@ -13,13 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @see     
  * @since   web 1.0
  */
-@RunWith(value = SpringJUnit4ClassRunner.class)
+@RunWith(value = JUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:config/spring/applicationContext-dao.xml", "classpath:config/spring/applicationContext-tx.xml"})
-public class ParentTest extends AbstractJUnit4SpringContextTests {
+public class ParentTest extends AbstractJUnit4SpringContextTests{
 
-	@Before
-	public void beforeTest(){
-		System.setProperty("log4j.configurationFile", "classpath:config/log4j2.xml");
-		System.setProperty("log4j2.debug", "true");
-	}
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 }

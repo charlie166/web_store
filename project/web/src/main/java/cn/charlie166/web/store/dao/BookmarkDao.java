@@ -21,5 +21,11 @@ public interface BookmarkDao {
 	 */
 	public int insertOne(@ParamCheck Bookmark bookmark);
 	
-	public int selectCount(@ParamCheck Bookmark bookmark);
+	/**
+	* @Title: selectCount 
+	* @Description: 查询条目数
+	* @param bookmark
+	* @return
+	 */
+	public int selectCount(Bookmark bookmark);
 }

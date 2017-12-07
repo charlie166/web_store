@@ -8,7 +8,7 @@
     		VALUES (#{title}, #{link}, #{content})
     </insert>
     
-    <select id="selectCount" resultType="int">
+    <select id="selectCount" resultType="int" parameterType="cn.charlie166.web.store.domain.po.Bookmark">
     	SELECT COUNT(bm.id) FROM bookmark bm
     	<where>
     		<if test="null != title and title != ''">

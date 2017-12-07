@@ -36,7 +36,7 @@ public class TestOfPac extends ParentTest {
 	
 	@Test
 	public void test(){
-		logger.debug(String.format("测试demo结果:$s", demoService.selectDemoCount()));
+		logger.debug(String.format("测试demo结果:%s", demoService.selectDemoCount()));
 	}
 	
 	/**
