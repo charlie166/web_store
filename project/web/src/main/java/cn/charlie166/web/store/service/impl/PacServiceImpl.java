@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.PacDao;
+import cn.charlie166.web.store.domain.dto.PacDTO;
 import cn.charlie166.web.store.domain.po.PacModel;
 import cn.charlie166.web.store.service.inter.PacService;
 import cn.charlie166.web.store.tools.StringUtils;
@@ -64,5 +65,10 @@ public class PacServiceImpl implements PacService {
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public List<PacDTO> all() {
+		return null;
 	}
 }
