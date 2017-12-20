@@ -1,9 +1,15 @@
 package cn.charlie166.web.store.tools;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.constant.ExceptionCodes;
 
 /**
 * @ClassName: ClassUtils 
@@ -35,5 +41,26 @@ public class ClassUtils {
 			}
 		}
 		return fieldList.toArray(new Field[fieldList.size()]);
+	}
+	
+	/**
+	* @Title: convertType 
+	* @Description: 将原数据类型转换为指定类型输出
+	* @param from 数据来源
+	* @param toType 目标类型
+	* @return
+	* @throws CustomException
+	 */
+	public static <T> T convertType(Object from, Class<T> toType) throws CustomException{
+		if(from == null || toType == null){
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		}
+		try {
+			T instance = toType.newInstance();
+			BeanUtils.copyProperties(instance, from);
+			return instance;
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw CustomException.instance(ExceptionCodes.COMMON_EXCEPTION, e);
+		}
 	}
 }	

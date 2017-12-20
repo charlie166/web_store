@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import cn.charlie166.web.store.dao.PacDao;
 import cn.charlie166.web.store.domain.dto.PacDTO;
 import cn.charlie166.web.store.domain.po.PacModel;
 import cn.charlie166.web.store.service.inter.PacService;
+import cn.charlie166.web.store.tools.ClassUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
 /**
@@ -30,6 +33,8 @@ import cn.charlie166.web.store.tools.StringUtils;
 @Service
 public class PacServiceImpl implements PacService {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private PacDao pacDao;
 
@@ -69,6 +74,25 @@ public class PacServiceImpl implements PacService {
 
 	@Override
 	public List<PacDTO> all() {
-		return null;
+		List<PacModel> all = pacDao.selectAll();
+		return all.stream().map(one -> {
+			try {
+				return this.convertToDto(one);
+			} catch (Exception e) {
+				logger.error(String.format("转换数据类型出现异常，忽略ID为%S的数据", one.getId()), e);
+				return null;
+			}
+		}).filter(one -> one != null).collect(Collectors.toList());
+	}
+	
+	/**
+	* @Title: convertToDto 
+	* @Description: 转换为DTO数据模型
+	* @param pm
+	* @return
+	 * @throws CustomException 
+	 */
+	private PacDTO convertToDto(PacModel pm) throws CustomException{
+		return ClassUtils.convertType(pm, PacDTO.class);
 	}
 }

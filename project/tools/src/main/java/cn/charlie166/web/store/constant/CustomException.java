@@ -9,7 +9,7 @@ package cn.charlie166.web.store.constant;
 * @date 2017年11月17日 
 *
  */
-public class CustomException extends Exception {
+public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
