@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,5 +35,17 @@ public class PacController extends BaseController {
 	@ResponseBody
 	public List<PacDTO> all(){
 		return service.all();
+	}
+	
+	/**
+	* @Title: insert 
+	* @Description: 新增一条记录
+	* @param dto domain:域名，必需
+	* @return
+	 */
+	@RequestMapping(value = "/add.do")
+	@ResponseBody
+	public PacDTO insert(@RequestBody PacDTO dto){
+		return service.add(dto);
 	}
 }

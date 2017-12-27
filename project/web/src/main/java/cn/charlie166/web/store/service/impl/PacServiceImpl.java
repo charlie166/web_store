@@ -1,5 +1,6 @@
 package cn.charlie166.web.store.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,7 @@ public class PacServiceImpl implements PacService {
 			/**已经保存了的域名**/
 			Set<String> domainSet = pacDao.selectAll().stream().filter(one -> one != null && StringUtils.hasContent(one.getDomain()))
 				.map(one -> one.getDomain()).distinct().collect(Collectors.toSet());
+			LocalDateTime now = LocalDateTime.now();
 			for(PacModel pm: pacList) {
 				if(pm != null) {
 					/**校验是否为有效域名**/
@@ -63,7 +65,12 @@ public class PacServiceImpl implements PacService {
 						} else {
 							domainSet.add(pm.getDomain());
 						}
+					} else {
+						throw CustomException.instance(ExceptionCodes.PAC_DOMAIN_NEED);
 					}
+					/**默认为当前时间**/
+					if(pm.getCreateTime() == null)
+						pm.setCreateTime(now);
 				}
 			}
 			return pacDao.batchInsert(pacList);
@@ -77,12 +84,40 @@ public class PacServiceImpl implements PacService {
 		List<PacModel> all = pacDao.selectAll();
 		return all.stream().map(one -> {
 			try {
-				return this.convertToDto(one);
+				return this.toDto(one);
 			} catch (Exception e) {
 				logger.error(String.format("转换数据类型出现异常，忽略ID为%S的数据", one.getId()), e);
 				return null;
 			}
 		}).filter(one -> one != null).collect(Collectors.toList());
+	}
+	
+	@Override
+	public PacDTO add(PacDTO dto) {
+		if(dto == null)
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		if(StringUtils.isNullOrTrimBlank(dto.getDomain()))
+			throw CustomException.instance(ExceptionCodes.PAC_DOMAIN_NEED);
+		/**默认为有效**/
+		if(dto.getFlag() == null)
+			dto.setFlag(Boolean.TRUE);
+		PacModel model = this.toModel(dto);
+		int result = this.insertOne(model);
+		if(result > 0){
+			return this.toDto(model);
+		} else {
+			throw CustomException.instance(ExceptionCodes.COMMON_INSERT_FAIL);
+		}
+	}
+	
+	/**
+	* @Title: toModel 
+	* @Description: 将数据转换为model类型
+	* @param dto
+	* @return
+	 */
+	private PacModel toModel(PacDTO dto){
+		return ClassUtils.convertType(dto, PacModel.class);
 	}
 	
 	/**
@@ -92,7 +127,7 @@ public class PacServiceImpl implements PacService {
 	* @return
 	 * @throws CustomException 
 	 */
-	private PacDTO convertToDto(PacModel pm) throws CustomException{
+	private PacDTO toDto(PacModel pm) throws CustomException{
 		return ClassUtils.convertType(pm, PacDTO.class);
 	}
 }

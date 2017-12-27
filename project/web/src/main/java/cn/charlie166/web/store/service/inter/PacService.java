@@ -40,4 +40,12 @@ public interface PacService {
 	 * @since web 1.0.0
 	 */
 	public List<PacDTO> all();
+	
+	/**
+	* @Title: add 
+	* @Description: 新增一条记录
+	* @param dto
+	* @return
+	 */
+	public PacDTO add(PacDTO dto);
 }

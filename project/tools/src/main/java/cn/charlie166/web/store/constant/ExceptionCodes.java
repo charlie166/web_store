@@ -17,6 +17,8 @@ public class ExceptionCodes {
 	public static final String COMMON_IO_EXCEPTION = "io";
 	/**通用----出现异常**/
 	public static final String COMMON_EXCEPTION = "exception";
+	/**通用----新增失败**/
+	public static final String COMMON_INSERT_FAIL = "insertFail";
 	
 	/**文件----创建目录出现异常***/
 	public static final String FILE_CREATE_DIRECTORY = "createDirectoryException";
@@ -36,6 +38,8 @@ public class ExceptionCodes {
 	
 	/**PAC----域名已存在**/
 	public static final String PAC_DOMAIN_EXISTS = "domainExists";
+	/**PAC----域名必需**/
+	public static final String PAC_DOMAIN_NEED = "domainNeed";
 	
 	/**网络----需要指明协议**/
 	public static final String WEB_NEED_PROTOCAL = "needProtocol";
