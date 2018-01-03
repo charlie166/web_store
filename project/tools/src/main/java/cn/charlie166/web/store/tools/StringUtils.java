@@ -41,4 +41,13 @@ public class StringUtils {
 		return obj != null && StringUtils.hasContent(obj.toString());
 	}
 	
+	/**
+	* @Title: getLineSeparator 
+	* @Description: 获取换行符
+	* @return
+	 */
+	public static String getLineSeparator(){
+		String string = System.getProperty("line.separator");
+		return StringUtils.hasContent(string) ? string : "\r\n";
+	}
 }

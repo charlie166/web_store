@@ -48,4 +48,15 @@ public class PacController extends BaseController {
 	public PacDTO insert(@RequestBody PacDTO dto){
 		return service.add(dto);
 	}
+	
+	/**
+	* @Title: online 
+	* @Description: 获取在线PAC数据
+	* @return
+	 */
+	@RequestMapping(value = "/online.do")
+	@ResponseBody
+	public String online(){
+		return service.online();
+	}
 }

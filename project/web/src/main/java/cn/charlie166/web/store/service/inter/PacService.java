@@ -48,4 +48,11 @@ public interface PacService {
 	* @return
 	 */
 	public PacDTO add(PacDTO dto);
+	
+	/**
+	* @Title: online 
+	* @Description: 获取在线PAC规则字符串
+	* @return
+	 */
+	public String online();
 }

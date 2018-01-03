@@ -1,7 +1,9 @@
 package cn.charlie166.web.store.service.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,10 +11,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import cn.charlie166.web.store.constant.CacheConstant;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.PacDao;
@@ -39,11 +44,13 @@ public class PacServiceImpl implements PacService {
 	@Autowired
 	private PacDao pacDao;
 
+	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
 	@Override
 	public int insertOne(PacModel pac) throws CustomException {
 		return this.insertBatch(Arrays.asList(pac));
 	}
 
+	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
 	@Override
 	@Transactional
 	public int insertBatch(List<PacModel> pacList) throws CustomException {
@@ -92,6 +99,7 @@ public class PacServiceImpl implements PacService {
 		}).filter(one -> one != null).collect(Collectors.toList());
 	}
 	
+	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
 	@Override
 	public PacDTO add(PacDTO dto) {
 		if(dto == null)
@@ -108,6 +116,20 @@ public class PacServiceImpl implements PacService {
 		} else {
 			throw CustomException.instance(ExceptionCodes.COMMON_INSERT_FAIL);
 		}
+	}
+	
+	@Cacheable(value = CacheConstant.PAC, key = CacheConstant.PAC_ONLINE)
+	@Override
+	public String online() {
+		StringBuilder str = new StringBuilder();
+		List<PacDTO> all = this.all();
+		String lineSeparator = StringUtils.getLineSeparator();
+		all.stream().filter(one -> one.getFlag() != null && one.getFlag().booleanValue())
+			.forEach(one -> {
+				str.append(one.getDomain()).append(lineSeparator);
+			});
+		byte[] b = Base64.getEncoder().encode(str.toString().getBytes(StandardCharsets.UTF_8));
+		return str.length() > 0 ? new String(b, StandardCharsets.UTF_8) : str.toString();
 	}
 	
 	/**
