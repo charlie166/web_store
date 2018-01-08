@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ import cn.charlie166.web.store.tools.StringUtils;
 *
  */
 @Service
+@CacheConfig(cacheNames = CacheConstant.PAC)
 public class PacServiceImpl implements PacService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,7 +46,7 @@ public class PacServiceImpl implements PacService {
 	@Autowired
 	private PacDao pacDao;
 
-	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
+	@CacheEvict(allEntries = true)
 	@Override
 	public int insertOne(PacModel pac) throws CustomException {
 		return this.insertBatch(Arrays.asList(pac));
@@ -99,7 +101,7 @@ public class PacServiceImpl implements PacService {
 		}).filter(one -> one != null).collect(Collectors.toList());
 	}
 	
-	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
+	@CacheEvict(allEntries = true)
 	@Override
 	public PacDTO add(PacDTO dto) {
 		if(dto == null)
@@ -118,7 +120,7 @@ public class PacServiceImpl implements PacService {
 		}
 	}
 	
-	@Cacheable(value = CacheConstant.PAC, key = CacheConstant.PAC_ONLINE)
+	@Cacheable(key = CacheConstant.PAC_ONLINE)
 	@Override
 	public String online() {
 		StringBuilder str = new StringBuilder();
