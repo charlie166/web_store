@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
 	<properties>
-	 	<property name="LOG_HOME">./logs/</property>
+	 	<property name="LOG_HOME">F:/charlie/logger/logs/charlie166</property>
  	</properties>
 	<Appenders>
+		<!-- 控制台输出 -->
 		<Console name="Console" target="SYSTEM_OUT">
       		<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36}[%line] - %msg%n"/>
     	</Console>
+    	<!-- 文件输出 -->
+    	<File name="fileLogger" fileName="${LOG_HOME}/app.log" append="false">
+      		<PatternLayout>
+        		<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%line] - %msg%n</Pattern>
+      		</PatternLayout>
+    	</File>
   	</Appenders>
   	<Loggers>
     	<Root level="ERROR">
@@ -14,6 +21,7 @@
     	</Root>
     	<Logger name="cn.charlie166.web.store" level="debug" additivity="false">
       		<AppenderRef ref="Console"/>
+      		<AppenderRef ref="fileLogger"/>
     	</Logger>
   	</Loggers>
 </Configuration>
