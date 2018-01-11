@@ -20,6 +20,8 @@ public class TextUtils {
 	public static final int MIN_VALUE = 19968;
 	/**UTF-8编码，汉字最大的编码**/
 	public static final int MAX_VALUE = 40869;
+	/**数字汉字**/
+	public static final char[] CHINESE_NUMS = "零壹贰叁肆伍陆柒捌玖".toCharArray();
 	
 	/**
 	* @Title: randomHan 
@@ -104,5 +106,28 @@ public class TextUtils {
 			}
 		}
 		return builder.toString();
+	}
+	
+	/**
+	* @Title: toSimpleChineseNum 
+	* @Description: 将数字转换为汉字书写, 仅返回对应中文，不处理单位
+	* 	例： 1244 -->> 壹贰肆肆
+	* @param num 转换后的数组字符串
+	* @return
+	 */
+	public static String toSimpleChineseNum(long num){
+		StringBuilder str = new StringBuilder();
+		if(num == 0){
+			str.append("零");
+		} else if(num < 0) {
+			str.append("负");
+		}
+		if(num != 0){
+			String s = String.valueOf(num);
+			for(char c: s.toCharArray()){
+				str.append(CHINESE_NUMS[Integer.parseInt(c + "")]);
+			}
+		}
+		return str.toString();
 	}
 }
