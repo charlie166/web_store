@@ -84,7 +84,7 @@ public class FileUtils {
 				try {
 					path = Files.createFile(path);
 				} catch (IOException e) {
-					throw CustomException.instance(ExceptionCodes.FILE_CREATE_FILE, e);
+					throw CustomException.instance(ExceptionCodes.FILE_CREATE_FAIL, e);
 				}
 			}
 			/**必须为文件**/
@@ -97,6 +97,20 @@ public class FileUtils {
 				}
 			}
 		}
+	}
+	
+	/**
+	* @Title: getSuffix 
+	* @Description: 获取文件格式
+	* @param filename 文件名
+	* @return
+	 */
+	public static String getSuffix(String filename){
+		if(StringUtils.hasContent(filename)){
+			int idx = filename.lastIndexOf(".");
+			return filename.substring(idx + 1);
+		}
+		return "";
 	}
 	
 	public static void readFile(Path path){

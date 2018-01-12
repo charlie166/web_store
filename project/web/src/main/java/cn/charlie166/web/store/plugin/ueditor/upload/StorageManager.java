@@ -1,128 +1,130 @@
 package cn.charlie166.web.store.plugin.ueditor.upload;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import org.springframework.web.context.ContextLoader;
 
-import org.apache.commons.io.FileUtils;
-
+import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.plugin.ueditor.define.AppInfo;
 import cn.charlie166.web.store.plugin.ueditor.define.BaseState;
 import cn.charlie166.web.store.plugin.ueditor.define.State;
+import cn.charlie166.web.store.service.inter.AttachmentService;
+import cn.charlie166.web.store.tools.StringUtils;
 
 public class StorageManager {
 
-	public static final int BUFFER_SIZE = 8192;
-
-	public StorageManager() {
-	}
-
+	/**
+	* @Title: saveBinaryFile 
+	* @Description: 保存二进制文件
+	* @param data 文件字节数组
+	* @param path 保存路径
+	* @return 操作状态结果
+	 */
 	public static State saveBinaryFile(byte[] data, String path) {
-		File file = new File(path);
-		State state = valid(file);
-		if (!state.isSuccess()) {
-			return state;
-		}
+		State storageState = new BaseState(false, AppInfo.UNKONWN_ERROR);
+		/**获取附件操作服务BEAN**/
+    	AttachmentService service = ContextLoader.getCurrentWebApplicationContext().getBean(AttachmentService.class);
 		try {
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-			bos.write(data);
-			bos.flush();
-			bos.close();
-		} catch (IOException ioe) {
-			return new BaseState(false, AppInfo.IO_ERROR);
+			File storeFile = service.saveBinaryFile(data, path);
+			storageState = new BaseState(true);
+			storageState.putInfo("size", storeFile.length());
+			storageState.putInfo("title", storeFile.getName());
+		} catch (CustomException ce) {
+			/**根据错误码处理**/
+			if(StringUtils.hasContent(ce.getCode())){
+				switch(ce.getCode()){
+					case ExceptionCodes.FILE_SIZE_EXCEED: {
+						storageState = StorageManager.getFalseState(AppInfo.MAX_SIZE);
+						break;
+					}
+					case ExceptionCodes.COMMON_PARAM_ABSENT: {
+						storageState = StorageManager.getFalseState(AppInfo.UNKONWN_ERROR);
+						break;
+					}
+					case ExceptionCodes.COMMON_IO_EXCEPTION: {
+						storageState = StorageManager.getFalseState(AppInfo.IO_ERROR);
+						break;
+					}
+					case ExceptionCodes.FILE_CREATE_FAIL: {
+						storageState = StorageManager.getFalseState(AppInfo.FAILED_CREATE_FILE);
+						break;
+					}
+					case ExceptionCodes.FILE_PERMISSION_DENIED: {
+						storageState = StorageManager.getFalseState(AppInfo.PERMISSION_DENIED);
+						break;
+					}
+				}
+			}
 		}
-		state = new BaseState(true, file.getAbsolutePath());
-		state.putInfo("size", data.length);
-		state.putInfo("title", file.getName());
-		return state;
-	}
-
-	public static State saveFileByInputStream(InputStream is, String path, long maxSize) {
-		State state = null;
-		File tmpFile = getTmpFile();
-		byte[] dataBuf = new byte[2048];
-		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
-			int count = 0;
-			while ((count = bis.read(dataBuf)) != -1) {
-				bos.write(dataBuf, 0, count);
-			}
-			bos.flush();
-			bos.close();
-			if (tmpFile.length() > maxSize) {
-				tmpFile.delete();
-				return new BaseState(false, AppInfo.MAX_SIZE);
-			}
-			state = saveTmpFile(tmpFile, path);
-			if (!state.isSuccess()) {
-				tmpFile.delete();
-			}
-			return state;
-		} catch (IOException e) {
-		}
-		return new BaseState(false, AppInfo.IO_ERROR);
-	}
-
-	public static State saveFileByInputStream(InputStream is, String path) {
-		State state = null;
-		File tmpFile = getTmpFile();
-		byte[] dataBuf = new byte[2048];
-		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
-			int count = 0;
-			while ((count = bis.read(dataBuf)) != -1) {
-				bos.write(dataBuf, 0, count);
-			}
-			bos.flush();
-			bos.close();
-			state = saveTmpFile(tmpFile, path);
-			if (!state.isSuccess()) {
-				tmpFile.delete();
-			}
-			return state;
-		} catch (IOException e) {
-		}
-		return new BaseState(false, AppInfo.IO_ERROR);
+		return storageState;
 	}
 	
-	private static File getTmpFile() {
-		File tmpDir = FileUtils.getTempDirectory();
-		String tmpFileName = (Math.random() * 10000 + "").replace(".", "");
-		return new File(tmpDir, tmpFileName);
+	/**
+	* @Title: saveByInputStrram 
+	* @Description: 保存文件流到文件
+	* @param is 文件流
+	* @param path 保存路径
+	* @return 状态信息
+	 */
+	public static State saveByInputStream(InputStream is, String path){
+		return StorageManager.saveByInputStream(is, path, -1);
 	}
-
-	private static State saveTmpFile(File tmpFile, String path) {
-		State state = null;
-		File targetFile = new File(path);
-		if (targetFile.canWrite()) {
-			return new BaseState(false, AppInfo.PERMISSION_DENIED);
-		}
+	
+	/**
+	* @Title: saveByInputStrram 
+	* @Description: 保存输入流到文件
+	* @param is 输入文件流
+	* @param path 保存路径
+	* @param maxSize 文件限制大小
+	* @return 状态信息
+	 */
+	public static State saveByInputStream(InputStream is, String path, long maxSize){
+		State storageState = new BaseState(false, AppInfo.UNKONWN_ERROR);
+		/**获取附件操作服务BEAN**/
+    	AttachmentService service = ContextLoader.getCurrentWebApplicationContext().getBean(AttachmentService.class);
 		try {
-			FileUtils.moveFile(tmpFile, targetFile);
-		} catch (IOException e) {
-			return new BaseState(false, AppInfo.IO_ERROR);
+			File storeFile = service.saveFileByInputStream(is, path, maxSize);
+			storageState = new BaseState(true);
+			storageState.putInfo("size", storeFile.length());
+			storageState.putInfo("title", storeFile.getName());
+		} catch (CustomException ce) {
+			/**根据错误码处理**/
+			if(StringUtils.hasContent(ce.getCode())){
+				switch(ce.getCode()){
+					case ExceptionCodes.FILE_SIZE_EXCEED: {
+						storageState = StorageManager.getFalseState(AppInfo.MAX_SIZE);
+						break;
+					}
+					case ExceptionCodes.COMMON_PARAM_ABSENT: {
+						storageState = StorageManager.getFalseState(AppInfo.UNKONWN_ERROR);
+						break;
+					}
+					case ExceptionCodes.COMMON_IO_EXCEPTION: {
+						storageState = StorageManager.getFalseState(AppInfo.IO_ERROR);
+						break;
+					}
+					case ExceptionCodes.FILE_CREATE_FAIL: {
+						storageState = StorageManager.getFalseState(AppInfo.FAILED_CREATE_FILE);
+						break;
+					}
+					case ExceptionCodes.FILE_PERMISSION_DENIED: {
+						storageState = StorageManager.getFalseState(AppInfo.PERMISSION_DENIED);
+						break;
+					}
+				}
+			}
 		}
-		state = new BaseState(true);
-		state.putInfo( "size", targetFile.length() );
-		state.putInfo( "title", targetFile.getName() );
-		return state;
+		return storageState;
 	}
-
-	private static State valid(File file) {
-		File parentPath = file.getParentFile();
-		if ((!parentPath.exists()) && (!parentPath.mkdirs())) {
-			return new BaseState(false, AppInfo.FAILED_CREATE_FILE);
-		}
-		if (!parentPath.canWrite()) {
-			return new BaseState(false, AppInfo.PERMISSION_DENIED);
-		}
-		return new BaseState(true);
+	
+	/**
+	* @Title: getFalseState 
+	* @Description: 获取一个表示失败的状态信息
+	* @param code 状态值
+	* @return
+	 */
+	private static State getFalseState(int code){
+		return new BaseState(false, code);
 	}
 }

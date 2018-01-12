@@ -20,6 +20,9 @@ public class Bookmark extends BaseEntity {
 	/**引用地址**/
 	@StringCheck(maxLength = 255, maxLengthTip = "地址长度不能超过%s")
 	private String link;
+	/**注释说明**/
+	@StringCheck(maxLength = 255, maxLengthTip = "注释说明长度不能超过%s")
+	private String commentary;
 	/**书签内容**/
 	@StringCheck(mustHasContent = true, mustHasContentTip = "内容必须")
 	private String content;
@@ -35,6 +38,12 @@ public class Bookmark extends BaseEntity {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	public String getCommentary() {
+		return commentary;
+	}
+	public void setCommentary(String commentary) {
+		this.commentary = commentary;
 	}
 	public String getContent() {
 		return content;

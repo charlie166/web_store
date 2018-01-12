@@ -52,7 +52,7 @@ public class PacServiceImpl implements PacService {
 		return this.insertBatch(Arrays.asList(pac));
 	}
 
-	@CacheEvict(value = CacheConstant.PAC, allEntries = true)
+	@CacheEvict(allEntries = true)
 	@Override
 	@Transactional
 	public int insertBatch(List<PacModel> pacList) throws CustomException {
@@ -88,6 +88,7 @@ public class PacServiceImpl implements PacService {
 		}
 	}
 
+	@Cacheable(key = CacheConstant.PAC_ALL)
 	@Override
 	public List<PacDTO> all() {
 		List<PacModel> all = pacDao.selectAll();

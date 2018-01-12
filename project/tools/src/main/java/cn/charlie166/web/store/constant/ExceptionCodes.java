@@ -23,13 +23,17 @@ public class ExceptionCodes {
 	/**文件----创建目录出现异常***/
 	public static final String FILE_CREATE_DIRECTORY = "createDirectoryException";
 	/**文件----创建文件出现异常***/
-	public static final String FILE_CREATE_FILE = "createFileException";
+	public static final String FILE_CREATE_FAIL = "createFileException";
 	/**文件----复制文件出现异常***/
 	public static final String FILE_COPY_FILE = "createFileException";
 	/**文件----文件不存在**/
 	public static final String FILE_NOT_EXISTS = "notExists";
 	/**文件----目录不存在或不是目录**/
 	public static final String FILE_NOT_DIRECTORY = "notDirectory";
+	/**文件----(读写)权限不足**/
+	public static final String FILE_PERMISSION_DENIED = "permissionDenied";
+	/**文件----文件大小超过限制**/
+	public static final String FILE_SIZE_EXCEED = "sizeExceed";
 	
 	/**校验----校验不通过**/
 	public static final String CHECK_FAILED = "checkFailed";

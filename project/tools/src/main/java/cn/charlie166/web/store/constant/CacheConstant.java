@@ -16,4 +16,7 @@ public class CacheConstant {
 	
 	/**在线PAC规则**/
 	public static final String PAC_ONLINE = "'online'";
+	
+	/**全部PAC规则**/
+	public static final String PAC_ALL = "'all'";
 }

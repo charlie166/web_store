@@ -24,6 +24,6 @@ public class FileType {
 	 * @return
 	 */
 	public static String getSuffixByFilename(String filename) {
-		return filename.substring(filename.lastIndexOf( "." )).toLowerCase();
+		return filename.substring(filename.lastIndexOf(".")).toLowerCase();
 	}
 }

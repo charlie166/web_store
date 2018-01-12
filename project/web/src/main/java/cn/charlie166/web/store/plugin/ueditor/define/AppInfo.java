@@ -30,6 +30,7 @@ public class AppInfo {
 	public static final int PARAM_ERROR = 501;
 	
 	public static final int SERVER_ERROR = 502;
+	public static final int UNKONWN_ERROR = 601;
 
 	public static Map<Integer, String> info = new HashMap<Integer, String>(){
 		private static final long serialVersionUID = 1L;
@@ -71,6 +72,8 @@ public class AppInfo {
 			put(AppInfo.PARAM_ERROR, "参数错误");
 			/**服务器错误**/
 			put(AppInfo.SERVER_ERROR, "服务器错误");
+			/**未知异常***/
+			put(AppInfo.UNKONWN_ERROR, "未知错误");
 		}
 	};
 	

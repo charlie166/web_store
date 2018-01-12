@@ -5,18 +5,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.PropertySource;
-import org.springframework.core.env.PropertySources;
 
 import cn.charlie166.web.store.plugin.ueditor.define.ActionMap;
+import cn.charlie166.web.store.tools.CustomPropertyPlaceholder;
 import cn.charlie166.web.store.tools.JsonUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
@@ -51,29 +48,34 @@ public class UeditorConfigManager {
 	private final static String REMOTE_FILE_NAME = "remote";
 	
 	@Autowired
-	private PropertySourcesPlaceholderConfigurer propertyConfigurer;
+	private CustomPropertyPlaceholder propertyConfigurer;
 	
 	@PostConstruct
 	public void postConstruct(){
-		PropertySources sources = propertyConfigurer.getAppliedPropertySources();
-		for(PropertySource<?> ps: sources){
-			Object object = ps.getSource();
-			/**从中提取ueditor的配置**/
-			if("localProperties".equals(ps.getName()) && object.getClass() == Properties.class){
-				Properties prop = (Properties) object;
-				/**通用添加的前缀**/
-				final String commonPreffix = prop.containsKey("ue.commonPreffix") ? prop.get("ue.commonPreffix").toString() : "";
-				prop.forEach((k, v) -> {
-					if(k != null && k.toString().startsWith(UE_PROP_PREFFIX)){
-						String key = k.toString().substring(UE_PROP_PREFFIX.length());
-						String val = v.toString();
-						if(UeditorConfigManager.VIEW_PREFFIX.contains(key)){
-							val = commonPreffix + v;
-						}
-						UeditorConfigManager.CONFIG_MAP.put(key, val);
-					}
-				});
+		Map<String, String> map = propertyConfigurer.getAllFields();
+		/**通用添加的前缀**/
+		final String commonPreffix = map.containsKey("ue.commonPreffix") ? map.get("ue.commonPreffix").toString() : "";
+		map.forEach((k, v) -> {
+			if(k != null && k.toString().startsWith(UE_PROP_PREFFIX)){
+				String key = k.toString().substring(UE_PROP_PREFFIX.length());
+				String val = v.toString();
+				if(UeditorConfigManager.VIEW_PREFFIX.contains(key)){
+					val = commonPreffix + v;
+				}
+				UeditorConfigManager.CONFIG_MAP.put(key, val);
 			}
+		});
+		/**ue使用的键名. 本地存储的物理路径前缀处理，优先使用附件配置的。**/
+		String key = "rootPath";
+		/**附件配置的物理路径前缀键名**/
+		String key_atta = "attachment.rootPath";
+		/**如果附件配置有值，优先使用附件配置值**/
+		if(StringUtils.hasContent(map.get(key_atta))){
+			UeditorConfigManager.CONFIG_MAP.put(key, map.get(key_atta));
+		}
+		/**未设置此值，默认使用当前路径**/
+		if(!StringUtils.hasContent(UeditorConfigManager.CONFIG_MAP.get(key))){
+			UeditorConfigManager.CONFIG_MAP.put(key, "./");
 		}
 	}
 	

@@ -57,7 +57,7 @@ public class BinaryUploader {
 				            String rootPath = UeditorConfigManager.getRootPath();
 				            String physicalPath = rootPath + savePath;
 							InputStream is = mf.getInputStream();
-							State storageState = StorageManager.saveFileByInputStream(is, physicalPath, maxSize);
+							State storageState = StorageManager.saveByInputStream(is, physicalPath, maxSize);
 							is.close();
 							if (storageState.isSuccess()) {
 								storageState.putInfo("url", PathFormat.format(savePath));
@@ -75,7 +75,7 @@ public class BinaryUploader {
 		}
 		return retState;
 	}
-
+	
 	private static boolean validType(String type, String[] allowTypes) {
 		List<String> list = Arrays.asList(allowTypes);
 		return list.contains(type);
