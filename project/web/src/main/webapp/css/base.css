@@ -1,3 +1,7 @@
 .txtCenter {
 	text-align: center;
 }
+.centerContent {
+	width: 1000px;
+	margin: 0 auto;
+}
