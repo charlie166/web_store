@@ -50,4 +50,9 @@ public class ExceptionCodes {
 	
 	/**JSON----解析出错**/
 	public static final String JSON_PARSE_ERROR = "jsonParseError";
+	
+	/**书签----需要书签内容**/
+	public static final String BOOKMARK_NEED_CONTENT = "bookmarkNeedContent";
+	/**书签----标题必需**/
+	public static final String BOOKMARK_NEED_TITLE = "bookmarkNeedTitle";
 }
