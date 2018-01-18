@@ -43,8 +43,7 @@ public class BookmarkController extends BaseController{
 	 */
 	@RequestMapping(value = "/json/submit.do")
 	@ResponseBody
-	public Boolean addSubmit(Bookmark data){
-		service.addSubmit(data);
-		return Boolean.TRUE;
+	public Long addSubmit(Bookmark data){
+		return service.addSubmit(data);
 	}
 }

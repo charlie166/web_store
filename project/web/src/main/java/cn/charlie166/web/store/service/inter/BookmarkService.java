@@ -17,7 +17,8 @@ public interface BookmarkService {
 	/**
 	* @Title: addSubmit 
 	* @Description: 新增提交
-	* @param bookmark
+	* @param bokmark
+	* @return 新增后的id
 	 */
-	public void addSubmit(Bookmark bookmark) throws CustomException;
+	public long addSubmit(Bookmark bookmark) throws CustomException;
 }

@@ -27,7 +27,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	private BookmarkDao bookmarkDao;
 
 	@Override
-	public void addSubmit(Bookmark bookmark) throws CustomException {
+	public long addSubmit(Bookmark bookmark) throws CustomException {
 		if(bookmark == null) {
 			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
 		}
@@ -37,5 +37,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 		if(!HtmlUtils.hasContent(bookmark.getContent())) {
 			throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_CONTENT);
 		}
+		bookmarkDao.insertOne(bookmark);
+		return bookmark.getId();
 	}
 }
