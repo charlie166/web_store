@@ -15,12 +15,31 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class JacksonLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
+	/**时间默认格式**/
+	private static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
+	private String pattern = JacksonLocalDateTimeDeserializer.DEFAULT_PATTERN;
+	
+	/**
+	 * @description 默认格式构造方法		yyyy-MM-dd HH:mm:ss
+	 */
+	public JacksonLocalDateTimeDeserializer() {
+		this(JacksonLocalDateTimeDeserializer.DEFAULT_PATTERN);
+	}
+	
+	/**
+	* @description 指定格式构造方法
+	* @param pattern 时间格式
+	 */
+	public JacksonLocalDateTimeDeserializer(String pattern) {
+		this.pattern = pattern;
+	}
+	
 	@Override
 	public LocalDateTime deserialize(JsonParser jp,
 			DeserializationContext context) throws IOException,
 			JsonProcessingException {
 		LocalDateTime localDatetime = null;
-		String pattern = "yyyy-MM-dd HH:mm:ss";
 		String text = jp.getText();
 		try {
 			/**只解析非空时间字符串**/

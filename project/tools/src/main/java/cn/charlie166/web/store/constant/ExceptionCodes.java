@@ -19,6 +19,8 @@ public class ExceptionCodes {
 	public static final String COMMON_EXCEPTION = "exception";
 	/**通用----新增失败**/
 	public static final String COMMON_INSERT_FAIL = "insertFail";
+	/**通用----没有默认构造方法**/
+	public static final String COMMON_DEFAULT_CONSTRUCTOR_ABSENT = "needDefaultConstructor";
 	
 	/**文件----创建目录出现异常***/
 	public static final String FILE_CREATE_DIRECTORY = "createDirectoryException";

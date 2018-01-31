@@ -1,6 +1,7 @@
 package cn.charlie166.web.store.plugin.ueditor.upload;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -8,8 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,12 +27,12 @@ public class BinaryUploader {
 	
 	public static final State save(HttpServletRequest request, Map<String, Object> conf) {
 		boolean isAjaxUpload = request.getHeader("X_Requested_With") != null;
-		if (!ServletFileUpload.isMultipartContent(request)) {
-			return new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
-		}
-		ServletFileUpload upload = new ServletFileUpload(new DiskFileItemFactory());
         if (isAjaxUpload) {
-            upload.setHeaderEncoding("UTF-8");
+        	try {
+				request.setCharacterEncoding("UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
         }
         State retState = new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
         try {
@@ -67,7 +66,11 @@ public class BinaryUploader {
 							return storageState;
 						}
 					}
+				} else {
+					retState = new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
 				}
+			} else {
+				retState = new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
 			}
 		} catch (Exception e) {
 			BinaryUploader.logger.error("上传出现异常", e);

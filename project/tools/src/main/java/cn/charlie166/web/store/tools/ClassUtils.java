@@ -1,12 +1,13 @@
 package cn.charlie166.web.store.tools;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
@@ -56,10 +57,18 @@ public class ClassUtils {
 			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
 		}
 		try {
+			try {
+				Constructor<T> constructor = toType.getConstructor();
+				if(constructor == null){
+					throw CustomException.instance(ExceptionCodes.COMMON_DEFAULT_CONSTRUCTOR_ABSENT);
+				}
+			} catch (NoSuchMethodException | SecurityException e) {
+				throw CustomException.instance(ExceptionCodes.COMMON_DEFAULT_CONSTRUCTOR_ABSENT, e);
+			}
 			T instance = toType.newInstance();
-			BeanUtils.copyProperties(instance, from);
+			BeanUtils.copyProperties(from, instance);
 			return instance;
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+		} catch (IllegalAccessException | InstantiationException | BeansException e) {
 			throw CustomException.instance(ExceptionCodes.COMMON_EXCEPTION, e);
 		}
 	}

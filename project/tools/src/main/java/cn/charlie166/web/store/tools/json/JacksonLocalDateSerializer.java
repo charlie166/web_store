@@ -11,11 +11,31 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class JacksonLocalDateSerializer extends JsonSerializer<LocalDate> {
 
+	/**日期默认格式**/
+	private static final String DEFAULT_PATTERN = "yyyy-MM-dd";
+	
+	private String pattern = JacksonLocalDateSerializer.DEFAULT_PATTERN;
+	
+	/**
+	* @description 默认日期格式构造方法		yyyy-MM-dd
+	 */
+	public JacksonLocalDateSerializer() {
+		this(JacksonLocalDateSerializer.DEFAULT_PATTERN);
+	}
+	
+	/**
+	* @description 指定格式构造方法
+	* @param pattern 日期格式
+	 */
+	public JacksonLocalDateSerializer(String pattern) {
+		this.pattern = pattern;
+	}
+	
 	@Override
 	public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider serializers) throws IOException,
 			JsonProcessingException {
 		if (value != null) {
-			String str = value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			String str = value.format(DateTimeFormatter.ofPattern(this.pattern));
 			gen.writeString(str);
 		}
 	}

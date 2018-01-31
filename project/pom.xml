@@ -12,7 +12,27 @@
   	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     	<project.version>0.0.1-SNAPSHOT</project.version>
+    	<springframework.version>4.3.14.RELEASE</springframework.version>
+    	<jackson.version>2.9.4</jackson.version>
+    	<qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
+    	<jstl.version>1.2</jstl.version>
+    	<jsoup.version>1.11.1</jsoup.version>
+    	<log4j.version>2.9.1</log4j.version>
+    	<taglibs.version>1.2.5</taglibs.version>
     	<java.version>1.8</java.version>
+    	<servlet.version>4.0.0</servlet.version>
+    	<mysql.version>6.0.6</mysql.version>
+    	<hikaricp.version>2.7.3</hikaricp.version>
+    	<mybatis.version>3.4.5</mybatis.version>
+    	<mybatis-spring.version>1.3.1</mybatis-spring.version>
+    	<mybatis-plus.version>2.1.9</mybatis-plus.version>
+    	<aspectj.version>1.8.13</aspectj.version>
+    	<!-- JSON相关改为Jackson操作 -->
+    	<gson.version>2.8.1</gson.version>
+    	<guava.version>23.5-jre</guava.version>
+    	<!-- commons -->
+    	<commons-io.version>2.6</commons-io.version>
+    	<commons-fileupload.version>1.3.3</commons-fileupload.version>
   	</properties>
 
 	<dependencyManagement>
@@ -36,174 +56,140 @@
 			<dependency>
 			    <groupId>org.apache.logging.log4j</groupId>
 			    <artifactId>log4j-core</artifactId>
-			    <version>2.9.1</version>
+			    <version>${log4j.version}</version>
 			</dependency>
 			<dependency>
 		    	<groupId>org.apache.logging.log4j</groupId>
 		    	<artifactId>log4j-web</artifactId>
-		    	<version>2.9.1</version>
+		    	<version>${log4j.version}</version>
 		  	</dependency>
 			<dependency>
 			    <groupId>org.apache.logging.log4j</groupId>
 			    <artifactId>log4j-api</artifactId>
-			    <version>2.9.1</version>
+			    <version>${log4j.version}</version>
 			</dependency>
 	    	<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 			    <artifactId>log4j-slf4j-impl</artifactId>
-			    <version>2.9.1</version>
+			    <version>${log4j.version}</version>
 		  	</dependency>
 	    	<dependency>
 			    <groupId>javax.servlet</groupId>
 			    <artifactId>javax.servlet-api</artifactId>
-			    <version>3.1.0</version>
+			    <version>${servlet.version}</version>
 			</dependency>
-			<dependency>
+			<!-- JSON相关改为Jackson操作 -->
+			<!-- <dependency>
 			    <groupId>com.google.code.gson</groupId>
 			    <artifactId>gson</artifactId>
-			    <version>2.8.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-			    <artifactId>log4j-api</artifactId>
-			    <version>2.8.2</version>
-		  	</dependency>
-	  		<dependency>
-	    		<groupId>org.apache.logging.log4j</groupId>
-	    		<artifactId>log4j-core</artifactId>
-	    		<version>2.8.2</version>
-	  		</dependency>
-	  		<dependency>
-	    		<groupId>org.apache.logging.log4j</groupId>
-	    		<artifactId>log4j-web</artifactId>
-	    		<version>2.8.2</version>
-	  		</dependency>
-			<dependency>
-			    <groupId>org.apache.logging.log4j</groupId>
-			    <artifactId>log4j-slf4j-impl</artifactId>
-			    <version>2.8.2</version>
-			</dependency>
+			    <version>${gson.version}</version>
+			</dependency> -->
 			<dependency>
 			    <groupId>mysql</groupId>
 			    <artifactId>mysql-connector-java</artifactId>
-			    <version>6.0.6</version>
-			</dependency>
-			<dependency>
-				<groupId>mysql</groupId>
-			  	<artifactId>mysql-connector-java</artifactId>
-			  	<version>6.0.6</version>
+			    <version>${mysql.version}</version>
 			</dependency>
 			<dependency>
 		        <groupId>com.zaxxer</groupId>
 		        <artifactId>HikariCP</artifactId>
-		        <version>2.7.3</version>
+		        <version>${hikaricp.version}</version>
 		    </dependency>
-			<dependency>
-			    <groupId>javax.servlet</groupId>
-			    <artifactId>javax.servlet-api</artifactId>
-			    <version>4.0.0</version>
-			</dependency>
 			<dependency>
 			    <groupId>org.mybatis</groupId>
 			    <artifactId>mybatis</artifactId>
-			    <version>3.4.5</version>
+			    <version>${mybatis.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.mybatis</groupId>
 			    <artifactId>mybatis-spring</artifactId>
-			    <version>1.3.1</version>
+			    <version>${mybatis-spring.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.baomidou</groupId>
+			    <artifactId>mybatis-plus</artifactId>
+			    <version>${mybatis-plus.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-jdbc</artifactId>
-			    <version>4.3.12.RELEASE</version>
+			    <version>${springframework.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.aspectj</groupId>
 			    <artifactId>aspectjrt</artifactId>
-			    <version>1.8.13</version>
+			    <version>${aspectj.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.aspectj</groupId>
 			    <artifactId>aspectjweaver</artifactId>
-			    <version>1.8.13</version>
+			    <version>${aspectj.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-aop</artifactId>
-			    <version>4.3.12.RELEASE</version>
+			    <version>${springframework.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-beans</artifactId>
-			    <version>4.3.12.RELEASE</version>
+			    <version>${springframework.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-webmvc</artifactId>
-			    <version>4.3.12.RELEASE</version>
+			    <version>${springframework.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-test</artifactId>
-			    <version>4.3.12.RELEASE</version>
+			    <version>${springframework.version}</version>
 			    <scope>test</scope>
 			</dependency>
 			<dependency>
 	            <groupId>org.apache.taglibs</groupId>
 	            <artifactId>taglibs-standard-spec</artifactId>
-	            <version>1.2.5</version>
+	            <version>${taglibs.version}</version>
 	        </dependency>
 			<dependency>
 			    <groupId>org.apache.taglibs</groupId>
 			    <artifactId>taglibs-standard-impl</artifactId>
-			    <version>1.2.5</version>
+			    <version>${taglibs.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>javax.servlet.jsp.jstl</groupId>
 			    <artifactId>jstl</artifactId>
-			    <version>1.2</version>
+			    <version>${jstl.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jsoup</groupId>
 			  	<artifactId>jsoup</artifactId>
-			  	<version>1.11.1</version>
-			</dependency>
-			<dependency>
-			    <groupId>org.json</groupId>
-			    <artifactId>json</artifactId>
-			    <version>20171018</version>
+			  	<version>${jsoup.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>com.fasterxml.jackson.core</groupId>
 			    <artifactId>jackson-databind</artifactId>
-			    <version>2.9.3</version>
+			    <version>${jackson.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>commons-io</groupId>
 			    <artifactId>commons-io</artifactId>
-			    <version>2.6</version>
+			    <version>${commons-io.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>commons-fileupload</groupId>
 			    <artifactId>commons-fileupload</artifactId>
-			    <version>1.3.3</version>
-			</dependency>
-			<dependency>
-			    <groupId>commons-beanutils</groupId>
-			    <artifactId>commons-beanutils</artifactId>
-			    <version>1.9.3</version>
+			    <version>${commons-fileupload.version}</version>
 			</dependency>
 			<dependency>
 			  <groupId>com.google.guava</groupId>
 			  <artifactId>guava</artifactId>
-			  <version>23.5-jre</version>
+			  <version>${guava.version}</version>
 			</dependency>
 			<!-- 七牛 -->
 			<dependency>
 				<groupId>com.qiniu</groupId>
 				<artifactId>qiniu-java-sdk</artifactId>
-				<version>[7.2.0, 7.2.99]</version>
+				<version>${qiniu.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
