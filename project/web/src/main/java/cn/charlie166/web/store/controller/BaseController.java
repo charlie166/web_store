@@ -1,5 +1,8 @@
 package cn.charlie166.web.store.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import cn.charlie166.web.store.constant.CustomException;
@@ -13,6 +16,9 @@ import cn.charlie166.web.store.constant.CustomException;
  */
 public class BaseController {
 
+	@Autowired
+	protected HttpServletRequest request;
+	
 	/**
 	 * @description 统一异常处理方法
 	 * @author <a href="mailto:charlie166@163.com">李阳</a> 
