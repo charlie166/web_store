@@ -45,7 +45,8 @@ var jsConfig = {
     	/** 富文本编辑器语言文件, ueditor会再次加载，就不用在requirejs中配置依赖了 **/
     	"ue_lang": "lib/ueditor/lang/zh-cn/zh-cn",
     	/** 富文本编辑器源码文件 **/
-    	"ue": "lib/ueditor/ue-require"
+    	"ue": "lib/ueditor/ue-require",
+    	"layer": "lib/layer/layer"
     }	
 };
 //console.debug("base_context_url:" + base_context_url);

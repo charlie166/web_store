@@ -1,7 +1,43 @@
+/**内容默认不显示**/
+body {
+	display: none;
+}
+/**文本居中**/
 .txtCenter {
+	width: 100%;
 	text-align: center;
 }
+/**居中内容**/
 .centerContent {
 	width: 1000px;
 	margin: 0 auto;
+}
+/**内容表单**/
+.contentForm {
+	width: 100%;
+}
+/**内容表格**/
+.contentForm table {
+	width: 100%;
+}
+/**整行宽度**/
+.contentForm table tr {
+	width: 100%;
+}
+/**四分之一宽度单元格**/
+.contentForm table tr td.quarter {
+	width: 25%;
+}
+/**五分之一宽度单元格**/
+.contentForm table tr td.fifth {
+	width: 20%;
+}
+/**十分之一宽度单元格**/
+.contentForm table tr td.tenth {
+	width: 10%;
+}
+/**表格内单行输入框**/
+.contentForm table tr td input {
+	width: 98%;
+	margin: 5px 1%;
 }

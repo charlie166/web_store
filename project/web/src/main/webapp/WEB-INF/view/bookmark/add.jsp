@@ -6,14 +6,15 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>新增书签</title>
 		<link href="<c:url value="/css/base.css"/>" rel="stylesheet">
+		<link href="<c:url value="/js/lib/layer/theme/default/layer.css"/>" rel="stylesheet">
 	</head>
 	<body>
 		<div class="centerContent">
-			<form id="dataForm">
+			<form id="dataForm" class="contentForm">
 				<table>
 					<tbody>
 						<tr>
-							<td>
+							<td class="tenth">
 								标题
 							</td>
 							<td>
@@ -21,7 +22,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td class="tenth">
 								引用地址
 							</td>
 							<td>
@@ -29,7 +30,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td class="tenth">
 								备注说明
 							</td>
 							<td>
@@ -38,14 +39,16 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								内容
+								<div class="txtCenter">
+									内容
+								</div>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2">
-								<div class="txtCenter" style="width: 98%; margin: 10px auto;">
+								<div class="" style="">
 									<!-- 加载编辑器的容器 -->
-								    <script id="uecontainer" type="text/plain" style="width: 600px; height: 500px;">
+								    <script id="uecontainer" type="text/plain">
 						    		</script>
 								</div>
 							</td>

@@ -145,6 +145,29 @@ if(!Date.prototype.format){
 /**
  * 一些基本的常用的功能方法封装
  */
-define(["jquery"], function ($){
-	
+define(["jquery", "layer"], function ($){
+	/**当前加载中动画索引**/
+	var currentLoadingIndex;
+	return {
+		/**   当前工程的访问路径，含上下文. 返回如: http://xxx.com:123/web/   **/
+		thisUrl: base_context_url,
+		/**公共操作执行完后调用**/
+		doSelfWork: function doSelfWork (func){/**在公共操作执行完成后执行自定义操作. func: 自定义要作的操作**/
+			$("body").show();
+			if($.isFunction(func)){
+				func.call(this);
+			}
+		},
+		closeAllLoading: function closeAllLoading(){/**关闭所有加载中动画**/
+			layer.closeAll("loading");
+		},
+		closeLoading: function(){/**关闭当前加载中动画**/
+			if(currentLoadingIndex){
+				layer.close(currentLoadingIndex);
+			}
+		},
+		showLoading: function(){/**显示加载中动画**/
+			currentLoadingIndex = layer.load(1);
+		}
+	}
 });
