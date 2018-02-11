@@ -37,6 +37,9 @@ public class AttachmentServiceImpl implements AttachmentService {
 	@Value(value = "${attachment.rootPath:null}")
 	private String physicalPath;
 	
+	/**是否异步备份到七牛**/
+	@Value(value = "${attachment.rootPath.asynchronousQiniu:false}")
+	private Boolean asynchronousQiniu;
 	@Autowired
 	private QiniuService qiniuService;
 	
@@ -71,7 +74,14 @@ public class AttachmentServiceImpl implements AttachmentService {
 			}
 			File targetFile = this.checkFile(path);
 			FileUtils.moveFile(tmpFile, targetFile);
-			this.backupToQiniu(targetFile);
+			/**异步备份，新开线程操作。并且暂无法处理异常**/
+			if(this.asynchronousQiniu){
+				new Thread(() -> {
+					this.backupToQiniu(targetFile);
+				}).start();
+			} else {
+				this.backupToQiniu(targetFile);
+			}
 			return targetFile;
 		} catch (IOException e) {
 			throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);

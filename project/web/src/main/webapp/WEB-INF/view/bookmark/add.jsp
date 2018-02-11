@@ -6,13 +6,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>新增书签</title>
 		<link href="<c:url value="/css/base.css"/>" rel="stylesheet">
-    	<script type="text/javascript" src="<c:url value="/js/lib/jquery-3.2.1.min.js"/>"></script>
-    	<script type="text/javascript" src="<c:url value="/js/common/base.js"/>"></script>
-		<!-- 配置文件 -->
-    	<script type="text/javascript" src="<c:url value="/js/lib/ueditor/ueditor.config.js"/>"></script>
-    	<!-- 编辑器源码文件 -->
-    	<script type="text/javascript" src="<c:url value="/js/lib/ueditor/ueditor.all.min.js"/>"></script>
-    	<script type="text/javascript" src="<c:url value="/js/i/bookmark/add.js"/>"></script>
 	</head>
 	<body>
 		<div class="centerContent">
@@ -69,4 +62,5 @@
 			</form>
 		</div>
 	</body>
+	<script src="<c:url value="/js/lib/require.js"/>" data-main="<c:url value="/js/i/bookmark/add"/>"></script>
 </html>

@@ -82,7 +82,7 @@ public class QiniuServiceImpl implements QiniuService {
 	public void uploadFile(File file, String key) {
 		if(file.exists() && file.isFile()){
 			/**构造一个带指定Zone对象的配置类**/
-			Configuration cfg = new Configuration(Zone.zone0());
+			Configuration cfg = new Configuration(this.getThisZone());
 			UploadManager uploadManager = new UploadManager(cfg);
 			try {
 				String upToken = this.getUploadToken();
@@ -100,7 +100,7 @@ public class QiniuServiceImpl implements QiniuService {
 	@Override
 	public void deleteFile(String key) {
 		if(StringUtils.hasContent(key)){
-			Configuration cfg = new Configuration(Zone.zone2());
+			Configuration cfg = new Configuration(this.getThisZone());
 			Auth auth = Auth.create(accessKey, secretKey);
 			BucketManager bucketManager = new BucketManager(auth, cfg);
 			try {
@@ -117,4 +117,12 @@ public class QiniuServiceImpl implements QiniuService {
 		return back;
 	}
 	
+	/**
+	* @Title: getThisZone 
+	* @Description: 获取当前使用的七牛域名配置
+	* @return
+	 */
+	private Zone getThisZone(){
+		return Zone.zone0();
+	}
 }

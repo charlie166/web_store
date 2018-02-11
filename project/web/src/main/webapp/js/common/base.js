@@ -142,3 +142,9 @@ if(!Date.prototype.format){
 	    return fmt;
 	}
 }
+/**
+ * 一些基本的常用的功能方法封装
+ */
+define(["jquery"], function ($){
+	
+});
