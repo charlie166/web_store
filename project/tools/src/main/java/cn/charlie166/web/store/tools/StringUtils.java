@@ -50,4 +50,17 @@ public class StringUtils {
 		String string = System.getProperty("line.separator");
 		return StringUtils.hasContent(string) ? string : "\r\n";
 	}
+	
+	/**
+	* @Title: isInteger 
+	* @Description: 校验给定字符串是整型
+	* @param s 需要判断的字符串
+	* @return
+	 */
+	public static boolean isInteger(String s){
+		if(StringUtils.hasContent(s)){
+			return s.matches("[+-]?\\d+");
+		}
+		return false;
+	}
 }

@@ -33,4 +33,14 @@ public class ErrorController extends BaseController {
 		ModelAndView view = new ModelAndView("error/404");
 		return view;
 	}
+	
+	/**
+	* @Title: page500 
+	* @Description: 服务器内部错误页面
+	* @return
+	 */
+	public ModelAndView page500(){
+		ModelAndView view = new ModelAndView("error/500");
+		return view;
+	}
 }

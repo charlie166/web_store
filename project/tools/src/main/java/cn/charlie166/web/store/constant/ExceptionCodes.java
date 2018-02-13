@@ -13,6 +13,8 @@ public class ExceptionCodes {
 
 	/**通用----缺少必要参数***/
 	public static final String COMMON_PARAM_ABSENT = "paramAbsent";
+	/**通用----数据不存在**/
+	public static final String COMMON_DATA_ABSENT = "noData";
 	/**通用----IO异常**/
 	public static final String COMMON_IO_EXCEPTION = "io";
 	/**通用----出现异常**/

@@ -16,5 +16,9 @@
     		</if>
     	</where>
     </select>
+    
+    <select id="seletById" resultType="cn.charlie166.web.store.domain.po.Bookmark">
+    	SELECT bm.* FROM bookmark bm WHERE bm.id = #{id}
+    </select>
 
 </mapper>

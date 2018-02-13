@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.BookmarkDao;
+import cn.charlie166.web.store.domain.dto.BookmarkDTO;
 import cn.charlie166.web.store.domain.po.Bookmark;
 import cn.charlie166.web.store.service.inter.BookmarkService;
+import cn.charlie166.web.store.tools.ClassUtils;
 import cn.charlie166.web.store.tools.HtmlUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
@@ -39,5 +41,18 @@ public class BookmarkServiceImpl implements BookmarkService {
 		}
 		bookmarkDao.insertOne(bookmark);
 		return bookmark.getId() != null ? bookmark.getId() : -1;
+	}
+
+	@Override
+	public BookmarkDTO detail(String id) throws CustomException {
+		if(StringUtils.isInteger(id)){
+			Bookmark bk = bookmarkDao.seletById(Long.valueOf(id));
+			if(bk != null){
+				BookmarkDTO dto = ClassUtils.convertType(bk, BookmarkDTO.class);
+				if(dto != null)
+					return dto;
+			}
+		}
+		throw CustomException.instance(ExceptionCodes.COMMON_DATA_ABSENT);
 	}
 }

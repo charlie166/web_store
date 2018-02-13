@@ -1,6 +1,7 @@
 package cn.charlie166.web.store.service.inter;
 
 import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.domain.dto.BookmarkDTO;
 import cn.charlie166.web.store.domain.po.Bookmark;
 
 /**
@@ -21,4 +22,13 @@ public interface BookmarkService {
 	* @return 新增后的id
 	 */
 	public long addSubmit(Bookmark bookmark) throws CustomException;
+	
+	/**
+	* @Title: detail 
+	* @Description: 书签详情
+	* @param id 书签ID
+	* @return
+	* @throws CustomException
+	 */
+	public BookmarkDTO detail(String id) throws CustomException;
 }

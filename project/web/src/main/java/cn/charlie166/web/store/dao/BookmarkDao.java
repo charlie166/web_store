@@ -1,5 +1,7 @@
 package cn.charlie166.web.store.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.charlie166.web.store.domain.annotation.ParamCheck;
 import cn.charlie166.web.store.domain.po.Bookmark;
 
@@ -28,4 +30,12 @@ public interface BookmarkDao {
 	* @return
 	 */
 	public int selectCount(Bookmark bookmark);
+	
+	/**
+	* @Title: seletById 
+	* @Description: 通过主键ID查询书签
+	* @param id 主键ID
+	* @return
+	 */
+	public Bookmark seletById(@Param(value = "id") long id);
 }

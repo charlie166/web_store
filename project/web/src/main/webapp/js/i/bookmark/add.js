@@ -21,7 +21,6 @@ requirejs(["jquery", "base", "ue"], function($, base) {
 				var param = $form.serializeObject();
 //				param.content = ue.getAllHtml();
 				param.content = ue.getContent();
-				console.debug(param);
 				/*$.ajax({
 					url: thisModuleUrl + "json/submit.do",
 					method: "POST",

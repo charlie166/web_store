@@ -4,13 +4,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>资源未找到</title>
+	<title>内部错误</title>
 </head>
 <body>
 	<div style="width: 260px; margin: 10px auto;">
-		<h2>你请求的资源找不到了~</h2>
+		<h2>哦！你的请求执行出现异常了~</h2>
 		<div style="text-align: center;">
-			<a href="<c:url value="/"/>">首页</a>
+			${msg}
 		</div>
 	</div>
 </body>
