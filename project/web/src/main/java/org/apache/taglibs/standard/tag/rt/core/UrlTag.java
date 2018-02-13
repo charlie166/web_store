@@ -10,7 +10,6 @@ import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 import org.apache.taglibs.standard.tag.common.core.UrlSupport;
 import org.apache.taglibs.standard.util.UrlUtil;
-
 import cn.charlie166.web.store.tools.StringUtils;
 
 /**
@@ -25,7 +24,7 @@ import cn.charlie166.web.store.tools.StringUtils;
 public class UrlTag extends UrlSupport {
 
 	private static final long serialVersionUID = 1L;
-
+	
     //*********************************************************************
     // Private state
 
@@ -92,6 +91,8 @@ public class UrlTag extends UrlSupport {
             HttpServletResponse response = ((HttpServletResponse) pageContext.getResponse());
             result = response.encodeURL(result);
         }
+        /**清除掉链接中的jsession参数**/
+        result = this.wipeSessionId(result);
         // store or print the output
         if (var != null) {
             pageContext.setAttribute(var, result, scope);
@@ -181,4 +182,32 @@ public class UrlTag extends UrlSupport {
     	return "/";
     }
 	
+    /**
+    * @Title: handleSessionId 
+    * @Description: 处理掉链接中的jsessionid
+    * @param url
+     */
+    private String wipeSessionId(String url){
+    	/**去掉链接中的jsessionid**/
+        String s = ";jsessionid=";
+        if(StringUtils.hasContent(url) && url.contains(s)){
+        	int startIndex = url.indexOf(s);
+        	if(startIndex > 0){
+        		/**链接中的主要分隔符**/
+        		char [] ca = {',', ';', '&', '?'};
+        		int endIndex = url.indexOf(".", startIndex);
+        		for(char c: ca){
+        			endIndex = url.indexOf(c, startIndex);
+        		}
+        		/**如果未找到特殊分隔符，以字符串最后结尾为分割**/
+        		if(endIndex == -1){
+        			endIndex = url.length();
+        		}
+        		if(endIndex > startIndex){
+        			url = url.substring(0, startIndex) + url.substring(endIndex);
+        		}
+        	}
+        }
+        return url;
+    }
 }

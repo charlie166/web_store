@@ -38,6 +38,6 @@ public class BookmarkServiceImpl implements BookmarkService {
 			throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_CONTENT);
 		}
 		bookmarkDao.insertOne(bookmark);
-		return bookmark.getId();
+		return bookmark.getId() != null ? bookmark.getId() : -1;
 	}
 }

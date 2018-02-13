@@ -31,6 +31,9 @@ requirejs(["jquery", "base", "ue"], function($, base) {
 						console.debug(data);
 					}
 				});*/
+				base.post(thisModuleUrl + "json/submit.do", param, function(data){
+					console.debug(data);
+				});
 			});
 		});
 	});
