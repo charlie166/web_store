@@ -1,6 +1,6 @@
 /**内容默认不显示**/
 body {
-	display: none;
+	/* display: none; */
 	overflow-x: hidden;
 }
 /**文本居中**/

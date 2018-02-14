@@ -47,7 +47,7 @@ public class BookmarkController extends BaseController{
 	* @return
 	 */
 	@RequestMapping(value = "/page/{id}/detail.do")
-	public ModelAndView detailPage(@PathVariable String id){
+	public ModelAndView detailPage(@PathVariable String id) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			BookmarkDTO dto = service.detail(id);
@@ -78,4 +78,5 @@ public class BookmarkController extends BaseController{
 	public Long addSubmit(Bookmark data){
 		return service.addSubmit(data);
 	}
+	
 }

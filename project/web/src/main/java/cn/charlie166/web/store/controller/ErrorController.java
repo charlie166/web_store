@@ -6,6 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.charlie166.web.store.constant.KeyConstant;
+import cn.charlie166.web.store.tools.StringUtils;
+
 /**
 * @ClassName: ErrorController 
 * @Description: 错误相关控制器
@@ -39,8 +42,12 @@ public class ErrorController extends BaseController {
 	* @Description: 服务器内部错误页面
 	* @return
 	 */
+	@RequestMapping(value = "/500.do")
 	public ModelAndView page500(){
 		ModelAndView view = new ModelAndView("error/500");
+		String ec = this.getExceptionCode();
+		view.addObject(KeyConstant.ERROR_500_MSG, StringUtils.hasContent(ec) ? ec : "");
 		return view;
 	}
+	
 }

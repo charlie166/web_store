@@ -17,6 +17,22 @@
       		<artifactId>junit</artifactId>
       		<scope>test</scope>
     	</dependency>
+    	<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>javax.servlet.jsp-api</artifactId>
+		</dependency>
+    	<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-spec</artifactId>
+        </dependency>
+		<dependency>
+		    <groupId>org.apache.taglibs</groupId>
+		    <artifactId>taglibs-standard-impl</artifactId>
+		</dependency>
   		<dependency>
   			<groupId>org.jsoup</groupId>
   			<artifactId>jsoup</artifactId>
