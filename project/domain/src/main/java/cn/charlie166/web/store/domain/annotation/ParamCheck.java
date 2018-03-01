@@ -28,4 +28,11 @@ public @interface ParamCheck {
 	* @return
 	 */
 	ParamCheckType type() default ParamCheckType.SINGLE;
+	
+	/**
+	* @Title: ignore 
+	* @Description: 设置忽略校验的字段 
+	* @return
+	 */
+	String [] ignore() default {};
 }

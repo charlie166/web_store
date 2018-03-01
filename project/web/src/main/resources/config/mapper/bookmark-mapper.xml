@@ -20,5 +20,24 @@
     <select id="seletById" resultType="cn.charlie166.web.store.domain.po.Bookmark">
     	SELECT bm.* FROM bookmark bm WHERE bm.id = #{id}
     </select>
+    
+    <update id="updateById" parameterType="cn.charlie166.web.store.domain.po.Bookmark">
+    	UPDATE bookmark
+    	<set>
+    		<if test="null != title">
+    			title = #{title},
+    		</if>
+    		<if test="null != link">
+    			link = #{link},
+    		</if>
+    		<if test="null != commentary">
+    			commentary = #{commentary},
+    		</if>
+    		<if test="null != content">
+    			content = #{content}
+    		</if>
+    	</set>
+    	WHERE id = #{id}
+    </update>
 
 </mapper>

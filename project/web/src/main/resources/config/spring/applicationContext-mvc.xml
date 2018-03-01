@@ -16,10 +16,13 @@
 	<!-- 自动扫描加载控制器 -->
 	<context:component-scan base-package="cn.charlie166.web.store.controller"/>
 	
-	<!-- 静态资源映射 -->
-	<mvc:resources location="/js/**" mapping="/js/"/>
-	<mvc:resources location="/img/**" mapping="/img/"/>
-	<mvc:resources location="/css/**" mapping="/css/"/>
+	<!--
+		静态资源映射   mapping: 映射的路径;  location: 资源位置
+		注册 org.springframework.web.servlet.handler.SimpleUrlHandlerMapping  匹配处理
+	-->
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	<mvc:resources location="/img/" mapping="/img/**"/>
+	<mvc:resources location="/css/" mapping="/css/**"/>
 	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>  
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -72,6 +75,6 @@
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"/>
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 	<!-- 自定义统一处理返回体切面 -->
-	<!-- <bean class="cn.charlie166.web.store.config.CustomResponseBodyAdvice"></bean> -->
+	<bean class="cn.charlie166.web.store.config.CustomResponseBodyAdvice"></bean>
 	
 </beans>

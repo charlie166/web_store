@@ -1,7 +1,5 @@
 package cn.charlie166.web.store.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,8 +20,6 @@ import cn.charlie166.web.store.tools.StringUtils;
 @Controller
 public class ErrorController extends BaseController {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 	/**
 	* @Title: page404 
 	* @Description: 404未找到的页面跳转
@@ -31,8 +27,6 @@ public class ErrorController extends BaseController {
 	 */
 	@RequestMapping(value = "/404.do")
 	public ModelAndView page404(){
-		StringBuffer url = this.request.getRequestURL();
-		logger.debug(String.format("404了[%s]", url));
 		ModelAndView view = new ModelAndView("error/404");
 		return view;
 	}

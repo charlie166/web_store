@@ -24,6 +24,14 @@ public interface BookmarkDao {
 	public int insertOne(@ParamCheck Bookmark bookmark);
 	
 	/**
+	* @Title: updateById 
+	* @Description: 根据ID更新数据
+	* @param bookmark
+	* @return
+	 */
+	public int updateById(@ParamCheck(ignore = "content") Bookmark bookmark);
+	
+	/**
 	* @Title: selectCount 
 	* @Description: 查询条目数
 	* @param bookmark

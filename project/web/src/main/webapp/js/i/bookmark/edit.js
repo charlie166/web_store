@@ -17,21 +17,23 @@ requirejs(["jquery", "base", "ue"], function($, base) {
 			ue.ready(function() {
 				base.closeLoading();
 			});
+			$form.find(":input").each(function(){
+				var _v = $(this).attr("value");
+				if(_v){
+					$(this).val(_v);
+				}
+			});
 			$save.off().on("click", function(){
 				var param = $form.serializeObject();
-//				param.content = ue.getAllHtml();
 				param.content = ue.getContent();
-				/*$.ajax({
-					url: thisModuleUrl + "json/submit.do",
-					method: "POST",
-					dataType: "json",
-					data: param,
-					success: function(data, s){
-						console.debug(data);
+				base.post(thisModuleUrl + "json/edit.do", param, function(data){
+					if(data.code == code.ok){
+						base.alert("修改成功", function(){
+							
+						});
+					} else {
+						base.alert(data.msg);
 					}
-				});*/
-				base.post(thisModuleUrl + "json/add.do", param, function(data){
-					console.debug(data);
 				});
 			});
 		});

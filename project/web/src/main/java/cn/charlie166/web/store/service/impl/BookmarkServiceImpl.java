@@ -30,17 +30,13 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	public long addSubmit(Bookmark bookmark) throws CustomException {
-		if(bookmark == null) {
-			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
-		}
-		if(!StringUtils.hasContent(bookmark.getTitle())) {
-			throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_TITLE);
-		}
-		if(!HtmlUtils.hasContent(bookmark.getContent())) {
-			throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_CONTENT);
-		}
+		this.commonCheck(bookmark);
 		bookmarkDao.insertOne(bookmark);
-		return bookmark.getId() != null ? bookmark.getId() : -1;
+		if(bookmark.getId() != null)
+			return bookmark.getId();
+		else {
+			throw CustomException.instance(ExceptionCodes.COMMON_FAILED);
+		}
 	}
 
 	@Override
@@ -54,5 +50,43 @@ public class BookmarkServiceImpl implements BookmarkService {
 			}
 		}
 		throw CustomException.instance(ExceptionCodes.COMMON_DATA_ABSENT);
+	}
+
+	@Override
+	public long editSubmit(Bookmark bookmark) throws CustomException {
+		this.commonCheck(bookmark);
+		int result = bookmarkDao.updateById(bookmark);
+		if(result > 0){
+			return bookmark.getId();
+		} else {
+			throw CustomException.instance(ExceptionCodes.COMMON_FAILED);
+		}
+	}
+	
+	/**
+	* @Title: commonCheck 
+	* @Description: 共用校验
+	* @param bookmark
+	 */
+	private void commonCheck(Bookmark bookmark){
+		if(bookmark == null) {
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		}
+		/**存在ID时，为修改**/
+		if(bookmark.getId() != null && bookmark.getId().longValue() > 0){
+			if(!StringUtils.hasContent(bookmark.getTitle()) ||
+				!HtmlUtils.hasContent(bookmark.getContent()) ||
+				!HtmlUtils.hasContent(bookmark.getCommentary()) ||
+				!HtmlUtils.hasContent(bookmark.getLink())){
+				throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+			}
+		} else {
+			if(!StringUtils.hasContent(bookmark.getTitle())) {
+				throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_TITLE);
+			}
+			if(!HtmlUtils.hasContent(bookmark.getContent())) {
+				throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_CONTENT);
+			}
+		}
 	}
 }

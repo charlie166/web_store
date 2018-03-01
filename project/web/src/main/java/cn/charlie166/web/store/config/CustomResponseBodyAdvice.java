@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import cn.charlie166.web.store.constant.ResponseCodes;
+import cn.charlie166.web.store.domain.dto.MsgDTO;
+
 /**
  * @description 自定义响应体切面
  * @author <a href="mailto:charlie166@163.com">李阳</a> 
@@ -31,7 +34,10 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 			ServerHttpResponse response) {
-		return body;
+		MsgDTO<Object> dto = new MsgDTO<Object>();
+		dto.setCode(ResponseCodes.OK);
+		dto.setContent(body);
+		return dto;
 	}
 
 }

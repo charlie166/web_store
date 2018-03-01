@@ -38,7 +38,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 	private String physicalPath;
 	
 	/**是否异步备份到七牛**/
-	@Value(value = "${attachment.rootPath.asynchronousQiniu:false}")
+	@Value(value = "${attachment.asynchronousQiniu:false}")
 	private Boolean asynchronousQiniu;
 	@Autowired
 	private QiniuService qiniuService;

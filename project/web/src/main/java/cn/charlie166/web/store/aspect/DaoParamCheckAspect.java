@@ -73,7 +73,7 @@ public class DaoParamCheckAspect {
 								if(annotationsByType.length > 0){
 									/**这个注解目前就处理第一个**/
 									StringCheck sc1 = annotationsByType[0];
-									this.checkField(f, sc1, currentParam);
+									this.checkField(f, sc1, currentParam, pc);
 								}
 							}
 						}
@@ -102,7 +102,7 @@ public class DaoParamCheckAspect {
 													/**这个注解目前就处理第一个**/
 													StringCheck sc1 = annotationsByType[0];
 													for(Object obj: listParam){
-														this.checkField(f, sc1, obj);
+														this.checkField(f, sc1, obj, pc);
 													}
 												}
 											}
@@ -125,30 +125,33 @@ public class DaoParamCheckAspect {
 	* @param f 校验的变量
 	* @param sc 校验规则
 	* @param obj 参数
+	* @param ParamCheck 校验注解
 	 * @throws CustomException 
 	 */
-	private void checkField(Field f, StringCheck sc, Object obj) throws CustomException{
+	private void checkField(Field f, StringCheck sc, Object obj, ParamCheck pc) throws CustomException{
 		try {
-			f.setAccessible(true);
-			String thisVal = (String) f.get(obj);
-			/**首先判断是否校验有内容**/
-			if(sc.mustHasContent()){
-				if(!StringUtils.hasContent(thisVal)){
-					throw CustomException.instance(ExceptionCodes.CHECK_FAILED, sc.mustHasContentTip());
-				}
-			}
-			/**判断长度***/
-			if(thisVal != null){
-				if(sc.minLength() >= 0){
-					if(thisVal.trim().length() < sc.minLength()){
-						throw CustomException.instance(ExceptionCodes.CHECK_FAILED,
-							String.format(sc.minLengthTip(), sc.minLength()));
+			if(this.checkThisField(f, pc)){
+				f.setAccessible(true);
+				String thisVal = (String) f.get(obj);
+				/**首先判断是否校验有内容**/
+				if(sc.mustHasContent()){
+					if(!StringUtils.hasContent(thisVal)){
+						throw CustomException.instance(ExceptionCodes.CHECK_FAILED, sc.mustHasContentTip());
 					}
 				}
-				if(sc.maxLength() >= 0){
-					if(thisVal.trim().length() > sc.maxLength()){
-						throw CustomException.instance(ExceptionCodes.CHECK_FAILED,
-							String.format(sc.maxLengthTip(), sc.maxLength()));
+				/**判断长度***/
+				if(thisVal != null){
+					if(sc.minLength() >= 0){
+						if(thisVal.trim().length() < sc.minLength()){
+							throw CustomException.instance(ExceptionCodes.CHECK_FAILED,
+									String.format(sc.minLengthTip(), sc.minLength()));
+						}
+					}
+					if(sc.maxLength() >= 0){
+						if(thisVal.trim().length() > sc.maxLength()){
+							throw CustomException.instance(ExceptionCodes.CHECK_FAILED,
+									String.format(sc.maxLengthTip(), sc.maxLength()));
+						}
 					}
 				}
 			}
@@ -156,5 +159,28 @@ public class DaoParamCheckAspect {
 				| IllegalAccessException e) {
 			logger.error(String.format("%s中的变量%s无法获取", obj.getClass().getName(), f.getName()), e);
 		}
+	}
+	
+	/**
+	* @Title: checkThisField 
+	* @Description: 是否校验此成员
+	* @param f 成员数据
+	* @param pc 注解信息
+	* @return
+	 */
+	private boolean checkThisField(Field f, ParamCheck pc){
+		if(f != null && pc != null){
+			String[] ignore = pc.ignore();
+			if(ignore != null && ignore.length > 0){
+				String name = f.getName();
+				if(StringUtils.hasContent(name)){
+					for(String s: ignore){
+						if(name.trim().equals(s))
+							return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 }

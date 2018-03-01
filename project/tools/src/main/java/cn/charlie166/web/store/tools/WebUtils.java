@@ -51,7 +51,7 @@ public class WebUtils {
     * @Description: 自定义处理地址
     * @param url 标签内设置的地址值
     * @param context 标签内设置的上下文
-    * @param pageContext 
+    * @param request 请求 
     * @return
     * @throws JspException
      */
@@ -112,17 +112,17 @@ public class WebUtils {
      	return "/";
      }
      
-     /**
-      * @Title: handleSessionId 
-      * @Description: 处理掉链接中的jsessionid
-      * @param url
-       */
-      public static String wipeSessionId(String url){
-      	/**去掉链接中的jsessionid**/
-          String s = ";jsessionid=";
-          if(StringUtils.hasContent(url) && url.contains(s)){
-          	int startIndex = url.indexOf(s);
-          	if(startIndex > 0){
+	/**
+	* @Title: handleSessionId 
+	* @Description: 处理掉链接中的jsessionid
+	* @param url
+	*/
+	public static String wipeSessionId(String url){
+		/**去掉链接中的jsessionid**/
+		String s = ";jsessionid=";
+		if(StringUtils.hasContent(url) && url.contains(s)){
+        	int startIndex = url.indexOf(s);
+        	if(startIndex > 0){
           		/**链接中的主要分隔符**/
           		char [] ca = {',', ';', '&', '?'};
           		int endIndex = url.indexOf(".", startIndex);
@@ -136,8 +136,8 @@ public class WebUtils {
           		if(endIndex > startIndex){
           			url = url.substring(0, startIndex) + url.substring(endIndex);
           		}
-          	}
-          }
-          return url;
-      }
+        	}
+		}
+		return url;
+	}
 }

@@ -145,7 +145,7 @@ if(!Date.prototype.format){
 /**
  * 一些基本的常用的功能方法封装
  */
-define(["jquery", "layer"], function ($){
+define(["jquery", "code", "layer"], function ($, code){
 	/**当前加载中动画索引**/
 	var currentLoadingIndex;
 	return {
@@ -169,6 +169,21 @@ define(["jquery", "layer"], function ($){
 		showLoading: function(){/**显示加载中动画**/
 			currentLoadingIndex = layer.load(1);
 		},
+		msg: function(msg){/**消息提示**/
+			if(msg)
+				layer.msg(msg);
+		},
+		alert: function(msg, callbak){/**消息弹窗. msg: 消息提示内容; callbak: 弹窗关闭回调**/
+			if(msg){
+				if($.isFunction(callbak)){
+					layer.alert(msg, function(thisIndex){
+						layer.close(thisIndex);
+					});
+				} else {
+					layer.alert(msg);  
+				}
+			}
+		},
 		post: function(url, param, succCall){/**post请求**/
 			if(!url)
 				return false;
@@ -178,14 +193,22 @@ define(["jquery", "layer"], function ($){
 			} else {
 				p = $.extend({}, param);
 			}
+			/**显示加载中动画**/
+			var postLoadingIndex = layer.load(1);
 			$.ajax({
 				url: url,
 				method: "POST",
 				dataType: "json",
 				data: p,
+				complete: function(jq, textStatus){
+					/**请求完成，关闭加载动画**/
+					layer.close(postLoadingIndex);
+				},
 				success: function(data, s){
-					if($.isFunction(succCall)){
-						succCall.call(this, data);
+					if(data){
+						if($.isFunction(succCall)){
+							succCall.call(this, data);
+						}
 					}
 				}
 			});

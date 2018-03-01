@@ -46,7 +46,9 @@ var jsConfig = {
     	"ue_lang": "lib/ueditor/lang/zh-cn/zh-cn",
     	/** 富文本编辑器源码文件 **/
     	"ue": "lib/ueditor/ue-require",
-    	"layer": "lib/layer/layer"
+    	"layer": "lib/layer/layer",
+    	/** 自定义返回码 **/
+    	"code": "common/codes"
     }	
 };
 //console.debug("base_context_url:" + base_context_url);

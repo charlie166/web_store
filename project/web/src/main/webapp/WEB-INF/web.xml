@@ -50,7 +50,12 @@
 
   	<servlet-mapping>
     	<servlet-name>springMVC</servlet-name>
-    	<url-pattern>*.do</url-pattern>
+    	<!-- /* 是匹配所有资源 -->
+    	<!-- <url-pattern>/*</url-pattern> -->
+    	<!-- / 意思是一个默认servlet 
+    		该设置表示将DispatcherServlet作为default Servlet（默认是org.apache.catalina.servlets.DefaultServlet）
+    		所有其他路径映射未匹配情况下才会交由它处理。而由于隐式映射的关系，使得 .jsp 等扩展名被映射到静态资源进而被执行。 -->
+    	<url-pattern>/</url-pattern>
   	</servlet-mapping>
    	
    	<error-page>

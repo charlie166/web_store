@@ -24,6 +24,15 @@ public interface BookmarkService {
 	public long addSubmit(Bookmark bookmark) throws CustomException;
 	
 	/**
+	* @Title: editSubmit 
+	* @Description: 修改提交
+	* @param bookmark 必须存在ID
+	* @return
+	* @throws CustomException
+	 */
+	public long editSubmit(Bookmark bookmark) throws CustomException;
+	
+	/**
 	* @Title: detail 
 	* @Description: 书签详情
 	* @param id 书签ID

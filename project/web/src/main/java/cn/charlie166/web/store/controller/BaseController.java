@@ -1,6 +1,7 @@
 package cn.charlie166.web.store.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.KeyConstant;
+import cn.charlie166.web.store.constant.ResponseCodes;
+import cn.charlie166.web.store.domain.dto.MsgDTO;
+import cn.charlie166.web.store.tools.JsonUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 import cn.charlie166.web.store.tools.WebUtils;
 
@@ -42,9 +46,12 @@ public class BaseController {
 	@ExceptionHandler
 	public void exceptionHandler(Exception exception) {
 		String url = this.request.getRequestURI().toString();
+		MsgDTO<Object> msg = new MsgDTO<Object>();
+		msg.setCode(ResponseCodes.FAIL);
 		if(exception instanceof CustomException){
 			CustomException ce = (CustomException) exception;
 			this.request.setAttribute(KeyConstant.CUSTOM_EXCEP_CODE, ce.getCode());
+			msg.setContent(ce.getCode());
 		} else {
 		}
 		/**如果是页面请求出现异常，导向错误提示页面**/
@@ -56,7 +63,16 @@ public class BaseController {
 				e.printStackTrace();
 			}*/
 		}
-//		exception.printStackTrace();
+		try {
+			PrintWriter writer = this.response.getWriter();
+			writer.write(JsonUtils.toJson(msg));
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+				
+		}
+		exception.printStackTrace();
 	}
 	
 	/**
