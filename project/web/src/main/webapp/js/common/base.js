@@ -206,8 +206,12 @@ define(["jquery", "code", "layer"], function ($, code){
 				},
 				success: function(data, s){
 					if(data){
-						if($.isFunction(succCall)){
-							succCall.call(this, data);
+						if(data.code == code.ok){
+							if($.isFunction(succCall)){
+								succCall.call(this, data);
+							}
+						} else {
+							layer.alert(data.msg ? data.msg : "操作失败");
 						}
 					}
 				}
