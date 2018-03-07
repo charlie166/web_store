@@ -7,12 +7,12 @@ import cn.charlie166.web.store.domain.dto.PacDTO;
 import cn.charlie166.web.store.domain.po.PacModel;
 
 /**
-* @ClassName: PacService 
+* @ClassName: PacService
 * @Description: PAC(代理自动配置)服务接口
-* @company 
+* @company
 * @author liyang
 * @Email charlie166@163.com
-* @date 2017年12月5日 
+* @date 2017年12月5日
 *
  */
 public interface PacService {
@@ -23,15 +23,15 @@ public interface PacService {
 	* @param pac
 	* @return
 	 */
-	public int insertOne(PacModel pac) throws CustomException;
+	int insertOne(PacModel pac) throws CustomException;
 	
 	/**
 	* @Title: insertBatch 
 	* @Description: 批量添加PAC记录
 	* @param pacList
-	* @return
+	* @return 影响条数
 	 */
-	public int insertBatch(List<PacModel> pacList) throws CustomException;
+	int insertBatch(List<PacModel> pacList) throws CustomException;
 	
 	/**
 	 * @description 获取所有保存了的配置数据
@@ -39,20 +39,20 @@ public interface PacService {
 	 * @return 
 	 * @since web 1.0.0
 	 */
-	public List<PacDTO> all();
-	
+	List<PacDTO> all();
+
 	/**
 	* @Title: add 
 	* @Description: 新增一条记录
 	* @param dto
 	* @return
 	 */
-	public PacDTO add(PacDTO dto);
+	PacDTO add(PacDTO dto);
 	
 	/**
 	* @Title: online 
 	* @Description: 获取在线PAC规则字符串
 	* @return
 	 */
-	public String online();
+	String online();
 }
