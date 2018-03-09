@@ -53,3 +53,9 @@ body {
 .pageInfo {
 	width: 100%;
 }
+/**用于将a标签设置为非链接样式**/
+.notLink {
+	color: black;
+	text-decoration: none;
+	cursor: default;
+}

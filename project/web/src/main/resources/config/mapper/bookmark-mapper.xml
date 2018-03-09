@@ -21,8 +21,8 @@
     <select id="selectListLimit" resultType="cn.charlie166.web.store.domain.po.Bookmark">
     	SELECT bm.* FROM bookmark bm
     	<include refid="selectWhere"/>
-    	LIMIT #{start}, #{size}
     	ORDER BY bm.createTime DESC
+    	LIMIT #{start}, #{size}
     </select>
     
     <!-- 查询条件 -->

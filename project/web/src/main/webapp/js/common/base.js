@@ -227,37 +227,27 @@ define(["jquery", "codes", "layer"], function ($, codes){
 		checkLink: function(url, callbak){
 			if($.isFunction(callbak)){
 				if(url){
-					$.get(url, {})
-						.done(function(data) {
-							console.debug(data);
-					});
-					/*$.get({
+					/**目前设置为0或200的有效链接，其他状态值均无效**/
+					$.get({
 						url: url,
 						processData: false,
 						dataType: "text html",
 						statusCode: {
 							200: function(){
-								console.debug("200-url:" + url);
-								callbak.call(this, true);
 							},
 							404: function(){
-								console.debug("404-url:" + url);
-								callbak.call(this, true);
 							}
 						},
 						error: function(jq, ts, e){
-							console.debug("b-url:" + url);
-							console.debug("status :" + jq.status);
-							console.debug(e);
-							callbak.call(this, false);
 						},
 						complete: function(jq, ts){
-							console.debug("d-url:" + url);
-							console.debug("status :" + jq.status);
-							console.debug(ts);
-							callbak.call(this, false);
+							if(jq.status == 0 || jq.status == 200){
+								callbak.call(this, true);
+							} else {
+								callbak.call(this, false);
+							}
 						}
-					});*/
+					});
 				} else {
 					console.debug("a-url:" + url);
 					callbak.call(this, false);
