@@ -42,3 +42,14 @@ body {
 	width: 98%;
 	margin: 5px 1%;
 }
+/**列表展示区域**/
+.pageList {
+	width: 100%;
+}
+.pageList table {
+	width: 100%;
+}
+/**列表页码**/
+.pageInfo {
+	width: 100%;
+}

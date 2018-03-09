@@ -2,7 +2,7 @@ package cn.charlie166.web.store.service.inter;
 
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
-import cn.charlie166.web.store.domain.po.Bookmark;
+import cn.charlie166.web.store.domain.dto.PageDTO;
 
 /**
 * @ClassName: BookmarkService 
@@ -21,7 +21,7 @@ public interface BookmarkService {
 	* @param bokmark
 	* @return 新增后的id
 	 */
-	public long addSubmit(Bookmark bookmark) throws CustomException;
+	public long addSubmit(BookmarkDTO bookmark) throws CustomException;
 	
 	/**
 	* @Title: editSubmit 
@@ -30,7 +30,7 @@ public interface BookmarkService {
 	* @return
 	* @throws CustomException
 	 */
-	public long editSubmit(Bookmark bookmark) throws CustomException;
+	public long editSubmit(BookmarkDTO bookmark) throws CustomException;
 	
 	/**
 	* @Title: detail 
@@ -40,4 +40,12 @@ public interface BookmarkService {
 	* @throws CustomException
 	 */
 	public BookmarkDTO detail(String id) throws CustomException;
+	
+	/**
+	* @Title: page 
+	* @Description: 书签分页查询
+	* @param page 查询条件
+	* @return
+	 */
+	PageDTO<BookmarkDTO> page(PageDTO<BookmarkDTO> page);
 }

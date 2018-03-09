@@ -48,7 +48,7 @@ var jsConfig = {
     	"ue": "lib/ueditor/ue-require",
     	"layer": "lib/layer/layer",
     	/** 自定义返回码 **/
-    	"code": "common/codes"
+    	"codes": "common/codes"
     }	
 };
 //console.debug("base_context_url:" + base_context_url);

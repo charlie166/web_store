@@ -3,6 +3,7 @@
 
 <mapper namespace="cn.charlie166.web.store.dao.BookmarkDao">
 
+	<!-- 单条插入 -->
     <insert id="insertOne" parameterType="cn.charlie166.web.store.domain.po.Bookmark" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
     	INSERT INTO bookmark(title, link, content)
     		VALUES (#{title}, #{link}, #{content})
@@ -10,17 +11,41 @@
     
     <select id="selectCount" resultType="int" parameterType="cn.charlie166.web.store.domain.po.Bookmark">
     	SELECT COUNT(bm.id) FROM bookmark bm
-    	<where>
-    		<if test="null != title and title != ''">
-    			bm.title LIKE '%${title}%'
-    		</if>
-    	</where>
+    	<include refid="selectWhere"/>
+    </select>
+    <select id="selectList" resultType="cn.charlie166.web.store.domain.po.Bookmark" parameterType="cn.charlie166.web.store.domain.po.Bookmark">
+    	SELECT bm.* FROM bookmark bm
+    	<include refid="selectWhere"/>
+    	ORDER BY bm.createTime DESC
+    </select>
+    <select id="selectListLimit" resultType="cn.charlie166.web.store.domain.po.Bookmark">
+    	SELECT bm.* FROM bookmark bm
+    	<include refid="selectWhere"/>
+    	LIMIT #{start}, #{size}
+    	ORDER BY bm.createTime DESC
     </select>
     
+    <!-- 查询条件 -->
+    <sql id="selectWhere">
+    	<where>
+    		<if test="null != bk.title and bk.title != ''">
+    			bm.title LIKE '%${bk.title}%'
+    		</if>
+    		<if test="null != bk.link and bk.link != ''">
+    			AND bm.link LIKE '%${bk.link}%'
+    		</if>
+    		<if test="null != bk.commentary and bk.commentary != ''">
+    			AND bm.commentary LIKE '%${bk.commentary}%'
+    		</if>
+    	</where>
+    </sql>
+    
+    <!-- 通过ID查询 -->
     <select id="seletById" resultType="cn.charlie166.web.store.domain.po.Bookmark">
     	SELECT bm.* FROM bookmark bm WHERE bm.id = #{id}
     </select>
     
+    <!-- 通过ID更新 -->
     <update id="updateById" parameterType="cn.charlie166.web.store.domain.po.Bookmark">
     	UPDATE bookmark
     	<set>

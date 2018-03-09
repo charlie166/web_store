@@ -1,5 +1,8 @@
 package cn.charlie166.web.store.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +10,7 @@ import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.BookmarkDao;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
+import cn.charlie166.web.store.domain.dto.PageDTO;
 import cn.charlie166.web.store.domain.po.Bookmark;
 import cn.charlie166.web.store.service.inter.BookmarkService;
 import cn.charlie166.web.store.tools.ClassUtils;
@@ -29,7 +33,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 	private BookmarkDao bookmarkDao;
 
 	@Override
-	public long addSubmit(Bookmark bookmark) throws CustomException {
+	public long addSubmit(BookmarkDTO bk) throws CustomException {
+		Bookmark bookmark = ClassUtils.convertType(bk, Bookmark.class);
 		this.commonCheck(bookmark);
 		bookmarkDao.insertOne(bookmark);
 		if(bookmark.getId() != null)
@@ -53,7 +58,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public long editSubmit(Bookmark bookmark) throws CustomException {
+	public long editSubmit(BookmarkDTO bk) throws CustomException {
+		Bookmark bookmark = ClassUtils.convertType(bk, Bookmark.class);
 		this.commonCheck(bookmark);
 		int result = bookmarkDao.updateById(bookmark);
 		if(result > 0){
@@ -88,5 +94,18 @@ public class BookmarkServiceImpl implements BookmarkService {
 				throw CustomException.instance(ExceptionCodes.BOOKMARK_NEED_CONTENT);
 			}
 		}
+	}
+
+	@Override
+	public PageDTO<BookmarkDTO> page(PageDTO<BookmarkDTO> page) {
+		Map<String, Object> condition = page.getCondition();
+		Bookmark bk = ClassUtils.convertType(condition, Bookmark.class);
+		int total = bookmarkDao.selectCount(bk);
+		if(total > 0){
+			page.setTotal(total);
+			List<Bookmark> list = bookmarkDao.selectListLimit(bk, page.getStart(), page.getPageSize());
+			page.setRecords(ClassUtils.convertTypeOfList(list, BookmarkDTO.class));
+		}
+		return page;
 	}
 }

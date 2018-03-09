@@ -1,5 +1,7 @@
 package cn.charlie166.web.store.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import cn.charlie166.web.store.domain.annotation.ParamCheck;
@@ -37,7 +39,23 @@ public interface BookmarkDao {
 	* @param bookmark
 	* @return
 	 */
-	public int selectCount(Bookmark bookmark);
+	public int selectCount(@Param(value = "bk") Bookmark bookmark);
+	
+	/**
+	* @Title: selectList 
+	* @Description: 查询列表
+	* @param bookmark
+	* @return
+	 */
+	public List<Bookmark> selectList(@Param(value = "bk") Bookmark bookmark);
+	
+	/**
+	* @Title: selectListLimit 
+	* @Description: 限制查询
+	* @param bookmark
+	* @return
+	 */
+	public List<Bookmark> selectListLimit(@Param(value = "bk") Bookmark bookmark, @Param(value = "start") int start, @Param(value = "size") int size);
 	
 	/**
 	* @Title: seletById 
@@ -46,4 +64,5 @@ public interface BookmarkDao {
 	* @return
 	 */
 	public Bookmark seletById(@Param(value = "id") long id);
+	
 }

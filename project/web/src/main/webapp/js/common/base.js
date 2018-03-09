@@ -145,9 +145,48 @@ if(!Date.prototype.format){
 /**
  * 一些基本的常用的功能方法封装
  */
-define(["jquery", "code", "layer"], function ($, code){
+define(["jquery", "codes", "layer"], function ($, codes){
 	/**当前加载中动画索引**/
 	var currentLoadingIndex;
+	/**发送请求方法 url: 请求地址; param: 请求参数; succCall: 成功回调方法**/
+	function sendRequest(url, param, succCall){
+		/**显示加载中动画**/
+		var postLoadingIndex = layer.load(1);
+		$.ajax({
+			url: url,
+			method: "POST",
+			dataType: "json",
+			data: param,
+			headers: {},
+			success: function(data, textStatus, jqXHR){
+				/**请求完成，关闭加载动画**/
+				if(postLoadingIndex)
+					layer.close(postLoadingIndex);
+				if(data){
+					if(data.code == codes.ok){
+						if($.isFunction(succCall)){
+							succCall.call(this, data.content);
+						} else {
+							layer.msg("回调方法参数错误");
+						}
+					} else {
+						layer.alert(data.msg ? data.msg : "操作失败");
+					}
+				} else {
+					layer.alert("没有获取到返回数据");
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				/**请求完成，关闭加载动画**/
+				if(postLoadingIndex)
+					layer.close(postLoadingIndex);
+			}
+		});
+	}
+	/**分页查询数据  page: 查询页数; pageSize: 查询每页条数; url: 分页查询地址; param: 查询条件; succCall: 查询成功回调**/
+	function pageQuery(page, pageSize, url, param, succCall){
+		
+	}
 	return {
 		/**   当前工程的访问路径，含上下文. 返回如: http://xxx.com:123/web/   **/
 		thisUrl: base_context_url,
@@ -184,6 +223,47 @@ define(["jquery", "code", "layer"], function ($, code){
 				}
 			}
 		},
+		/**校验链接是否有效，异步校验	  url: 校验地址; callbak: 校验结果回调.**/
+		checkLink: function(url, callbak){
+			if($.isFunction(callbak)){
+				if(url){
+					$.get(url, {})
+						.done(function(data) {
+							console.debug(data);
+					});
+					/*$.get({
+						url: url,
+						processData: false,
+						dataType: "text html",
+						statusCode: {
+							200: function(){
+								console.debug("200-url:" + url);
+								callbak.call(this, true);
+							},
+							404: function(){
+								console.debug("404-url:" + url);
+								callbak.call(this, true);
+							}
+						},
+						error: function(jq, ts, e){
+							console.debug("b-url:" + url);
+							console.debug("status :" + jq.status);
+							console.debug(e);
+							callbak.call(this, false);
+						},
+						complete: function(jq, ts){
+							console.debug("d-url:" + url);
+							console.debug("status :" + jq.status);
+							console.debug(ts);
+							callbak.call(this, false);
+						}
+					});*/
+				} else {
+					console.debug("a-url:" + url);
+					callbak.call(this, false);
+				}
+			}
+		},
 		post: function(url, param, succCall){/**post请求**/
 			if(!url)
 				return false;
@@ -193,29 +273,8 @@ define(["jquery", "code", "layer"], function ($, code){
 			} else {
 				p = $.extend({}, param);
 			}
-			/**显示加载中动画**/
-			var postLoadingIndex = layer.load(1);
-			$.ajax({
-				url: url,
-				method: "POST",
-				dataType: "json",
-				data: p,
-				complete: function(jq, textStatus){
-					/**请求完成，关闭加载动画**/
-					layer.close(postLoadingIndex);
-				},
-				success: function(data, s){
-					if(data){
-						if(data.code == code.ok){
-							if($.isFunction(succCall)){
-								succCall.call(this, data);
-							}
-						} else {
-							layer.alert(data.msg ? data.msg : "操作失败");
-						}
-					}
-				}
-			});
+			/**发送请求**/
+			sendRequest(url, p, succCall);
 		}
 	}
 });

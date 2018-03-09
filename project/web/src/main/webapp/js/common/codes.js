@@ -1,4 +1,6 @@
 /**自定义响应码**/
-var code = {
-	ok: 200
-}
+define(["jquery"], function ($){
+	return {
+		ok: 200
+	}
+});

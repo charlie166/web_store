@@ -26,7 +26,7 @@
 								引用地址
 							</td>
 							<td>
-								<input type="text" name="link" value="${bk.title}">
+								<input type="text" name="link" value="${bk.link}">
 							</td>
 						</tr>
 						<tr>

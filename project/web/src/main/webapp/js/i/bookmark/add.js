@@ -31,7 +31,7 @@ requirejs(["jquery", "base", "ue"], function($, base) {
 					}
 				});*/
 				base.post(thisModuleUrl + "json/add.do", param, function(data){
-					console.debug(data);
+					window.location.href = thisModuleUrl + "page/" + data.content + "/detail.do";
 				});
 			});
 		});

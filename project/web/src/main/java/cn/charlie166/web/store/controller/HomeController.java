@@ -14,7 +14,6 @@ import cn.charlie166.web.store.service.inter.DemoService;
  * @see     
  * @since   web 1.0
  */
-@RequestMapping(value = "/home")
 @Controller
 public class HomeController extends BaseController {
 
@@ -27,7 +26,7 @@ public class HomeController extends BaseController {
 	 * @return 
 	 * @since web 1.0.0
 	 */
-	@RequestMapping(value = "/welcome.do")
+	@RequestMapping(value = {"/home/welcome.do", "/"})
 	public ModelAndView homePage() {
 		ModelAndView view = new ModelAndView("index/home");
 		view.addObject("demoCount", Integer.valueOf(demoService.selectDemoCount()));

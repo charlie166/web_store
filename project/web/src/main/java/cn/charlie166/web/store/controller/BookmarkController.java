@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
-import cn.charlie166.web.store.domain.po.Bookmark;
+import cn.charlie166.web.store.domain.dto.PageDTO;
 import cn.charlie166.web.store.service.inter.BookmarkService;
 
 /**
@@ -27,6 +27,17 @@ public class BookmarkController extends BaseController{
 
 	@Autowired
 	private BookmarkService service;
+	
+	/**
+	* @Title: indexPage 
+	* @Description: 书签列表(首页)页面
+	* @return
+	 */
+	@RequestMapping(value = "/page/index.do")
+	public ModelAndView indexPage(){
+		ModelAndView mv = new ModelAndView("bookmark/index");
+		return mv;
+	}
 	
 	/**
 	 * @description 新增书签页面
@@ -102,7 +113,7 @@ public class BookmarkController extends BaseController{
 	 */
 	@RequestMapping(value = "/json/add.do")
 	@ResponseBody
-	public Long addSubmit(Bookmark data){
+	public Long addSubmit(BookmarkDTO data){
 		return service.addSubmit(data);
 	}
 	
@@ -114,8 +125,19 @@ public class BookmarkController extends BaseController{
 	 */
 	@RequestMapping(value = "/json/edit.do")
 	@ResponseBody
-	public Long editSubmit(Bookmark data){
+	public Long editSubmit(BookmarkDTO data){
 		return service.editSubmit(data);
 	}
 	
+	/**
+	* @Title: page 
+	* @Description: 书签分页查询
+	* @param condition 查询条件
+	* @return
+	 */
+	@RequestMapping(value = "/json/pager.do")
+	@ResponseBody
+	public PageDTO<BookmarkDTO> page(PageDTO<BookmarkDTO> condition){
+		return service.page(condition);
+	}
 }
