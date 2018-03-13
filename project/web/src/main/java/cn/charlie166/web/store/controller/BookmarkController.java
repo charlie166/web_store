@@ -33,7 +33,7 @@ public class BookmarkController extends BaseController{
 	* @Description: 书签列表(首页)页面
 	* @return
 	 */
-	@RequestMapping(value = {"/page/index.do", "/", "/page.do", "/page/list.do"})
+	@RequestMapping(value = {"/page/index.do", "/", "/page.do", "/page/list.do", ""})
 	public ModelAndView indexPage(){
 		ModelAndView mv = new ModelAndView("bookmark/index");
 		return mv;
