@@ -47,6 +47,8 @@ public class QiniuServiceImpl implements QiniuService {
 	private String bucket;
 	@Value(value = "${qiniu.callback.url:null}")
 	private String callbackUrl;
+	@Value(value = "${qiniu.url.preffix:}")
+	private String qiniuPreffix;
 	
 	@Override
 	public String getUploadToken() {
@@ -124,5 +126,10 @@ public class QiniuServiceImpl implements QiniuService {
 	 */
 	private Zone getThisZone(){
 		return Zone.zone0();
+	}
+
+	@Override
+	public String getQiniuPreffix() {
+		return this.qiniuPreffix;
 	}
 }

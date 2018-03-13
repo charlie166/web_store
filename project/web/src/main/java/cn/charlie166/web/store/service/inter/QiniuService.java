@@ -52,4 +52,11 @@ public interface QiniuService {
 	* @return
 	 */
 	public QiniuRet callback(QiniuRet back);
+	
+	/**
+	* @Title: getQiniuPreffix 
+	* @Description: 获取七牛访问路径部分
+	* @return
+	 */
+	public String getQiniuPreffix();
 }
