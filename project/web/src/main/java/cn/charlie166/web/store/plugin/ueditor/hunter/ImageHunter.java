@@ -1,10 +1,21 @@
 package cn.charlie166.web.store.plugin.ueditor.hunter;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cn.charlie166.web.store.plugin.ueditor.PathFormat;
 import cn.charlie166.web.store.plugin.ueditor.define.AppInfo;
@@ -30,6 +41,8 @@ public class ImageHunter {
 	private long maxSize = -1;
 	private List<String> filters = null;
 	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public ImageHunter(Map<String, Object> conf) {
 		this.filename = (String)conf.get("filename");
 		this.savePath = (String)conf.get("savePath");
@@ -49,35 +62,51 @@ public class ImageHunter {
 	}
 
 	public State captureRemoteData(String urlStr) {
-		HttpURLConnection connection = null;
-		URL url = null;
-		String suffix = null;
 		try {
-			url = new URL(urlStr);
-			if (!validHost(url.getHost())) {
-				return new BaseState( false, AppInfo.PREVENT_HOST);
-			}
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setInstanceFollowRedirects(true);
-			connection.setUseCaches(true);
-			if (!validContentState(connection.getResponseCode())) {
+			CloseableHttpClient hc = HttpClientBuilder.create().build();
+			HttpGet get = new HttpGet(urlStr);
+			get.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0");
+			get.setHeader("Accept", "*/*");
+			try {
+				String host = get.getURI().getHost();
+				if (!validHost(host)) {
+					return new BaseState( false, AppInfo.PREVENT_HOST);
+				}
+				CloseableHttpResponse resp = hc.execute(get);
+				StatusLine statusLine = resp.getStatusLine();
+				if(statusLine != null){
+					logger.error("请求[{}]返回状态码: [{}]", urlStr, statusLine.getStatusCode());
+					if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+						HttpEntity httpEntity = resp.getEntity();
+						Header contentType = httpEntity.getContentType();
+						String suffix = MIMEType.getSuffix(contentType.getValue());
+						if (!validFileType(suffix)) {
+							return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
+						}
+						InputStream inputStream = httpEntity.getContent();
+						long contentLength = httpEntity.getContentLength();
+						if (!validFileSize(contentLength)) {
+							return new BaseState(false, AppInfo.MAX_SIZE);
+						}
+						String savePath = this.getPath(this.savePath, this.filename, suffix);
+						String physicalPath = this.rootPath + savePath;
+						State state = StorageManager.saveByInputStream(inputStream, physicalPath);
+						if (state.isSuccess()) {
+							state.putInfo("url", PathFormat.format(savePath));
+							state.putInfo("source", urlStr);
+						}
+						return state;
+					} else {
+						return new BaseState( false, AppInfo.CONNECTION_ERROR );
+					}
+				} else {
+					logger.error("请求{}返回状态行为空", urlStr);
+					return new BaseState( false, AppInfo.CONNECTION_ERROR );
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 				return new BaseState( false, AppInfo.CONNECTION_ERROR );
 			}
-			suffix = MIMEType.getSuffix(connection.getContentType());
-			if (!validFileType(suffix)) {
-				return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
-			}
-			if (!validFileSize(connection.getContentLength())) {
-				return new BaseState(false, AppInfo.MAX_SIZE);
-			}
-			String savePath = this.getPath(this.savePath, this.filename, suffix);
-			String physicalPath = this.rootPath + savePath;
-			State state = StorageManager.saveByInputStream(connection.getInputStream(), physicalPath);
-			if (state.isSuccess()) {
-				state.putInfo("url", PathFormat.format(savePath));
-				state.putInfo("source", urlStr);
-			}
-			return state;
 		} catch (Exception e) {
 			return new BaseState(false, AppInfo.REMOTE_FAIL);
 		}
@@ -92,15 +121,11 @@ public class ImageHunter {
 		return !filters.contains( hostname );
 	}
 	
-	private boolean validContentState(int code) {
-		return HttpURLConnection.HTTP_OK == code;
-	}
-	
 	private boolean validFileType(String type) {
 		return this.allowTypes.contains(type);
 	}
 	
-	private boolean validFileSize(int size) {
+	private boolean validFileSize(long size) {
 		return size < this.maxSize;
 	}
 }

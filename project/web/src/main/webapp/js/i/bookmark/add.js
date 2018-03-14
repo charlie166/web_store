@@ -30,8 +30,8 @@ requirejs(["jquery", "base", "ue"], function($, base) {
 						console.debug(data);
 					}
 				});*/
-				base.post(thisModuleUrl + "json/add.do", param, function(data){
-					window.location.href = thisModuleUrl + "page/" + data.content + "/detail.do";
+				base.post(thisModuleUrl + "json/add.do", param, function(content){
+					window.location.href = thisModuleUrl + "page/" + content + "/detail.do";
 				});
 			});
 		});

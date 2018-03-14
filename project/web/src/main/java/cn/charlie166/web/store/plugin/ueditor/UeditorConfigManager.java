@@ -34,8 +34,10 @@ public class UeditorConfigManager {
 	public static final String UE_PROP_PREFFIX = "ue.";
 	/**配置信息***/
 	public static final Map<String, String> CONFIG_MAP = new HashMap<String, String>();
+	/**ue使用的键名. 本地存储的物理路径前缀处理，优先使用附件配置的。**/
+	public static final String ROOT_PATH_KEY = "rootPath";
 	/**不返回前端的配置键**/
-	public static final Set<String> FILTER_KEYS = Sets.newHashSet("rootPath");
+	public static final Set<String> FILTER_KEYS = Sets.newHashSet(UeditorConfigManager.ROOT_PATH_KEY);
 	/**配置中，值为数组的键名**/
 	public static final Set<String> KEYS_OF_ARRAY = Sets.newHashSet("imageAllowFiles", "catcherLocalDomain", "catcherAllowFiles", "videoAllowFiles",
 		"fileAllowFiles", "imageManagerAllowFiles", "fileManagerAllowFiles");
@@ -65,17 +67,15 @@ public class UeditorConfigManager {
 				UeditorConfigManager.CONFIG_MAP.put(key, val);
 			}
 		});
-		/**ue使用的键名. 本地存储的物理路径前缀处理，优先使用附件配置的。**/
-		String key = "rootPath";
 		/**附件配置的物理路径前缀键名**/
 		String key_atta = "attachment.rootPath";
 		/**如果附件配置有值，优先使用附件配置值**/
 		if(StringUtils.hasContent(map.get(key_atta))){
-			UeditorConfigManager.CONFIG_MAP.put(key, map.get(key_atta));
+			UeditorConfigManager.CONFIG_MAP.put(UeditorConfigManager.ROOT_PATH_KEY, map.get(key_atta));
 		}
 		/**未设置此值，默认使用当前路径**/
-		if(!StringUtils.hasContent(UeditorConfigManager.CONFIG_MAP.get(key))){
-			UeditorConfigManager.CONFIG_MAP.put(key, "./");
+		if(!StringUtils.hasContent(UeditorConfigManager.CONFIG_MAP.get(UeditorConfigManager.ROOT_PATH_KEY))){
+			UeditorConfigManager.CONFIG_MAP.put(UeditorConfigManager.ROOT_PATH_KEY, "./");
 		}
 	}
 	
@@ -233,21 +233,21 @@ public class UeditorConfigManager {
 				break;
 		}
 		conf.put("savePath", savePath);
-//		conf.put("rootPath", this.rootPath);
+		conf.put("rootPath", UeditorConfigManager.getRootPath());
 		return conf;
 	}
 	
 	/**
 	* @Title: getRootPath 
-	* @Description: 获取保存附件的根路径
+	* @Description: 获取保存附件的根路径, 未设置时返回当前目录
 	* @return
 	 */
     public static String getRootPath() {
     	String rootPath = "./";
-    	if(UeditorConfigManager.CONFIG_MAP.containsKey("rootPath")){
-    		String s = UeditorConfigManager.CONFIG_MAP.get("rootPath");
+    	if(UeditorConfigManager.CONFIG_MAP.containsKey(UeditorConfigManager.ROOT_PATH_KEY)){
+    		String s = UeditorConfigManager.CONFIG_MAP.get(UeditorConfigManager.ROOT_PATH_KEY);
     		if(StringUtils.hasContent(s)){
-    			rootPath = UeditorConfigManager.CONFIG_MAP.get("rootPath");
+    			rootPath = UeditorConfigManager.CONFIG_MAP.get(UeditorConfigManager.ROOT_PATH_KEY);
     		}
     	}
     	if(!rootPath.endsWith("/") && !rootPath.endsWith("\\")){
