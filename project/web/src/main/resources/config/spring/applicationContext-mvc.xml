@@ -67,7 +67,7 @@
       	<property name="suffix" value=".jsp" />
    	</bean>
    	
-	<!-- 上传多媒体文件处理器，id是确定的 -->
+	<!-- 上传文件处理器，id是确定的 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
 	</bean>
 	
@@ -76,5 +76,8 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 	<!-- 自定义统一处理返回体切面 -->
 	<bean class="cn.charlie166.web.store.config.CustomResponseBodyAdvice"></bean>
+	
+	<!-- spring的上下文工具类 -->
+	<bean class="cn.charlie166.web.store.config.SpringContextUtils"></bean>
 	
 </beans>

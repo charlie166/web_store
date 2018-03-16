@@ -2,6 +2,8 @@ package cn.charlie166.web.store.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,10 +12,14 @@ import javax.servlet.jsp.JspException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.google.common.collect.Maps;
+
+import cn.charlie166.web.store.config.SpringContextUtils;
 import cn.charlie166.web.store.constant.CustomException;
+import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.constant.KeyConstant;
 import cn.charlie166.web.store.constant.ResponseCodes;
 import cn.charlie166.web.store.domain.dto.MsgDTO;
@@ -46,33 +52,46 @@ public class BaseController {
 	@ExceptionHandler
 	public void exceptionHandler(Exception exception) {
 		String url = this.request.getRequestURI().toString();
+		logger.error(String.format("请求[%s]出现异常", url), exception);
+		this.response.setCharacterEncoding("UTF-8");
 		MsgDTO<Object> msg = new MsgDTO<Object>();
 		msg.setCode(ResponseCodes.FAIL);
+		/**用于异常的视图解析**/
+		InternalResourceViewResolver beanResolver = SpringContextUtils.getBean(InternalResourceViewResolver.class);
+		HashMap<String, Object> map = Maps.newHashMap();
+		String viewName = "";
 		if(exception instanceof CustomException){
 			CustomException ce = (CustomException) exception;
-			this.request.setAttribute(KeyConstant.CUSTOM_EXCEP_CODE, ce.getCode());
+			if(ExceptionCodes.COMMON_DATA_ABSENT.equals(ce.getCode())){
+				viewName = "error/404";
+			}
+			map.put(KeyConstant.CUSTOM_EXCEP_CODE, ce.getCode());
 			msg.setContent(ce.getCode());
-		} else {
+			msg.setMsg(ce.getMessage());
+		} else {/**其他异常**/
+			viewName = "error/500";
+			msg.setMsg(exception.getMessage());
+			map.put(KeyConstant.ERROR_500_MSG, msg.getMsg());
 		}
 		/**如果是页面请求出现异常，导向错误提示页面**/
 		if(url.contains("/page/")){
-			this.response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			/*try {
-				this.response.sendRedirect(this.getBaseUrl() + "error/500.do");
+			try {
+				if(StringUtils.isNullOrTrimBlank(viewName)){
+					viewName = "error/500";
+				}
+				beanResolver.resolveViewName(viewName, Locale.getDefault()).render(map, this.request, this.response);
+			} catch (Exception e) {
+				e.printStackTrace();
+				msg.setMsg(e.getMessage());
+			}
+		} else {/**其他请求返回JSON数据**/
+			try (PrintWriter writer = this.response.getWriter()) {
+				writer.write(JsonUtils.toJson(msg));
+				writer.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}*/
+			}
 		}
-		try {
-			PrintWriter writer = this.response.getWriter();
-			writer.write(JsonUtils.toJson(msg));
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-				
-		}
-		exception.printStackTrace();
 	}
 	
 	/**
