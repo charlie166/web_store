@@ -15,5 +15,5 @@ public class ResponseCodes {
 	public static final int OK = 200;
 	
 	/**操作失败**/
-	public static final int FAIL = 100000;
+	public static final int FAIL = -1;
 }

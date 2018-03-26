@@ -31,7 +31,7 @@ public class ExceptionCodes {
 	/**文件----创建文件出现异常***/
 	public static final String FILE_CREATE_FAIL = "createFileException";
 	/**文件----复制文件出现异常***/
-	public static final String FILE_COPY_FILE = "createFileException";
+	public static final String FILE_COPY_FILE = "copyFileException";
 	/**文件----文件不存在**/
 	public static final String FILE_NOT_EXISTS = "notExists";
 	/**文件----目录不存在或不是目录**/

@@ -59,7 +59,13 @@ public class StringUtils {
 	 */
 	public static boolean isInteger(String s){
 		if(StringUtils.hasContent(s)){
-			return s.matches("[+-]?\\d+");
+//			return s.matches("[+-]?\\d+");
+			try {
+				Integer.parseInt(s);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
 		}
 		return false;
 	}

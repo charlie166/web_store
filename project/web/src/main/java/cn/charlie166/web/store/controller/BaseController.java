@@ -24,6 +24,7 @@ import cn.charlie166.web.store.constant.KeyConstant;
 import cn.charlie166.web.store.constant.ResponseCodes;
 import cn.charlie166.web.store.domain.dto.MsgDTO;
 import cn.charlie166.web.store.tools.JsonUtils;
+import cn.charlie166.web.store.tools.MsgPropertyPlaceholder;
 import cn.charlie166.web.store.tools.StringUtils;
 import cn.charlie166.web.store.tools.WebUtils;
 
@@ -66,8 +67,8 @@ public class BaseController {
 				viewName = "error/404";
 			}
 			map.put(KeyConstant.CUSTOM_EXCEP_CODE, ce.getCode());
-			msg.setContent(ce.getCode());
-			msg.setMsg(ce.getMessage());
+//			msg.setContent(ce.getCode());
+			msg.setMsg(MsgPropertyPlaceholder.getStringValue(ce.getCode()));
 		} else {/**其他异常**/
 			viewName = "error/500";
 			msg.setMsg(exception.getMessage());

@@ -13,6 +13,12 @@
     	http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<!-- 消息内容配置读取 -->
+	<bean class="cn.charlie166.web.store.tools.MsgPropertyPlaceholder">
+		<property name="fileEncoding" value="UTF-8"></property>
+		<property name="locations" value="classpath*:msg/*.properties"/>
+	</bean>
+
 	<!-- 自动扫描加载控制器 -->
 	<context:component-scan base-package="cn.charlie166.web.store.controller"/>
 	
