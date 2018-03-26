@@ -76,7 +76,7 @@ public class BaseController {
 		}
 		boolean shouldReturnJson = true;
 		/**如果是页面请求出现异常，导向错误提示页面**/
-		if(url.contains("/page/")){
+		if(WebUtils.isPageRequest(this.request)){
 			try {
 				if(StringUtils.isNullOrTrimBlank(viewName)){
 					viewName = "error/500";

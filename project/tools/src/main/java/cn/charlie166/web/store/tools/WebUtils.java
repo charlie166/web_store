@@ -140,4 +140,18 @@ public class WebUtils {
 		}
 		return url;
 	}
+	
+	/***
+	* @Title: isPageRequest 
+	* @Description: 判断请求是否为页面的请求
+	* @param request
+	* @return
+	 */
+	public static boolean isPageRequest(HttpServletRequest request){
+		if(request != null){
+			String header = request.getHeader("accept");
+			return StringUtils.hasContent(header) && header.startsWith("text/html");
+		}
+		return false;
+	}
 }
