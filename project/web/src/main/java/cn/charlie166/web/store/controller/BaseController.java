@@ -73,6 +73,7 @@ public class BaseController {
 			msg.setMsg(exception.getMessage());
 			map.put(KeyConstant.ERROR_500_MSG, msg.getMsg());
 		}
+		boolean shouldReturnJson = true;
 		/**如果是页面请求出现异常，导向错误提示页面**/
 		if(url.contains("/page/")){
 			try {
@@ -80,11 +81,13 @@ public class BaseController {
 					viewName = "error/500";
 				}
 				beanResolver.resolveViewName(viewName, Locale.getDefault()).render(map, this.request, this.response);
+				shouldReturnJson = false;
 			} catch (Exception e) {
 				e.printStackTrace();
 				msg.setMsg(e.getMessage());
 			}
-		} else {/**其他请求返回JSON数据**/
+		}
+		if (shouldReturnJson) {/**其他请求返回JSON数据**/
 			try (PrintWriter writer = this.response.getWriter()) {
 				writer.write(JsonUtils.toJson(msg));
 				writer.flush();
