@@ -4,8 +4,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
+import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.store.domain.third.QiniuResponse;
 import cn.charlie166.web.store.domain.third.QiniuRet;
 import cn.charlie166.web.store.service.inter.QiniuService;
@@ -35,9 +34,7 @@ import cn.charlie166.web.store.tools.StringUtils;
 *
  */
 @Service
-public class QiniuServiceImpl implements QiniuService {
-
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class QiniuServiceImpl extends BaseServiceImpl implements QiniuService {
 	
 	@Value(value = "${qiniu.access.key}")
 	private String accessKey;

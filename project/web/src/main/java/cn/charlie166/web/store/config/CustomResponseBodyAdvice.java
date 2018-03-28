@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import cn.charlie166.web.common.domain.annotation.DirectReturn;
 import cn.charlie166.web.store.constant.ResponseCodes;
 import cn.charlie166.web.store.domain.dto.MsgDTO;
 
@@ -27,7 +28,8 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-		return returnType.getMethodAnnotation(ResponseBody.class) != null;
+		return returnType.getMethodAnnotation(ResponseBody.class) != null &&
+			returnType.getMethodAnnotation(DirectReturn.class) == null;
 	}
 
 	@Override

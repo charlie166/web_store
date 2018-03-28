@@ -1,5 +1,7 @@
 package cn.charlie166.web.store.constant;
 
+import cn.charlie166.web.store.tools.MsgPropertyPlaceholder;
+
 /**
 * @ClassName: CustomException 
 * @Description: 自定义异常
@@ -44,7 +46,7 @@ public class CustomException extends RuntimeException {
 	}
 	
 	public static CustomException instance(String code){
-		return new CustomException(code);
+		return new CustomException(code, String.format("%s[%s]", code, MsgPropertyPlaceholder.getStringValue(code)));
 	}
 	
 	public static CustomException instance(String code, String message){

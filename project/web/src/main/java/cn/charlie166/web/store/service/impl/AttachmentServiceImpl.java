@@ -5,12 +5,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.service.inter.AttachmentService;
@@ -27,7 +33,7 @@ import cn.charlie166.web.store.tools.StringUtils;
 *
  */
 @Service
-public class AttachmentServiceImpl implements AttachmentService {
+public class AttachmentServiceImpl extends BaseServiceImpl implements AttachmentService {
 
 	/**是否备份到七牛**/
 	@Value(value = "${attachment.backup.qiniu:false}")
@@ -60,7 +66,10 @@ public class AttachmentServiceImpl implements AttachmentService {
 
 	@Override
 	public String getPhysicalCommonPreffix() {
-		return StringUtils.hasContent(physicalPath) ? physicalPath : "./";
+		String str = StringUtils.hasContent(physicalPath) ? physicalPath : "./";
+		if(!str.endsWith("/"))
+			str += "/";
+		return str;
 	}
 
 	@Override
@@ -161,5 +170,44 @@ public class AttachmentServiceImpl implements AttachmentService {
 			throw CustomException.instance(ExceptionCodes.FILE_PERMISSION_DENIED);
 		}
 		return f;
+	}
+
+	@Override
+	public void saveString(String content, String relativePath) {
+		if(content != null && StringUtils.hasContent(relativePath)){
+			File f = this.checkFile(this.getPhysicalCommonPreffix() + relativePath);
+			try {
+				FileUtils.write(f, content, Charset.defaultCharset());
+			} catch (IOException e) {
+				throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);
+			}
+		}
+	}
+
+	@Override
+	public String getString(String relativePath) {
+		Path path = Paths.get(this.getPhysicalCommonPreffix() + relativePath);
+		if(Files.exists(path)){
+			try {
+				return ByteBuffer.wrap(Files.readAllBytes(path)).toString();
+			} catch (IOException e) {
+				throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);
+			}
+		} else {
+			throw CustomException.instance(ExceptionCodes.FILE_NOT_EXISTS);
+		}
+	}
+
+	@Override
+	public String getStringOrDefault(String relativePath, String defaultString) {
+		Path path = Paths.get(this.getPhysicalCommonPreffix() + relativePath);
+		if(Files.exists(path)){
+			try {
+				return new String(Files.readAllBytes(path));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return defaultString;
 	}
 }

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.store.constant.CacheConstant;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
@@ -39,10 +38,8 @@ import cn.charlie166.web.store.tools.StringUtils;
  */
 @Service
 @CacheConfig(cacheNames = CacheConstant.PAC)
-public class PacServiceImpl implements PacService {
+public class PacServiceImpl extends BaseServiceImpl implements PacService {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 	@Autowired
 	private PacDao pacDao;
 

@@ -26,9 +26,34 @@ public interface AttachmentService {
 	public File saveBinaryFile(byte[] data, String path) throws CustomException;
 	
 	/**
+	* @Title: saveString 
+	* @Description: 保存文本内容到文件， 如果文件存在，则覆盖文件内容
+	* @param content 需要保存的内容. 可以为空字符串
+	* @param relativePath 文件相对路径
+	 */
+	void saveString(String content, String relativePath);
+	
+	/**
+	* @Title: getString 
+	* @Description: 从指定路径文件获取文本内容
+	* @param relativePath 相对路径
+	* @return 文本内容
+	 */
+	String getString(String relativePath);
+	
+	/**
+	* @Title: getStringOrDefault 
+	* @Description: 从指定文件获取文本内容，如果文件不存在或者出现异常，均返回默认字符串
+	* @param relativePath 文件相对路径
+	* @param defaultString 默认文本内容
+	* @return 读取到的文本内容
+	 */
+	String getStringOrDefault(String relativePath, String defaultString);
+	
+	/**
 	* @Title: getPhysicalCommonPreffix 
 	* @Description: 获取物理保存路径共同部分. 未配置返回当前路径{./}
-	* 如: F:/upload/ 	或	/home/xxx/upload	或	./
+	* 如: F:/upload/ 	或	/home/xxx/upload/	或	./
 	* @return 保存路径
 	 */
 	public String getPhysicalCommonPreffix();

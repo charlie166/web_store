@@ -61,4 +61,9 @@ public class ExceptionCodes {
 	public static final String BOOKMARK_NEED_CONTENT = "bookmarkNeedContent";
 	/**书签----标题必需**/
 	public static final String BOOKMARK_NEED_TITLE = "bookmarkNeedTitle";
+	
+	/**微信----服务器校验不通过***/
+	public static final String WEIXIN_SERVER_VALID_FAILED = "weixinServerFailed";
+	/**微信----获取微信凭证失败**/
+	public static final String WEIXIN_GET_TOKEN_FAILED = "weixinTokenFailed";
 }
