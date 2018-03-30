@@ -5,13 +5,9 @@ import java.nio.charset.Charset;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +19,11 @@ import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.service.inter.AttachmentService;
 import cn.charlie166.web.store.tools.JsonUtils;
 import cn.charlie166.web.store.tools.StringUtils;
+import cn.charlie166.web.store.tools.WebUtils;
+import cn.charlie166.web.weixin.domain.WeixinMenu;
+import cn.charlie166.web.weixin.domain.dto.WeixinResponseBaseDTO;
 import cn.charlie166.web.weixin.domain.dto.WeixinTokenDTO;
+import cn.charlie166.web.weixin.domain.dto.WeixinUserDTO;
 import cn.charlie166.web.weixin.service.inter.WeixinBaseService;
 
 /***
@@ -74,7 +74,7 @@ public class WeixinBaseServiceImpl extends BaseServiceImpl implements WeixinBase
 			String timeStr = content.substring(0, ind);
 			if(timeStr.matches("\\d+")){
 				LocalDateTime timeOfGet = Instant.ofEpochMilli(Long.valueOf(timeStr)).atZone(ZoneId.systemDefault()).toLocalDateTime();
-				/**微信是2个小时，这里设置成1个小时多**/
+				/**微信是2个小时有效期，这里设置成1个小时多**/
 				LocalDateTime shouldRefreshTime = timeOfGet.plusHours(1).plusMinutes(40);
 				/**时间还在有效期**/
 				if(LocalDateTime.now().isBefore(shouldRefreshTime)){
@@ -86,13 +86,8 @@ public class WeixinBaseServiceImpl extends BaseServiceImpl implements WeixinBase
 		StringBuilder thisUrl = new StringBuilder();
 		LocalDateTime now = LocalDateTime.now();
 		thisUrl.append(this.getBaseUrl()).append("token?grant_type=client_credential&appid=").append(this.id).append("&secret=").append(this.secret);
-		HttpGet hg = new HttpGet(thisUrl.toString());
-		HttpHost proxy = new HttpHost("charlie166.ddns.net", 8888);
-		RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
-		hg.setConfig(requestConfig);
-		HttpClient hc = HttpClientBuilder.create().build();
 		try {
-			HttpResponse httpResponse = hc.execute(hg);
+			HttpResponse httpResponse = WebUtils.weixinGet(thisUrl.toString());
 			if(httpResponse.getStatusLine().getStatusCode() == HttpStatus.OK.value()){
 				String result = EntityUtils.toString(httpResponse.getEntity(), Charset.defaultCharset());
 				WeixinTokenDTO json = JsonUtils.fromJson(result, WeixinTokenDTO.class);
@@ -113,5 +108,86 @@ public class WeixinBaseServiceImpl extends BaseServiceImpl implements WeixinBase
 			e.printStackTrace();
 		}
 		throw CustomException.instance(ExceptionCodes.WEIXIN_GET_TOKEN_FAILED);
+	}
+
+	@Override
+	public void refreshMenu() {
+		WeixinMenu firstMenu = new WeixinMenu();
+		firstMenu.setName("来啊");
+		firstMenu.setType("location_select");
+		WeixinMenu menu = new WeixinMenu();
+		menu.setButton(Arrays.asList(firstMenu));
+		StringBuilder thisUrl = new StringBuilder();
+		thisUrl.append(this.getBaseUrl()).append("menu/create?access_token=").append(this.getAccessToken());
+		try {
+			HttpResponse hr = WebUtils.weixinPost(thisUrl.toString(), menu);
+			if(hr.getStatusLine().getStatusCode() == HttpStatus.OK.value()){
+				String result = EntityUtils.toString(hr.getEntity(), Charset.defaultCharset());
+				WeixinResponseBaseDTO json = JsonUtils.fromJson(result, WeixinResponseBaseDTO.class);
+				if(json != null){
+					if(json.getErrcode() == null || json.getErrcode().intValue() == 0){
+						logger.debug("刷新微信菜单成功");
+					}
+				} else {
+					logger.error("刷新微信菜单返回无法解析对象");
+				}
+				this.throwWeixinException(json, "刷新微信菜单");
+			} else {
+				logger.error("微信响应返回码: {}", hr.getStatusLine().getStatusCode());
+				throw CustomException.instance(ExceptionCodes.WEIXIN_REQUEST_FAILED);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("刷新微信菜单失败", e);
+			throw CustomException.instance(ExceptionCodes.WEIXIN_REQUEST_FAILED);
+		}
+	}
+	
+	/**
+	* @Title: throwWeixinException 
+	* @Description:
+	* @param dto
+	 */
+	private void throwWeixinException(WeixinResponseBaseDTO dto, String tip){
+		StringBuilder msg = new StringBuilder(StringUtils.hasContent(tip) ? tip : "微信请求失败");
+		if(dto != null){
+			if(dto.getErrcode() != null){
+				msg.append(", 错误码: " + dto.getErrcode());
+			}
+			if(StringUtils.hasContent(dto.getErrmsg())){
+				msg.append(", 错误信息: " + dto.getErrmsg());
+			}
+		}
+		throw CustomException.instance(ExceptionCodes.WEIXIN_REQUEST_FAILED, msg.toString());
+	}
+
+	@Override
+	public WeixinUserDTO userInfo(String openId) {
+		if(!StringUtils.hasContent(openId))
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		StringBuilder thisUrl = new StringBuilder();
+		thisUrl.append(this.getBaseUrl()).append("user/info?access_token=").append(this.getAccessToken()).append("&openid=").append(openId).append("&lang=zh_CN");
+		try {
+			HttpResponse hr = WebUtils.weixinGet(thisUrl.toString());
+			if(hr.getStatusLine().getStatusCode() == HttpStatus.OK.value()){
+				String result = EntityUtils.toString(hr.getEntity(), Charset.defaultCharset());
+				WeixinUserDTO json = JsonUtils.fromJson(result, WeixinUserDTO.class);
+				if(json != null){
+					if(json.getErrcode() == null || json.getErrcode().intValue() == 0){
+						return json;
+					}
+				} else {
+					logger.error("请求获取微信用户信息返回无法解析对象");
+				}
+				this.throwWeixinException(json, "获取微信用户信息");
+			} else {
+				logger.error("请求获取微信用户信息-微信响应返回码: {}", hr.getStatusLine().getStatusCode());
+				throw CustomException.instance(ExceptionCodes.WEIXIN_REQUEST_FAILED);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("请求获取微信用户信息失败", e);
+		}
+		throw CustomException.instance(ExceptionCodes.WEIXIN_REQUEST_FAILED);
 	}
 }

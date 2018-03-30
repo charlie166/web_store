@@ -9,16 +9,12 @@ package cn.charlie166.web.weixin.domain.dto;
 * @date 2018年3月28日 
 *
  */
-public class WeixinTokenDTO {
+public class WeixinTokenDTO extends WeixinResponseBaseDTO {
 
 	/**获取到的凭证**/
 	private String access_token;
 	/**凭证有效时间, 单位: 秒**/
 	private Long expires_in;
-	/**错误码**/
-	private Integer errcode;
-	/**错误信息**/
-	private String errmsg;
 	
 	public String getAccess_token() {
 		return access_token;
@@ -31,18 +27,6 @@ public class WeixinTokenDTO {
 	}
 	public void setExpires_in(Long expires_in) {
 		this.expires_in = expires_in;
-	}
-	public Integer getErrcode() {
-		return errcode;
-	}
-	public void setErrcode(Integer errcode) {
-		this.errcode = errcode;
-	}
-	public String getErrmsg() {
-		return errmsg;
-	}
-	public void setErrmsg(String errmsg) {
-		this.errmsg = errmsg;
 	}
 	
 }

@@ -14,6 +14,7 @@
     	<project.version>0.0.1-SNAPSHOT</project.version>
     	<springframework.version>4.3.14.RELEASE</springframework.version>
     	<jackson.version>2.9.4</jackson.version>
+    	<jackson-dataformat-xml.version>2.9.4</jackson-dataformat-xml.version>
     	<qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
     	<jstl.version>1.2</jstl.version>
     	<jsp-api.version>2.3.1</jsp-api.version>
@@ -209,6 +210,11 @@
 			    <groupId>org.apache.httpcomponents</groupId>
 			    <artifactId>httpclient</artifactId>
 			    <version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.fasterxml.jackson.dataformat</groupId>
+			    <artifactId>jackson-dataformat-xml</artifactId>
+			    <version>${jackson-dataformat-xml.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

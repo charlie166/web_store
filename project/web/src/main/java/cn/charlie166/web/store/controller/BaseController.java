@@ -68,7 +68,7 @@ public class BaseController {
 			}
 			map.put(KeyConstant.CUSTOM_EXCEP_CODE, ce.getCode());
 //			msg.setContent(ce.getCode());
-			msg.setMsg(MsgPropertyPlaceholder.getStringValue(ce.getCode()));
+			msg.setMsg(StringUtils.hasContent(ce.getMessage()) ? ce.getMessage() : MsgPropertyPlaceholder.getStringValue(ce.getCode()));
 		} else {/**其他异常**/
 			viewName = "error/500";
 			msg.setMsg(exception.getMessage());
@@ -96,6 +96,7 @@ public class BaseController {
 				e.printStackTrace();
 			}
 		}
+		logger.error("请求出现异常", exception);
 	}
 	
 	/**

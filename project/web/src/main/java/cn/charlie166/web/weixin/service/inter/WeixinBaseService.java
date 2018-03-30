@@ -1,5 +1,8 @@
 package cn.charlie166.web.weixin.service.inter;
 
+import cn.charlie166.web.base.service.inter.BaseService;
+import cn.charlie166.web.weixin.domain.dto.WeixinUserDTO;
+
 /**
 * @ClassName: WeixinBaseService 
 * @Description: 微信基础服务接口
@@ -9,7 +12,7 @@ package cn.charlie166.web.weixin.service.inter;
 * @date 2018年3月28日 
 *
  */
-public interface WeixinBaseService {
+public interface WeixinBaseService extends BaseService {
 
 	/**
 	* @Title: getBaseUrl 
@@ -24,4 +27,18 @@ public interface WeixinBaseService {
 	* @return
 	 */
 	String getAccessToken();
+	
+	/**
+	* @Title: refreshMenu 
+	* @Description: 刷新微信菜单
+	 */
+	void refreshMenu();
+	
+	/**
+	* @Title: userInfo 
+	* @Description: 获取用户信息
+	* @param openId 用户openId
+	* @return 用户信息对象
+	 */
+	WeixinUserDTO userInfo(String openId);
 }

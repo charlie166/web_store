@@ -25,6 +25,8 @@ public class ExceptionCodes {
 	public static final String COMMON_INSERT_FAIL = "insertFail";
 	/**通用----没有默认构造方法**/
 	public static final String COMMON_DEFAULT_CONSTRUCTOR_ABSENT = "needDefaultConstructor";
+	/**xml----解析出错**/
+	public static final String COMMON_XML_PARSE_EXCEPTION = "xmlParseException";
 	
 	/**文件----创建目录出现异常***/
 	public static final String FILE_CREATE_DIRECTORY = "createDirectoryException";
@@ -66,4 +68,6 @@ public class ExceptionCodes {
 	public static final String WEIXIN_SERVER_VALID_FAILED = "weixinServerFailed";
 	/**微信----获取微信凭证失败**/
 	public static final String WEIXIN_GET_TOKEN_FAILED = "weixinTokenFailed";
+	/**微信----请求失败**/
+	public static final String WEIXIN_REQUEST_FAILED = "weixinRequestFailed";
 }

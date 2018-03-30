@@ -1,11 +1,21 @@
 package cn.charlie166.web.store.tools;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.util.UrlUtil;
 import org.jsoup.Jsoup;
@@ -25,6 +35,8 @@ import cn.charlie166.web.store.constant.ExceptionCodes;
  */
 public class WebUtils {
 
+	private static final String PROXY_HOST = "t.charlie166.xyz";
+	
 	/**
 	* @Title: getContentByLink 
 	* @Description: 获取指定链接地址的内容
@@ -153,5 +165,49 @@ public class WebUtils {
 			return StringUtils.hasContent(header) && header.startsWith("text/html");
 		}
 		return false;
+	}
+	
+	/**
+	* @Title: weixinGet 
+	* @Description: 微信GET请求
+	* @param url 请求地址, 完整的地址
+	* @return 请求响应
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	public static HttpResponse weixinGet(String url) throws IOException{
+		if(!StringUtils.hasContent(url)){
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		}
+		HttpGet hg = new HttpGet(url);
+		HttpHost proxy = new HttpHost(PROXY_HOST, 8888);
+		RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+		hg.setConfig(requestConfig);
+		HttpClient hc = HttpClientBuilder.create().build();
+		HttpResponse httpResponse = hc.execute(hg);
+		return httpResponse;
+	}
+	
+	/**
+	* @Title: weixinPost 
+	* @Description: 微信post请求
+	* @param url 请求地址，完整地址
+	* @param body 发送数据
+	* @return 响应结果
+	* @throws IOException
+	 */
+	public static HttpResponse weixinPost(String url, Object body) throws IOException{
+		if(!StringUtils.hasContent(url)){
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		}
+		HttpPost hp = new HttpPost(url);
+		HttpHost proxy = new HttpHost(PROXY_HOST, 8888);
+		RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+		hp.setConfig(requestConfig);
+		StringEntity se = new StringEntity(JsonUtils.toJson(body), Charset.defaultCharset());
+		se.setContentType("application/json");
+		hp.setEntity(se);
+		HttpClient hc = HttpClientBuilder.create().build();
+		return hc.execute(hp);
 	}
 }

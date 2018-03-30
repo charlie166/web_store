@@ -1,8 +1,11 @@
 package cn.charlie166.web.weixin.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.charlie166.web.common.domain.annotation.DirectReturn;
@@ -32,12 +35,29 @@ public class WeixinHomeController extends BaseController {
 	* @param dto
 	* @return
 	 */
-	@RequestMapping(value = "/valid")
+	@RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
 	@ResponseBody
 	@DirectReturn
 	public String serverValidate(WeixinServerValidateDTO dto){
 		dto = service.validateServer(dto);
+		logger.debug("原样返回微信: {}", dto.getEchostr());
 		return dto.getEchostr();
+	}
+	
+	/**
+	* @Title: msg 
+	* @Description: 微信消息
+	* @param msg
+	* @return
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = {"/", ""}, method = RequestMethod.POST)
+	@ResponseBody
+	@DirectReturn
+	public Object msg() throws IOException{
+		String msg = service.handlerMsg(this.request.getInputStream());
+		logger.debug("微信消息返回: {}", msg);
+		return msg;
 	}
 	
 	/**
@@ -49,5 +69,17 @@ public class WeixinHomeController extends BaseController {
 	@ResponseBody
 	public Object getAccessToken(){
 		return service.getAccessToken();
+	}
+	
+	/**
+	* @Title: refreshMenu 
+	* @Description: 刷新微信菜单
+	* @return
+	 */
+	@RequestMapping(value = "/menu")
+	@ResponseBody
+	public Boolean refreshMenu(){
+		service.refreshMenu();
+		return Boolean.TRUE;
 	}
 }

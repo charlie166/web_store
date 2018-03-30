@@ -34,7 +34,7 @@
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
-				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<bean class="cn.charlie166.web.base.others.CustomConverter">
 					<constructor-arg>
 						<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
 							<property name="deserializersByType">
