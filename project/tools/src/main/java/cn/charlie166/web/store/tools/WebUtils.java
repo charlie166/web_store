@@ -204,7 +204,9 @@ public class WebUtils {
 		HttpHost proxy = new HttpHost(PROXY_HOST, 8888);
 		RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
 		hp.setConfig(requestConfig);
-		StringEntity se = new StringEntity(JsonUtils.toJson(body), Charset.defaultCharset());
+		String json = JsonUtils.toJson(body);
+		System.out.println("发送数据对象: " + json);
+		StringEntity se = new StringEntity(json, Charset.defaultCharset());
 		se.setContentType("application/json");
 		hp.setEntity(se);
 		HttpClient hc = HttpClientBuilder.create().build();

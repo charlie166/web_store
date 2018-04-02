@@ -3,6 +3,9 @@ package cn.charlie166.web.store.tools;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import cn.charlie166.web.store.constant.CustomException;
@@ -49,6 +52,9 @@ public class XmlUtils {
 	public static <T> T toObject(String input, Class<T> cls){
 		if(StringUtils.hasContent(input) && cls != null){
 			XmlMapper mapper = new XmlMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+			mapper.setDefaultPropertyInclusion(Include.NON_EMPTY);
 			try {
 				return mapper.readValue(input, cls);
 			} catch (IOException e) {
@@ -68,6 +74,8 @@ public class XmlUtils {
 	public static String fromObject(Object obj){
 		if(obj != null){
 			XmlMapper mapper = new XmlMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 			try {
 				return mapper.writeValueAsString(obj);
 			} catch (IOException e) {

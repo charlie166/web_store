@@ -1,37 +1,18 @@
 package cn.charlie166.web.weixin.domain.dto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
 * @ClassName: WeixinMsgDTO 
-* @Description: 微信消息数据对象
+* @Description: 微信消息数据对象----用户发送的消息
 * @company 
 * @author liyang
 * @Email charlie166@163.com
 * @date 2018年3月29日 
 *
  */
-@JacksonXmlRootElement(localName = "xml")
-public class WeixinMsgDTO extends WeixinResponseBaseDTO {
+public class WeixinUserMsgDTO extends WeixinCommonMsgDTO {
 
-	/**开发者微信号**/
-	@JacksonXmlProperty(localName = "ToUserName")
-	private String toUserName;
-	/**发送方帐号(一个OpenID)**/
-	@JacksonXmlProperty(localName = "FromUserName")
-	private String fromUserName;
-	/**	消息创建时间 （整型）**/
-	@JacksonXmlProperty(localName = "CreateTime")
-	private Long createTime;
-	/**消息类型**/
-	@JacksonXmlProperty(localName = "MsgType")
-	private String msgType;
-	/**事件**/
-	@JacksonXmlProperty(localName = "Event")
-	private String event;
-	@JacksonXmlProperty(localName = "EventKey")
-	private String eventKey;
 	/**消息id，64位整型**/
 	@JacksonXmlProperty(localName = "MsgId")
 	private Long msgId;
@@ -86,42 +67,6 @@ public class WeixinMsgDTO extends WeixinResponseBaseDTO {
 	@JacksonXmlProperty(localName = "PicUrl")
 	private String picUrl;
 	
-	public String getToUserName() {
-		return toUserName;
-	}
-	public void setToUserName(String toUserName) {
-		this.toUserName = toUserName;
-	}
-	public String getFromUserName() {
-		return fromUserName;
-	}
-	public void setFromUserName(String fromUserName) {
-		this.fromUserName = fromUserName;
-	}
-	public Long getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Long createTime) {
-		this.createTime = createTime;
-	}
-	public String getMsgType() {
-		return msgType;
-	}
-	public void setMsgType(String msgType) {
-		this.msgType = msgType;
-	}
-	public String getEvent() {
-		return event;
-	}
-	public void setEvent(String event) {
-		this.event = event;
-	}
-	public String getEventKey() {
-		return eventKey;
-	}
-	public void setEventKey(String eventKey) {
-		this.eventKey = eventKey;
-	}
 	public String getContent() {
 		return content;
 	}

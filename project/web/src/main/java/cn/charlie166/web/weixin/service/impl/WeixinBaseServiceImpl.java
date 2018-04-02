@@ -115,6 +115,7 @@ public class WeixinBaseServiceImpl extends BaseServiceImpl implements WeixinBase
 		WeixinMenu firstMenu = new WeixinMenu();
 		firstMenu.setName("来啊");
 		firstMenu.setType("location_select");
+		firstMenu.setKey("where_now");
 		WeixinMenu menu = new WeixinMenu();
 		menu.setButton(Arrays.asList(firstMenu));
 		StringBuilder thisUrl = new StringBuilder();
@@ -127,6 +128,7 @@ public class WeixinBaseServiceImpl extends BaseServiceImpl implements WeixinBase
 				if(json != null){
 					if(json.getErrcode() == null || json.getErrcode().intValue() == 0){
 						logger.debug("刷新微信菜单成功");
+						return;
 					}
 				} else {
 					logger.error("刷新微信菜单返回无法解析对象");
