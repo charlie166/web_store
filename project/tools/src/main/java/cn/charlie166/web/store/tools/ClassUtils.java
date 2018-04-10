@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -47,7 +48,7 @@ public class ClassUtils {
 	/**
 	* @Title: convertType 
 	* @Description: 将原数据类型转换为指定类型输出
-	* @param from 数据来源
+	* @param from 数据来源.
 	* @param toType 目标类型
 	* @return
 	* @throws CustomException
@@ -56,6 +57,8 @@ public class ClassUtils {
 		if(toType == null){
 			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
 		}
+		if(from == null)
+			return null;
 		try {
 			try {
 				Constructor<T> constructor = toType.getConstructor();
@@ -66,9 +69,38 @@ public class ClassUtils {
 				throw CustomException.instance(ExceptionCodes.COMMON_DEFAULT_CONSTRUCTOR_ABSENT, e);
 			}
 			T instance = toType.newInstance();
-			if(from == null)
-				return instance;
 			BeanUtils.copyProperties(from, instance);
+			return instance;
+		} catch (IllegalAccessException | InstantiationException | BeansException e) {
+			throw CustomException.instance(ExceptionCodes.COMMON_EXCEPTION, e);
+		}
+	}
+	
+	/**
+	* @Title: convertType 
+	* @Description: 从MAP中取值转换为指定对象
+	* @param from 数据来源MAP, 键值必须是字符串
+	* @param toType 转换结果类型
+	* @return
+	* @throws CustomException
+	 */
+	public static <T> T convertType(Map<String, Object> from, Class<T> toType) throws CustomException{
+		if(toType == null){
+			throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+		}
+		if(from == null)
+			return null;
+		try {
+			try {
+				Constructor<T> constructor = toType.getConstructor();
+				if(constructor == null){
+					throw CustomException.instance(ExceptionCodes.COMMON_DEFAULT_CONSTRUCTOR_ABSENT);
+				}
+			} catch (NoSuchMethodException | SecurityException e) {
+				throw CustomException.instance(ExceptionCodes.COMMON_DEFAULT_CONSTRUCTOR_ABSENT, e);
+			}
+			T instance = toType.newInstance();
+			Field[] allField = ClassUtils.getAllField(toType);
 			return instance;
 		} catch (IllegalAccessException | InstantiationException | BeansException e) {
 			throw CustomException.instance(ExceptionCodes.COMMON_EXCEPTION, e);

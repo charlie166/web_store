@@ -1,6 +1,6 @@
 /** 
  * @ClassName: package-info 
- * @Description: 公共注解
+ * @Description: 自定义注解包
  * @company 
  * @author liyang
  * @Email charlie166@163.com

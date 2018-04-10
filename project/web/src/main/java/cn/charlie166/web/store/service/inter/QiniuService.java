@@ -2,7 +2,7 @@ package cn.charlie166.web.store.service.inter;
 
 import java.io.File;
 
-import cn.charlie166.web.store.domain.third.QiniuRet;
+import cn.charlie166.web.common.domain.third.QiniuRet;
 
 /**
 * @ClassName: QiniuService 

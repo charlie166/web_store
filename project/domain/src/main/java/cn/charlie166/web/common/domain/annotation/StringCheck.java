@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.annotation;
+package cn.charlie166.web.common.domain.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

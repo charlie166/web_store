@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.enums;
+package cn.charlie166.web.common.domain.enums;
 
 /**
 * @ClassName: ParamCheckType 

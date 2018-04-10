@@ -17,8 +17,8 @@ import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
 import cn.charlie166.web.base.service.impl.BaseServiceImpl;
-import cn.charlie166.web.store.domain.third.QiniuResponse;
-import cn.charlie166.web.store.domain.third.QiniuRet;
+import cn.charlie166.web.common.domain.third.QiniuResponse;
+import cn.charlie166.web.common.domain.third.QiniuRet;
 import cn.charlie166.web.store.service.inter.QiniuService;
 import cn.charlie166.web.store.tools.FileUtils;
 import cn.charlie166.web.store.tools.JsonUtils;

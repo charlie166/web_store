@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.third;
+package cn.charlie166.web.common.domain.third;
 
 /**
 * @ClassName: QiniuResponse 

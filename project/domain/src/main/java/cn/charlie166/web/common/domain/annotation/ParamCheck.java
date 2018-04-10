@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.annotation;
+package cn.charlie166.web.common.domain.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cn.charlie166.web.store.domain.enums.ParamCheckType;
+import cn.charlie166.web.common.domain.enums.ParamCheckType;
 
 /**
 * @ClassName: ParamCheck 

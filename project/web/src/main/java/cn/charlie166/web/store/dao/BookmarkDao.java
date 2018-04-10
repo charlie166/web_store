@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import cn.charlie166.web.store.domain.annotation.ParamCheck;
+import cn.charlie166.web.common.domain.annotation.ParamCheck;
 import cn.charlie166.web.store.domain.po.Bookmark;
 
 /**
