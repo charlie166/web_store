@@ -18,6 +18,10 @@
       		<scope>test</scope>
     	</dependency>
     	<dependency>
+      		<groupId>cn.charlie166.web.store</groupId>
+  			<artifactId>domain</artifactId>
+    	</dependency>
+    	<dependency>
 		    <groupId>javax.servlet.jsp</groupId>
 		    <artifactId>javax.servlet.jsp-api</artifactId>
 		</dependency>

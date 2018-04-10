@@ -25,6 +25,8 @@ public class ExceptionCodes {
 	public static final String COMMON_INSERT_FAIL = "insertFail";
 	/**通用----没有默认构造方法**/
 	public static final String COMMON_DEFAULT_CONSTRUCTOR_ABSENT = "needDefaultConstructor";
+	/**通用----变量类型不匹配**/
+	public static final String COMMON_FIELD_TYPE_MISMATCH = "fieldTypeMismatch";
 	/**xml----解析出错**/
 	public static final String COMMON_XML_PARSE_EXCEPTION = "xmlParseException";
 	
@@ -42,6 +44,8 @@ public class ExceptionCodes {
 	public static final String FILE_PERMISSION_DENIED = "permissionDenied";
 	/**文件----文件大小超过限制**/
 	public static final String FILE_SIZE_EXCEED = "sizeExceed";
+	/**文件----文件格式不支持**/
+	public static final String FILE_NOT_SUPPORT = "fileNotSupport";
 	
 	/**校验----校验不通过**/
 	public static final String CHECK_FAILED = "checkFailed";

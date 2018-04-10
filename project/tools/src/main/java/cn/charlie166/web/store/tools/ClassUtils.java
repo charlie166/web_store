@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import cn.charlie166.web.common.domain.annotation.FieldAlias;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 
@@ -101,6 +103,25 @@ public class ClassUtils {
 			}
 			T instance = toType.newInstance();
 			Field[] allField = ClassUtils.getAllField(toType);
+			for(Field f: allField){
+				FieldAlias alias = f.getAnnotation(FieldAlias.class);
+				String getKey = alias != null && StringUtils.hasContent(alias.value()) ? alias.value() : f.getName();
+				/**当原MAP中有这个键时，才设置**/
+				if(from.containsKey(getKey)){
+					f.setAccessible(true);
+					Object value = from.get(getKey);
+					if(value == null)
+						f.set(instance, value);
+					else{
+						Class<?> fieldType = f.getType();
+						if(fieldType.isInstance(value)){
+							f.set(instance, value);
+						} else {
+							throw CustomException.instance(ExceptionCodes.COMMON_FIELD_TYPE_MISMATCH, String.format("变量[%s]类型不匹配", getKey));
+						}
+					}
+				}
+			}
 			return instance;
 		} catch (IllegalAccessException | InstantiationException | BeansException e) {
 			throw CustomException.instance(ExceptionCodes.COMMON_EXCEPTION, e);
