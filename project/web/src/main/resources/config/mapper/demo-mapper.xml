@@ -6,5 +6,10 @@
     <select id="selectDemoCount" resultType="int">
         SELECT COUNT(*) FROM demo
     </select>
+    
+    <!-- 直接执行插入sql的 -->
+    <insert id="directInsertBySql" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+    	${_sql}
+    </insert>
 
 </mapper>

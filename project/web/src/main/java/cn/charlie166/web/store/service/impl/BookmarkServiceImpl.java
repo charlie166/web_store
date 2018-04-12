@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.BookmarkDao;
@@ -27,7 +28,7 @@ import cn.charlie166.web.store.tools.StringUtils;
 *
  */
 @Service
-public class BookmarkServiceImpl implements BookmarkService {
+public class BookmarkServiceImpl extends BaseServiceImpl implements BookmarkService {
 
 	@Autowired
 	private BookmarkDao bookmarkDao;

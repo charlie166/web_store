@@ -1,5 +1,6 @@
 package cn.charlie166.web.store.service.inter;
 
+import cn.charlie166.web.base.service.inter.BaseService;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
 import cn.charlie166.web.store.domain.dto.PageDTO;
@@ -13,7 +14,7 @@ import cn.charlie166.web.store.domain.dto.PageDTO;
 * @date 2017年11月22日 
 *
  */
-public interface BookmarkService {
+public interface BookmarkService extends BaseService {
 
 	/**
 	* @Title: addSubmit 
