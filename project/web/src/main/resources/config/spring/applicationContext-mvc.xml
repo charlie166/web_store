@@ -3,6 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     	http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -10,9 +11,13 @@
     	http://www.springframework.org/schema/context/spring-context.xsd
     	http://www.springframework.org/schema/mvc
     	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    	http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
     	http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<!-- 设置代理类，不然下面的controller切面会无效 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	<!-- 消息内容配置读取 -->
 	<bean class="cn.charlie166.web.store.tools.MsgPropertyPlaceholder">
 		<property name="fileEncoding" value="UTF-8"></property>
@@ -84,6 +89,9 @@
 	<bean class="cn.charlie166.web.store.config.CustomResponseBodyAdvice"></bean>
 	
 	<!-- spring的上下文工具类 -->
-	<bean class="cn.charlie166.web.store.config.SpringContextUtils"></bean>
+	<bean class="cn.charlie166.web.base.tool.SpringContextUtils"></bean>
+	
+	<!-- 切面在controller，要在这配置 -->
+	<!-- <bean class="cn.charlie166.web.base.aspect.SpecialDemoAspectJ"></bean> -->
 	
 </beans>

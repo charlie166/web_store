@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.config;
+package cn.charlie166.web.base.tool;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.google.common.collect.Maps;
 
-import cn.charlie166.web.store.config.SpringContextUtils;
+import cn.charlie166.web.base.tool.SpringContextUtils;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.constant.KeyConstant;
