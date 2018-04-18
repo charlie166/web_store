@@ -2,14 +2,14 @@ package cn.charlie166.web.store.plugin.ueditor.upload;
 
 import java.io.File;
 import java.io.InputStream;
-import org.springframework.web.context.ContextLoader;
 
+import cn.charlie166.web.base.service.inter.AttachmentService;
+import cn.charlie166.web.base.tool.SpringContextUtils;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.plugin.ueditor.define.AppInfo;
 import cn.charlie166.web.store.plugin.ueditor.define.BaseState;
 import cn.charlie166.web.store.plugin.ueditor.define.State;
-import cn.charlie166.web.store.service.inter.AttachmentService;
 import cn.charlie166.web.store.tools.StringUtils;
 
 public class StorageManager {
@@ -24,7 +24,7 @@ public class StorageManager {
 	public static State saveBinaryFile(byte[] data, String path) {
 		State storageState = new BaseState(false, AppInfo.UNKONWN_ERROR);
 		/**获取附件操作服务BEAN**/
-    	AttachmentService service = ContextLoader.getCurrentWebApplicationContext().getBean(AttachmentService.class);
+    	AttachmentService service = SpringContextUtils.getBean(AttachmentService.class);
 		try {
 			File storeFile = service.saveBinaryFile(data, path);
 			storageState = new BaseState(true);
@@ -82,7 +82,7 @@ public class StorageManager {
 	public static State saveByInputStream(InputStream is, String path, long maxSize){
 		State storageState = new BaseState(false, AppInfo.UNKONWN_ERROR);
 		/**获取附件操作服务BEAN**/
-    	AttachmentService service = ContextLoader.getCurrentWebApplicationContext().getBean(AttachmentService.class);
+    	AttachmentService service = SpringContextUtils.getBean(AttachmentService.class);
 		try {
 			File storeFile = service.saveFileByInputStream(is, path, maxSize);
 			storageState = new BaseState(true);

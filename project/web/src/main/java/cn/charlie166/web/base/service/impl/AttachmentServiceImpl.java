@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.service.impl;
+package cn.charlie166.web.base.service.impl;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import cn.charlie166.web.base.service.impl.BaseServiceImpl;
+import cn.charlie166.web.base.service.inter.AttachmentService;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
-import cn.charlie166.web.store.service.inter.AttachmentService;
 import cn.charlie166.web.store.service.inter.QiniuService;
 import cn.charlie166.web.store.tools.StringUtils;
 

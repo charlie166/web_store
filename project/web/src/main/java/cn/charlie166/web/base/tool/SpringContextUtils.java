@@ -32,6 +32,9 @@ public class SpringContextUtils implements ApplicationContextAware {
 	* @throws BeansException
 	 */
 	public static <T> T getBean(Class<T> requiredType) throws BeansException {
-		return SpringContextUtils.applicationContext.getBean(requiredType);
+		/**这种方式可以直接获取到web的应用上下文***/
+//		T bean = ContextLoader.getCurrentWebApplicationContext().getBean(requiredType);
+		T bean = SpringContextUtils.applicationContext.getBean(requiredType);
+		return bean;
 	}
 }

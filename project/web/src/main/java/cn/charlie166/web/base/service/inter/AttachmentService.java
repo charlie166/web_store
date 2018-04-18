@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.service.inter;
+package cn.charlie166.web.base.service.inter;
 
 import java.io.File;
 import java.io.InputStream;
