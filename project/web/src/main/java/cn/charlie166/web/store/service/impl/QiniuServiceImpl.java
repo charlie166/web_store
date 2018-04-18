@@ -20,7 +20,7 @@ import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.common.domain.third.QiniuResponse;
 import cn.charlie166.web.common.domain.third.QiniuRet;
 import cn.charlie166.web.store.service.inter.QiniuService;
-import cn.charlie166.web.store.tools.FileUtils;
+import cn.charlie166.web.store.tools.CustomFileUtils;
 import cn.charlie166.web.store.tools.JsonUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
@@ -69,7 +69,7 @@ public class QiniuServiceImpl extends BaseServiceImpl implements QiniuService {
 	public String uploadFile(File file) {
 		/***默认不指定key的情况下，以文件内容的hash值作为文件名***/
 		String filename = file.getName();
-		String suffix = FileUtils.getSuffix(filename);
+		String suffix = CustomFileUtils.getSuffix(filename);
 		/**处理新的文件名**/
 		String newName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mmssSSS")) + Thread.currentThread().getId() +
 			filename.hashCode() + (StringUtils.hasContent(suffix) ? ("." + suffix) : "");

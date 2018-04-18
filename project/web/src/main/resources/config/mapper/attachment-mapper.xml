@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- 附件信息数据库操作SQL -->
+<mapper namespace="cn.charlie166.web.base.dao.AttachmentDao">
+
+	<insert id="insertOne" parameterType="cn.charlie166.web.common.domain.po.Attachment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO attachment(id, module, moduleType, path, info, uuid, originalName, sort, suffix, size)
+		VALUES (#{id}, #{module}, #{moduleType}, #{path}, #{info}, #{uuid}, #{originalName}, #{sort}, #{suffix}, #{size})
+	</insert>
+	
+	<!-- 根据相对路径查询 -->
+	<select id="selectList" parameterType="cn.charlie166.web.common.domain.po.Attachment" resultType="cn.charlie166.web.common.domain.po.Attachment">
+		SELECT a.* FROM attachment a
+		<where>
+			<if test="null != id">
+				a.id = #{id}
+			</if>
+			<if test="null != module and module != ''">
+				AND a.module = #{module}
+			</if>
+			<if test="null != moduleType">
+				AND a.moduleType = #{moduleType}
+			</if>
+			<!-- 使用路径查询，完全匹配 -->
+			<if test="null != path and path != ''">
+				AND a.path = #{path}
+			</if>
+			<if test="null != info">
+				AND a.info = #{info}
+			</if>
+			<if test="null != uuid and uuid != ''">
+				AND a.uuid = #{uuid}
+			</if>
+			<!-- 文件名, 模糊匹配 -->
+			<if test="null != originalName and originalName != ''">
+				AND a.originalName LIKE '%${originalName}%'
+			</if>
+			<!-- 文件格式 -->
+			<if test="null != suffix and suffix != ''">
+				AND a.suffix = #{suffix}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM attachment WHERE id = #{id}
+	</delete>
+	
+</mapper>

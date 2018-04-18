@@ -91,7 +91,10 @@
 	<!-- spring的上下文工具类 -->
 	<bean class="cn.charlie166.web.base.tool.SpringContextUtils"></bean>
 	
-	<!-- 切面在controller，要在这配置 -->
+	<!-- 切面在controller的，要在这配置. 这个只是个测试切面 -->
 	<!-- <bean class="cn.charlie166.web.base.aspect.SpecialDemoAspectJ"></bean> -->
+	
+	<!-- 数据库操作参数校验切面 -->
+	<bean class="cn.charlie166.web.base.aspect.DaoParamCheckAspect"></bean>
 	
 </beans>

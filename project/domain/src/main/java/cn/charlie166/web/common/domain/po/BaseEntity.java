@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.po;
+package cn.charlie166.web.common.domain.po;
 
 import java.time.LocalDateTime;
 

@@ -15,7 +15,7 @@
 	
 	<!-- 扫描 service -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
-	<context:component-scan base-package="cn.charlie166.web.*.service,cn.charlie166.web.store.aspect" />
+	<context:component-scan base-package="cn.charlie166.web.*.service" />
 
 	<!-- 使用JDBC事物 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

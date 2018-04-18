@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 
 import cn.charlie166.web.store.constant.CustomException;
-import cn.charlie166.web.store.tools.FileUtils;
+import cn.charlie166.web.store.tools.CustomFileUtils;
 
 /**
 * @ClassName: JsoupTest 
@@ -28,7 +28,7 @@ public class JsoupTest {
 		try {
 			Document doc = Jsoup.connect("https://item.jd.com/5089273.html").get();
 			try {
-				FileUtils.storeFile("F:/upload/test.html", doc.toString());
+				CustomFileUtils.storeFile("F:/upload/test.html", doc.toString());
 			} catch (CustomException e) {
 				e.printStackTrace();
 			}

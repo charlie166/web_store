@@ -2,9 +2,14 @@ package cn.charlie166.web.store.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -123,6 +128,38 @@ public class BaseController {
 			e.printStackTrace();
 			/**出现异常，返回斜杠***/
 			return "/";
+		}
+	}
+	
+	/**
+	* @Title: responseFile 
+	* @Description: 响应文件流
+	* @param path 文件路径
+	* @param responseName 文件名称
+	 */
+	protected void responseFile(Path path, String responseName){
+		if(path != null && Files.exists(path) && Files.isRegularFile(path)){
+			if(Files.isReadable(path)){
+				try {
+					final String userAgent = this.request.getHeader("USER-AGENT");
+					this.response.setContentType("application/octet-stream");
+					String showName = StringUtils.hasContent(responseName) ? responseName : path.getFileName().toString();
+					StringBuilder headStr = new StringBuilder("attachment; filename=\"");
+					if (StringUtils.contains(userAgent, "Mozilla")) {/** google,火狐浏览器 ***/
+						headStr.append(new String(showName.getBytes(Charset.defaultCharset()), "ISO8859-1"));
+					} else {/**	IE 及  其他 ****/
+						headStr.append(URLEncoder.encode(showName, "UTF-8"));
+					}
+					this.response.setHeader("Content-Disposition", headStr.append("\"").toString());;
+					ServletOutputStream os = this.response.getOutputStream();
+					Files.copy(path, os);
+					os.flush();
+					os.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);
+				}
+			}
 		}
 	}
 }

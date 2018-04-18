@@ -2,6 +2,7 @@ package cn.charlie166.web.base.others;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 /**
 * @ClassName: CustomConverter 
-* @Description: 自定义转换器, 档返回字符串时，不使用引号包裹
+* @Description: 自定义转换器, 当返回字符串时，不使用引号包裹
 * @company 
 * @author liyang
 * @Email charlie166@163.com
@@ -99,5 +100,16 @@ public class CustomConverter extends MappingJackson2HttpMessageConverter {
 	
 	}
 
+	@Override
+	public boolean canWrite(Class<?> clazz, MediaType mediaType) {
+		/**去掉父类的mediaType判断，允许所有类型**/
+		/*****/
+		AtomicReference<Throwable> causeRef = new AtomicReference<Throwable>();
+		if (this.objectMapper.canSerialize(clazz, causeRef)) {
+			return true;
+		}
+		logWarningIfNecessary(clazz, causeRef.get());
+		return false;
+	}
 	
 }

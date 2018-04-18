@@ -2,7 +2,11 @@ package cn.charlie166.web.base.service.inter;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import cn.charlie166.web.common.domain.dto.AttachmentDTO;
 import cn.charlie166.web.store.constant.CustomException;
 
 /**
@@ -24,6 +28,16 @@ public interface AttachmentService {
 	* @return 保存后的文件对象
 	 */
 	public File saveBinaryFile(byte[] data, String path) throws CustomException;
+	
+	/**
+	 * 
+	* @Title: saveFromMultipartFile 
+	* @Description: 保存文件上传的对象
+	* @param file 上传文件
+	* @param params 附加参数
+	* @return 文件保存后的相对路径
+	 */
+	String saveFromMultipartFile(MultipartFile file, Map<String, Object> params);
 	
 	/**
 	* @Title: saveString 
@@ -76,4 +90,20 @@ public interface AttachmentService {
 	* @return 保存后的文件对象
 	 */
 	public File saveFileByInputStream(InputStream is, String path) throws CustomException;
+	
+	/**
+	* @Title: getPath 
+	* @Description: 获取文件, 根据是否存在对应附件查询
+	* @param relativePath 相对路径
+	* @return 附件信息
+	 */
+	AttachmentDTO getPath(String relativePath);
+	
+	/***
+	* @Title: getInfoList 
+	* @Description: 根据相对路径信息查询数据库，正常来说，一个路径只会对应一条记录. 如果存在多条.此处只取一条
+	* @param relativePath 相对路径
+	* @return 附件信息
+	 */
+	AttachmentDTO getInfoOfPath(String relativePath);
 }

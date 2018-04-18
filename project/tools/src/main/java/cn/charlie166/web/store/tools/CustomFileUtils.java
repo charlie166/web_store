@@ -21,7 +21,7 @@ import cn.charlie166.web.store.constant.ExceptionCodes;
 * @date 2017年11月17日 
 *
  */
-public class FileUtils {
+public class CustomFileUtils {
 
 	/**
 	 * @Title: storeFile 
@@ -31,7 +31,7 @@ public class FileUtils {
 	 * @throws CustomException 操作异常 
 	 */
 	public static void storeFile(String path, String content) throws CustomException{
-		FileUtils.storeFile(path, content, StandardCharsets.UTF_8);
+		CustomFileUtils.storeFile(path, content, StandardCharsets.UTF_8);
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class FileUtils {
 	 */
 	public static void storeFile(String path, String content, Charset cs) throws CustomException{
 		if(StringUtils.hasContent(path)){
-			FileUtils.storeFile(Paths.get(path), content, cs);
+			CustomFileUtils.storeFile(Paths.get(path), content, cs);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class FileUtils {
 	 * @throws CustomException 操作异常 
 	 */
 	public static void storeFile(Path path, String content) throws CustomException {
-		FileUtils.storeFile(path, content, StandardCharsets.UTF_8);
+		CustomFileUtils.storeFile(path, content, StandardCharsets.UTF_8);
 	}
 	/**
 	* @Title: storeFile 
@@ -101,7 +101,7 @@ public class FileUtils {
 	
 	/**
 	* @Title: getSuffix 
-	* @Description: 获取文件格式
+	* @Description: 获取文件格式. 以英文点判断
 	* @param filename 文件名
 	* @return
 	 */
@@ -120,7 +120,7 @@ public class FileUtils {
 	public static void main(String[] args) {
 		Path path = Paths.get("F:/upload/charlie166");
 		try {
-			FileUtils.storeFile(path, "rrfs肉肉肉放撒施我\r\n水电工额俄方");
+			CustomFileUtils.storeFile(path, "rrfs肉肉肉放撒施我\r\n水电工额俄方");
 		} catch (CustomException e) {
 			System.out.println("异常码：" + e.getCode());
 			e.printStackTrace();

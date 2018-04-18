@@ -1,6 +1,7 @@
 package cn.charlie166.web.store.domain.po;
 
 import cn.charlie166.web.common.domain.annotation.StringCheck;
+import cn.charlie166.web.common.domain.po.BaseEntity;
 
 /**
 * @ClassName: Bookmark 

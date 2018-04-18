@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.aspect;
+package cn.charlie166.web.base.aspect;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,7 +13,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import cn.charlie166.web.common.domain.annotation.ParamCheck;
@@ -34,7 +33,6 @@ import cn.charlie166.web.store.tools.StringUtils;
 *
  */
 @Aspect
-@Component
 public class DaoParamCheckAspect {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -45,7 +43,7 @@ public class DaoParamCheckAspect {
 	* @param jp
 	 * @throws CustomException 
 	 */
-	@Before("execution(* cn.charlie166.web.store.dao..*.*(..))")
+	@Before("execution(* cn.charlie166.web.*.dao..*.*(..))")
 	public void justCheck(JoinPoint jp) throws CustomException{
 		Signature signature = jp.getSignature();
 		Object[] args = jp.getArgs();

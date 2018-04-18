@@ -10,17 +10,29 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import cn.charlie166.web.base.dao.AttachmentDao;
 import cn.charlie166.web.base.service.impl.BaseServiceImpl;
 import cn.charlie166.web.base.service.inter.AttachmentService;
+import cn.charlie166.web.common.domain.dto.AttachmentDTO;
+import cn.charlie166.web.common.domain.po.Attachment;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.service.inter.QiniuService;
+import cn.charlie166.web.store.tools.ClassUtils;
+import cn.charlie166.web.store.tools.CustomFileUtils;
+import cn.charlie166.web.store.tools.PathUtils;
 import cn.charlie166.web.store.tools.StringUtils;
 
 /**
@@ -48,6 +60,8 @@ public class AttachmentServiceImpl extends BaseServiceImpl implements Attachment
 	private Boolean asynchronousQiniu;
 	@Autowired
 	private QiniuService qiniuService;
+	@Autowired
+	private AttachmentDao dao;
 	
 	@Override
 	public File saveBinaryFile(byte[] data, String path) throws CustomException {
@@ -209,5 +223,65 @@ public class AttachmentServiceImpl extends BaseServiceImpl implements Attachment
 			}
 		}
 		return defaultString;
+	}
+
+	@Override
+	public String saveFromMultipartFile(MultipartFile file,
+			Map<String, Object> params) {
+		if(file != null){
+			if(!file.isEmpty() && file.getSize() > 0){
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mmss_SSS");
+				StringBuilder relativePath = new StringBuilder();
+				LocalDateTime now = LocalDateTime.now();
+				String suffix = CustomFileUtils.getSuffix(file.getOriginalFilename());
+				relativePath.append("web/").append(dtf.format(now)).append("_")
+					.append(Thread.currentThread().getId()).append(StringUtils.hasContent(suffix) ? ("." + suffix) : "");
+				try {
+					Path savePath = PathUtils.getPathOfFile(this.getPhysicalCommonPreffix() + relativePath.toString());
+					Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
+					Attachment of = Attachment.of(relativePath.toString(), file.getOriginalFilename(), suffix);
+					dao.insertOne(of);
+					return of.getPath();
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);
+				}
+			}
+		}
+		throw CustomException.instance(ExceptionCodes.COMMON_PARAM_ABSENT);
+	}
+
+	@Override
+	public AttachmentDTO getPath(String relativePath) {
+		if(StringUtils.hasContent(relativePath)){
+			String s = (relativePath.startsWith("/") || relativePath.startsWith("\\")) ? relativePath.substring(1) : relativePath;
+			Path path = Paths.get(this.getPhysicalCommonPreffix() + s);
+			if(Files.exists(path) && Files.isRegularFile(path)){
+				if(Files.isReadable(path)){
+					/**文件存在再去数据库查询**/
+					AttachmentDTO dto = this.getInfoOfPath(s);
+					/**也可能会不存在记录，创建新的对象返回***/
+					if(dto == null){
+						dto = new AttachmentDTO();
+					}
+					dto.setFile(path);
+					return dto;
+				}
+			}
+		}
+		throw CustomException.instance(ExceptionCodes.COMMON_DATA_ABSENT);
+	}
+
+	@Override
+	public AttachmentDTO getInfoOfPath(String relativePath) {
+		if(StringUtils.hasContent(relativePath)){
+			Attachment query = new Attachment();
+			query.setPath(relativePath.startsWith("/") || relativePath.startsWith("\\") ? relativePath.substring(1) : relativePath);
+			List<Attachment> list = dao.selectList(query);
+			if(list.size() > 0){
+				return ClassUtils.convertType(list.get(0), AttachmentDTO.class);
+			}
+		}
+		return null;
 	}
 }
