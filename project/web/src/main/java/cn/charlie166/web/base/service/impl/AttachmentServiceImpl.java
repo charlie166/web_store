@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -240,6 +241,7 @@ public class AttachmentServiceImpl extends BaseServiceImpl implements Attachment
 					Path savePath = PathUtils.getPathOfFile(this.getPhysicalCommonPreffix() + relativePath.toString());
 					Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
 					Attachment of = Attachment.of(relativePath.toString(), file.getOriginalFilename(), suffix);
+					of.setSize(Files.size(savePath));
 					dao.insertOne(of);
 					return of.getPath();
 				} catch (IOException e) {
@@ -252,7 +254,7 @@ public class AttachmentServiceImpl extends BaseServiceImpl implements Attachment
 	}
 
 	@Override
-	public AttachmentDTO getPath(String relativePath) {
+	public AttachmentDTO getFileOfPath(String relativePath) {
 		if(StringUtils.hasContent(relativePath)){
 			String s = (relativePath.startsWith("/") || relativePath.startsWith("\\")) ? relativePath.substring(1) : relativePath;
 			Path path = Paths.get(this.getPhysicalCommonPreffix() + s);
@@ -274,14 +276,84 @@ public class AttachmentServiceImpl extends BaseServiceImpl implements Attachment
 
 	@Override
 	public AttachmentDTO getInfoOfPath(String relativePath) {
+		List<AttachmentDTO> list = this.getInfoListOfPath(relativePath);
+		if(list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+	
+	@Override
+	public List<AttachmentDTO> getInfoListOfPath(String relativePath) {
 		if(StringUtils.hasContent(relativePath)){
 			Attachment query = new Attachment();
 			query.setPath(relativePath.startsWith("/") || relativePath.startsWith("\\") ? relativePath.substring(1) : relativePath);
 			List<Attachment> list = dao.selectList(query);
 			if(list.size() > 0){
-				return ClassUtils.convertType(list.get(0), AttachmentDTO.class);
+				return ClassUtils.convertTypeOfList(list, AttachmentDTO.class);
 			}
 		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public boolean deleteFileByPath(String relativePath, boolean deleteRecord) {
+		AttachmentDTO atta = this.getFileOfPath(relativePath);
+		if(atta != null && atta.getFile() != null){
+			if(Files.isExecutable(atta.getFile())){
+				try {
+					boolean s = Files.deleteIfExists(atta.getFile());
+					if(s){
+						/**迭代判断删除空文件夹**/
+						PathUtils.deleteEmptyFolder(atta.getFile());
+						/**删除数据库附件记录**/
+						if(deleteRecord){
+							List<AttachmentDTO> list = this.getInfoListOfPath(relativePath);
+							list.stream().filter(one -> one != null && one.getId() != null).forEach(one -> {
+								dao.deleteById(one.getId());
+							});
+						}
+					}
+					return s;
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw CustomException.instance(ExceptionCodes.COMMON_IO_EXCEPTION, e);
+				}
+			} else {
+				throw CustomException.instance(ExceptionCodes.FILE_PERMISSION_DENIED);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteFileByPath(String relativePath) {
+		return this.deleteFileByPath(relativePath, true);	
+	}
+
+	@Override
+	public boolean deleteFileById(long id) {
+		AttachmentDTO dto = this.selectById(id);
+		if(dto != null){
+			if(StringUtils.hasContent(dto.getPath())){
+				boolean r = this.deleteFileByPath(dto.getPath(), false);
+				if(r){
+					int r1 = dao.deleteById(dto.getId());
+					return r1 > 0;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public AttachmentDTO selectById(long id) {
+		Attachment query = new Attachment();
+		query.setId(id);
+		List<Attachment> list = dao.selectList(query);
+		/**用ID查询最多只会有一条**/
+		if(list.size() > 0)
+			return ClassUtils.convertType(list.get(0), AttachmentDTO.class);
 		return null;
 	}
+
 }

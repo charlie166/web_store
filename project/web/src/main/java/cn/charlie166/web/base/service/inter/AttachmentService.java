@@ -2,6 +2,7 @@ package cn.charlie166.web.base.service.inter;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -92,12 +93,38 @@ public interface AttachmentService {
 	public File saveFileByInputStream(InputStream is, String path) throws CustomException;
 	
 	/**
-	* @Title: getPath 
+	* @Title: getFileOfPath 
 	* @Description: 获取文件, 根据是否存在对应附件查询
 	* @param relativePath 相对路径
 	* @return 附件信息
 	 */
-	AttachmentDTO getPath(String relativePath);
+	AttachmentDTO getFileOfPath(String relativePath);
+	
+	/**
+	* @Title: deleteFileByPath 
+	* @Description: 根据文件相对路径查询病删除文件. 
+	* @param relativePath 文件相对路径
+	* @param deleteRecord 是否查询数据库并删除数据库记录
+	* @return
+	 */
+	boolean deleteFileByPath(String relativePath, boolean deleteRecord);
+	
+	/**
+	 * 
+	* @Title: deleteFileByPath 
+	* @Description: 根据文件相对路径查询病删除文件. 并查询删除数据库记录
+	* @param relativePath 文件相对路径
+	* @return
+	 */
+	boolean deleteFileByPath(String relativePath);
+	
+	/**
+	* @Title: deleteFileById 
+	* @Description: 根据主键查询附件记录，删除附件及记录
+	* @param id 主键ID
+	* @return 删除结果
+	 */
+	boolean deleteFileById(long id);
 	
 	/***
 	* @Title: getInfoList 
@@ -106,4 +133,20 @@ public interface AttachmentService {
 	* @return 附件信息
 	 */
 	AttachmentDTO getInfoOfPath(String relativePath);
+	
+	/**
+	* @Title: getInfoListOfPath 
+	* @Description: 根据相对路径查询数据库记录，返回列表. 正常来说，一个路径应该只有一条记录
+	* @param relativePath 相对路径
+	* @return
+	 */
+	List<AttachmentDTO> getInfoListOfPath(String relativePath);
+	
+	/**
+	* @Title: selectById 
+	* @Description: 根据主键ID查询
+	* @param id
+	* @return
+	 */
+	AttachmentDTO selectById(long id);
 }

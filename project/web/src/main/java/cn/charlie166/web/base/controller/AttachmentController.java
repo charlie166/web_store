@@ -54,7 +54,33 @@ public class AttachmentController extends BaseController {
 	public void download() throws UnsupportedEncodingException{
 		String uri = this.request.getRequestURI();
 		String relative = StringUtils.getStrFrom(URLDecoder.decode(uri, "UTF-8"), "attachment/download/");
-		AttachmentDTO dto = service.getPath(relative);
+		AttachmentDTO dto = service.getFileOfPath(relative);
 		this.responseFile(dto.getFile(), dto.getOriginalName());
+	}
+	
+	/**
+	* @Title: delete 
+	* @Description: 删除附件
+	* @return 删除结果
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping(value = "/delete/**")
+	@ResponseBody
+	public Boolean delete() throws UnsupportedEncodingException{
+		String uri = this.request.getRequestURI();
+		String relative = StringUtils.getStrFrom(URLDecoder.decode(uri, "UTF-8"), "attachment/delete/");
+		return service.deleteFileByPath(relative);
+	}
+	
+	/**
+	* @Title: deleteByInfoId 
+	* @Description: 根据附件信息主键ID删除附件及记录
+	* @param id 主键ID
+	* @return
+	 */
+	@RequestMapping(value = "/delete")
+	@ResponseBody
+	public Boolean deleteByInfoId(@RequestParam(value = "id", required = true) Long id){
+		return service.deleteFileById(id);
 	}
 }

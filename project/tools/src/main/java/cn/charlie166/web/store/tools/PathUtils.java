@@ -37,4 +37,24 @@ public class PathUtils {
 			Files.createFile(path);
 		return path;
 	}
+	
+	/***
+	* @Title: deleteEmptyFolder 
+	* @Description: 迭代删除空文件夹
+	* @param p 最尾文件夹路径，此路径必须存在且是文件夹属性
+	 */
+	public static void deleteEmptyFolder(Path p){
+		if(p != null && Files.isDirectory(p)){
+			int fileCount = p.toFile().listFiles().length;
+			/**没有文件的文件夹, 删除**/
+			if(fileCount == 0){
+				try {
+					Files.deleteIfExists(p);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				PathUtils.deleteEmptyFolder(p.getParent());
+			}
+		}
+	}
 }
