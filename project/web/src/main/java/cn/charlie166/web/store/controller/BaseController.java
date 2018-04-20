@@ -101,7 +101,6 @@ public class BaseController {
 				e.printStackTrace();
 			}
 		}
-		logger.error("请求出现异常", exception);
 	}
 	
 	/**
