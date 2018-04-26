@@ -11,5 +11,10 @@
     <insert id="directInsertBySql" parameterType="map" useGeneratedKeys="true" keyProperty="id">
     	${_sql}
     </insert>
-
+    
+    <!-- 直接执行更新SQL -->
+    <update id="directUpdateSql" parameterType="map">
+    	${_sql}
+    </update>
+    
 </mapper>

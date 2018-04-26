@@ -79,6 +79,7 @@ public class DemoController extends BaseController {
 			Map<String, Object> row = Maps.newHashMap();
 			row.put("id", Integer.valueOf(i));
 			row.put("name", "第" + TextUtils.toSimpleChineseNum(i) + "号");
+			row.put("address", "地址第" + TextUtils.toSimpleChineseNum(i) + "号");
 			row.put("age", Integer.valueOf(18 + ran.nextInt(10)));
 			rows.add(row);
 		}

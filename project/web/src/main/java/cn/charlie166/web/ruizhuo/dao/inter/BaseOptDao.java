@@ -23,4 +23,48 @@ public interface BaseOptDao {
 	* @return
 	 */
 	public int baseInsert(Map<String, Object> row, String tableName, List<String> ignoreField);
+
+	/**
+	* @Title: baseUpdateById 
+	* @Description: 通过ID更新一条数据
+	* @param row 数据
+	* @param idName 条件中ID的字段名称
+	* @param tableName 表名
+	* @param ignoreField 忽略的字段
+	* @param ignoreEmptyStr 是否忽略空白字符串
+	* @return
+	 */
+	public int baseUpdateById(Map<String, Object> row, String idName, String tableName, List<String> ignoreField, boolean ignoreEmptyStr);
+	
+	/**
+	* @Title: baseUpdateById 
+	* @Description: 通过ID更新一条数据, 忽略空白字符串
+	* @param row 数据
+	* @param idName 条件中ID的字段名称
+	* @param tableName 表名
+	* @param ignoreField 忽略的字段
+	* @return
+	 */
+	public int baseUpdateById(Map<String, Object> row, String idName, String tableName, List<String> ignoreField);
+	
+	/**
+	* @Title: baseUpdateById 
+	* @Description: 通过ID更新一条数据, 忽略空白字符串
+	* @param row 数据
+	* @param idName 条件中ID的字段名称
+	* @param tableName 表名
+	* @param ignoreEmptyStr 是否忽略空白字符串
+	* @return
+	 */
+	public int baseUpdateById(Map<String, Object> row, String idName, String tableName, boolean ignoreEmptyStr);
+	
+	/**
+	* @Title: baseUpdateById 
+	* @Description: 通过ID更新一条数据, 忽略空白字符串
+	* @param row 数据
+	* @param idName 条件中ID的字段名称
+	* @param tableName 表名
+	* @return
+	 */
+	public int baseUpdateById(Map<String, Object> row, String idName, String tableName);
 }
