@@ -23,6 +23,16 @@ public interface BaseOptDao {
 	* @return
 	 */
 	public int baseInsert(Map<String, Object> row, String tableName, List<String> ignoreField);
+	
+	/**
+	* @Title: baseBatchInsert 
+	* @Description: 基本批量插入数据
+	* @param rows 数据
+	* @param tableName 目标表名
+	* @param ignoreField 需要排除的字段
+	* @return
+	 */
+	int baseBatchInsert(List<Map<String, Object>> rows, String tableName, List<String> ignoreField);
 
 	/**
 	* @Title: baseUpdateById 

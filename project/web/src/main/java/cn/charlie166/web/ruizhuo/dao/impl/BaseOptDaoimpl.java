@@ -1,8 +1,12 @@
 package cn.charlie166.web.ruizhuo.dao.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -47,6 +51,34 @@ public class BaseOptDaoimpl implements BaseOptDao {
 			row.put("_sql", sql.toString());
 			logger.debug("执行sql:" + sql);
 			return sf.openSession().insert("cn.charlie166.web.store.dao.DemoDao.directInsertBySql", row);
+		}
+		return 0;
+	}
+	
+	@Override
+	public int baseBatchInsert(List<Map<String, Object>> rows, String tableName, List<String> ignoreField){
+		if(StringUtils.hasContent(tableName) && rows != null && rows.size() > 0){
+			Map<String, Object> param = new HashMap<String, Object>();
+			/**获取字段**/
+			Set<String> fieldSet = rows.stream().collect(() -> new HashSet<String>(), (set, item) -> set.addAll(item.keySet().stream().filter(one -> StringUtils.hasContent(one) &&
+				(ignoreField == null || !ignoreField.contains(one))).collect(Collectors.toSet())), (one, two) -> one.addAll(two));
+			/**字段字符串**/
+			String fieldStr = fieldSet.stream().collect(Collectors.joining(", "));
+			List<String> valList = new ArrayList<String>(rows.size());
+			for(int i = 0; i < rows.size(); i++){
+				final String s = "item_" + i;
+				String valStr = fieldSet.stream().map(one -> {return "#{" + s + "." + one + "}";})
+					.collect(Collectors.joining(", "));
+				valList.add("(" + valStr + ")");
+				param.put(s, rows.get(i));
+			}
+			if(valList.size() > 0){
+				StringBuilder sql = new StringBuilder();
+				sql.append(" INSERT INTO ").append(tableName).append("(").append(fieldStr)
+					.append(") VALUES ").append(valList.stream().collect(Collectors.joining(", ")));
+				param.put("_sql", sql.toString());
+				logger.debug("执行sql:" + sql);
+			}
 		}
 		return 0;
 	}
