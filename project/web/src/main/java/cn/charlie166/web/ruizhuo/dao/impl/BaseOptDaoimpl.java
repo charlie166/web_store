@@ -58,13 +58,40 @@ public class BaseOptDaoimpl implements BaseOptDao {
 	@Override
 	public int baseBatchInsert(List<Map<String, Object>> rows, String tableName, List<String> ignoreField){
 		if(StringUtils.hasContent(tableName) && rows != null && rows.size() > 0){
-			Map<String, Object> param = new HashMap<String, Object>();
 			/**获取字段**/
 			Set<String> fieldSet = rows.stream().collect(() -> new HashSet<String>(), (set, item) -> set.addAll(item.keySet().stream().filter(one -> StringUtils.hasContent(one) &&
 				(ignoreField == null || !ignoreField.contains(one))).collect(Collectors.toSet())), (one, two) -> one.addAll(two));
+			/**每次执行插入的条数**/
+			int everySize = 30;
+			if(rows.size() <= everySize){/**一次性添加**/
+				this.batchInsertOnce(rows, tableName, fieldSet);
+			} else {
+				/**当前计数插入索引**/
+				int index = 0;
+				do {
+					int endIndex = index + everySize > rows.size() ? rows.size() : (index + everySize);
+					this.batchInsertOnce(rows.subList(index, endIndex), tableName, fieldSet);
+					index += everySize;
+				} while (index  <= rows.size());
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	* @Title: batchInsertOnce 
+	* @Description: 直接插入列表所有数据，不会截取列表插入
+	* @param rows 列表数据
+	* @param tableName 目标表名
+	* @param fieldSet 表内字段集合
+	* @return
+	 */
+	private int batchInsertOnce(List<Map<String, Object>> rows, String tableName, Set<String> fieldSet){
+		if(rows != null && rows.size() > 0){
+			List<String> valList = new ArrayList<String>(rows.size());
+			Map<String, Object> param = new HashMap<String, Object>();
 			/**字段字符串**/
 			String fieldStr = fieldSet.stream().collect(Collectors.joining(", "));
-			List<String> valList = new ArrayList<String>(rows.size());
 			for(int i = 0; i < rows.size(); i++){
 				final String s = "item_" + i;
 				String valStr = fieldSet.stream().map(one -> {return "#{" + s + "." + one + "}";})
@@ -91,24 +118,20 @@ public class BaseOptDaoimpl implements BaseOptDao {
 			/**有效的字段列表**/
 			List<String> fieldList = row.keySet().stream().filter(one -> StringUtils.hasContent(one) &&
 				(ignoreField == null || !ignoreField.contains(one) && !idName.equals(one))).collect(Collectors.toList());
-			StringBuilder sql = new StringBuilder();
-			sql.append("UPDATE ").append(tableName).append(" SET ");
-			boolean hasUpdateField = false;
+			List<String> fieldSetList = new ArrayList<String>();
 			for(int i = 0; i < fieldList.size(); i++){
 				String f = fieldList.get(i);
 				Object val = row.get(f);
 				if(val != null){
 					if(!ignoreEmptyStr || (ignoreEmptyStr && StringUtils.hasContent(val))){
-						sql.append(f).append(" = ").append("#{").append(f).append("}");
-						if(i < fieldList.size() - 1){
-							sql.append(", ");
-						}
-						if(!hasUpdateField)
-							hasUpdateField = true;
+						fieldSetList.add(f + " = #{" + f + "}");
 					}
 				}
 			}
-			if(hasUpdateField){
+			if(fieldSetList.size() > 0){
+				StringBuilder sql = new StringBuilder();
+				sql.append("UPDATE ").append(tableName).append(" SET ");
+				sql.append(fieldSetList.stream().collect(Collectors.joining(", ")));
 				sql.append(" WHERE ").append(idName).append(" = #{").append(idName).append("}");
 				row.put("_sql", sql.toString());
 				logger.debug("执行sql:" + sql);
