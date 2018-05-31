@@ -7,11 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import cn.charlie166.web.common.domain.annotation.FieldAlias;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 
+import cn.charlie166.web.store.annotation.FieldAlias;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 
