@@ -23,7 +23,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class SelfEncryptionUtils {
 
-	private static final String PREFFIX_STR = "cn.charlie.s.jni";
+	private static final String PREFFIX_STR = "cn.charlie166.web.store.domain.dto";
 	
 	/**
 	* @Title: shouldHandle 
@@ -61,6 +61,7 @@ public class SelfEncryptionUtils {
 								/**混淆数值**/
 								int plusValue = 0;
 								if(SelfEncryptionUtils.shouldHandle(name)){
+									System.out.println("handle:" + name);
 									plusValue = 1;
 								}
 								InputStream is = jarFile.getInputStream(one);
@@ -91,7 +92,7 @@ public class SelfEncryptionUtils {
 	}
 	
 	public static void main(String[] args) {
-		SelfEncryptionUtils.encryptionCls("F:/charlie/documents/vs/docs/s.jar");
+		SelfEncryptionUtils.encryptionCls("F:/charlie/documents/vs/docs/domain-0.0.1-SNAPSHOT.jar");
 		System.out.println("done:" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
 	}
 }
