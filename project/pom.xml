@@ -219,6 +219,21 @@
 		</dependencies>
 	</dependencyManagement>
   	<build>
+		<resources>
+			<!-- 将资源文件也一并打包 -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+            	<!-- 此目录下均为资源文件，不需要过滤 -->
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     	<plugins>
         	<plugin>
             	<groupId>org.apache.maven.plugins</groupId>
