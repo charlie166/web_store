@@ -15,15 +15,17 @@ import java.util.zip.ZipOutputStream;
 /**
 * @ClassName: SelfEncryptionUtils 
 * @Description: 自定义加密/解密工具方法----对class进行字节加解密
+* @deprecated 这个暂时没什么用处
 * @company 
 * @author liyang
 * @Email charlie166@163.com
 * @date 2018年5月29日 
 *
  */
+@Deprecated
 public class SelfEncryptionUtils {
 
-	private static final String PREFFIX_STR = "cn.charlie166.web.store.domain.dto";
+	private static final String PREFFIX_STR = "com.rzkjsoft.cms.basic.constants";
 	
 	/**
 	* @Title: shouldHandle 
@@ -92,7 +94,7 @@ public class SelfEncryptionUtils {
 	}
 	
 	public static void main(String[] args) {
-		SelfEncryptionUtils.encryptionCls("F:/charlie/documents/vs/docs/domain-0.0.1-SNAPSHOT.jar");
+		SelfEncryptionUtils.encryptionCls("F:/charlie/documents/vs/docs/rzkjsoft-cms-1.0.jar");
 		System.out.println("done:" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
 	}
 }

@@ -23,7 +23,7 @@ public class WebTest extends ParentTest {
 	 */
 	@Test
 	public void testGetContent(){
-		String url = "https://charlie166.ddns.net/";
+		String url = "https://t.charlie166.xyz/";
 		try {
 			logger.debug("结果：\r\n" + WebUtils.getContentByLink(url));
 		} catch (CustomException e) {
