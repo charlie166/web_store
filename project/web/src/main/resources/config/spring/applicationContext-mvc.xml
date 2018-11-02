@@ -86,7 +86,7 @@
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"/>
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 	<!-- 自定义统一处理返回体切面 -->
-	<bean class="cn.charlie166.web.store.config.CustomResponseBodyAdvice"></bean>
+	<bean class="cn.charlie166.web.base.config.CustomResponseBodyAdvice"></bean>
 	
 	<!-- spring的上下文工具类 -->
 	<bean class="cn.charlie166.web.base.tool.SpringContextUtils"></bean>

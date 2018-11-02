@@ -14,7 +14,7 @@
    	<cache:annotation-driven cache-manager="customCacheManager"/>
    	
    	<!--自定义设置缓存模式 -->
-	<bean id="customCacheManager" class="cn.charlie166.web.store.config.CustomCacheManager">
+	<bean id="customCacheManager" class="cn.charlie166.web.base.config.CustomCacheManager">
 		<property name="cacheManagers">
 			<list>
 				<!-- 暂时使用简单的Map缓存 -->

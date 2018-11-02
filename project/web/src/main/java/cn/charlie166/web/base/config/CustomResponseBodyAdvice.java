@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.config;
+package cn.charlie166.web.base.config;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;

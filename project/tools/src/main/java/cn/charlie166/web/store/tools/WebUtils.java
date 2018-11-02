@@ -41,7 +41,7 @@ public class WebUtils {
 	* @Title: getContentByLink 
 	* @Description: 获取指定链接地址的内容
 	* @param url 链接
-	* @return
+	* @return 请求内容
 	 */
 	public static String getContentByLink(String url) throws CustomException {
 		if(StringUtils.hasContent(url)){
