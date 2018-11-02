@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.domain.dto;
+package cn.charlie166.web.common.domain.dto;
 
 import java.util.Collections;
 import java.util.HashMap;

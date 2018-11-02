@@ -1,5 +1,7 @@
 package cn.charlie166.web.store.domain.dto;
 
+import cn.charlie166.web.common.domain.dto.BaseDTO;
+
 /**
  * @description 代理自动配置(PAC)数据传输模型
  * @author <a href="mailto:charlie166@163.com">李阳</a> 

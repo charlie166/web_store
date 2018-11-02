@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import cn.charlie166.web.common.domain.annotation.DirectReturn;
+import cn.charlie166.web.common.domain.dto.MsgDTO;
 import cn.charlie166.web.store.constant.ResponseCodes;
-import cn.charlie166.web.store.domain.dto.MsgDTO;
 
 /**
  * @description 自定义响应体切面

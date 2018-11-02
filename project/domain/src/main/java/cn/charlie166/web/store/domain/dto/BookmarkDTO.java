@@ -1,5 +1,6 @@
 package cn.charlie166.web.store.domain.dto;
 
+import cn.charlie166.web.common.domain.dto.BaseDTO;
 
 /**
 * @ClassName: BookmarkDTO 

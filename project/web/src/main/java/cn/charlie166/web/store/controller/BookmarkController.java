@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.charlie166.web.base.controller.BaseController;
+import cn.charlie166.web.common.domain.dto.PageDTO;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
-import cn.charlie166.web.store.domain.dto.PageDTO;
 import cn.charlie166.web.store.service.inter.BookmarkService;
 
 /**

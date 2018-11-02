@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.charlie166.web.base.service.impl.BaseServiceImpl;
+import cn.charlie166.web.common.domain.dto.PageDTO;
 import cn.charlie166.web.store.constant.CustomException;
 import cn.charlie166.web.store.constant.ExceptionCodes;
 import cn.charlie166.web.store.dao.BookmarkDao;
 import cn.charlie166.web.store.domain.dto.BookmarkDTO;
-import cn.charlie166.web.store.domain.dto.PageDTO;
 import cn.charlie166.web.store.domain.po.Bookmark;
 import cn.charlie166.web.store.service.inter.BookmarkService;
 import cn.charlie166.web.store.tools.ClassUtils;

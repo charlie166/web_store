@@ -36,7 +36,7 @@
     
     <!-- mapper批量扫描包，从mapper包中扫描出mapper接口，自动创建代理对象并且在spring容器中注册 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-	    <property name="basePackage" value="cn.charlie166.web.base.dao,cn.charlie166.web.store.dao"/>
+	    <property name="basePackage" value="cn.charlie166.web.base.dao,cn.charlie166.web.store.dao,cn.charlie166.web.tumblr.dao"/>
 	    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	    <!-- 扫描要需找的注解 -->
 	    <!-- <property name="annotationClass" value="org.springframework.stereotype.Repository"/> -->

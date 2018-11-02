@@ -107,7 +107,7 @@ public class StringUtils {
 		if(StringUtils.hasContent(s)){
 //			return s.matches("[+-]?\\d+");
 			try {
-				Integer.parseInt(s);
+				Long.parseLong(s);
 				return true;
 			} catch (Exception e) {
 				return false;

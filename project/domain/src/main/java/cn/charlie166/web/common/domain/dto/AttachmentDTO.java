@@ -2,8 +2,6 @@ package cn.charlie166.web.common.domain.dto;
 
 import java.nio.file.Path;
 
-import cn.charlie166.web.store.domain.dto.BaseDTO;
-
 /**
 * @ClassName: Attachment 
 * @Description: 附件传输数据对象

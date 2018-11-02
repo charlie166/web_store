@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="cn.charlie166.web.tumblr.dao.TumblrDao">
+
+    
+    <select id="selectVideoCount" resultType="int" parameterType="cn.charlie166.web.tumblr.domain.po.Video">
+    	SELECT COUNT(v.id) FROM video v
+    	<include refid="selectWhere"/>
+    </select>
+    <select id="selectVideoList" resultType="cn.charlie166.web.tumblr.domain.po.Video" parameterType="cn.charlie166.web.tumblr.domain.po.Video">
+    	SELECT v.* FROM video v
+    	<include refid="selectWhere"/>
+    	ORDER BY bm.createTime DESC
+    </select>
+    <select id="selectVideoListLimit" resultType="cn.charlie166.web.tumblr.domain.po.Video">
+    	SELECT v.* FROM video v
+    	<include refid="selectWhere"/>
+    	ORDER BY v.store_time DESC
+    	LIMIT #{start}, #{size}
+    </select>
+    
+    <!-- 视频查询条件 -->
+    <sql id="selectWhere">
+    	<where>
+    		<if test="null != v.title and v.title != ''">
+    			v.title LIKE '%${v.title}%'
+    		</if>
+    		<if test="null != v.local">
+    			AND v.local= #{v.local}
+    		</if>
+    		<if test="null != v.flag">
+    			AND v.flag= #{v.flag}
+    		</if>
+    	</where>
+    </sql>
+    
+    <!-- 通过ID查询视频 -->
+    <select id="seletVideoById" resultType="cn.charlie166.web.tumblr.domain.po.Video">
+    	SELECT v.* FROM video v WHERE v.id = #{id}
+    </select>
+    
+</mapper>
