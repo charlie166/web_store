@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.charlie166.web.base.service.inter.AttachmentService;
 import cn.charlie166.web.common.domain.dto.AttachmentDTO;
-import cn.charlie166.web.store.controller.BaseController;
 import cn.charlie166.web.store.tools.StringUtils;
 
 /**

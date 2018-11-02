@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import cn.charlie166.web.base.controller.BaseController;
 import cn.charlie166.web.store.plugin.ueditor.UeditorActionEntrance;
 
 /**

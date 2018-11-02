@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import cn.charlie166.web.store.controller.BaseController;
 import cn.charlie166.web.store.tools.StringUtils;
 import cn.charlie166.web.store.tools.TextUtils;
 

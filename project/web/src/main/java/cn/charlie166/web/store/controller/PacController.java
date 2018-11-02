@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.charlie166.web.base.controller.BaseController;
 import cn.charlie166.web.store.domain.dto.PacDTO;
 import cn.charlie166.web.store.service.inter.PacService;
 

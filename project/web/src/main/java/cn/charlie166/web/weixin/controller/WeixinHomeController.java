@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.charlie166.web.base.controller.BaseController;
 import cn.charlie166.web.common.domain.annotation.DirectReturn;
-import cn.charlie166.web.store.controller.BaseController;
 import cn.charlie166.web.weixin.domain.dto.WeixinServerValidateDTO;
 import cn.charlie166.web.weixin.service.inter.WeixinHomeService;
 

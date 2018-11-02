@@ -1,4 +1,4 @@
-package cn.charlie166.web.store.controller;
+package cn.charlie166.web.base.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;

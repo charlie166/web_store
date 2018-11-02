@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.charlie166.web.base.controller.BaseController;
 import cn.charlie166.web.store.constant.KeyConstant;
 import cn.charlie166.web.store.tools.StringUtils;
 
