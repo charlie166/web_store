@@ -31,7 +31,7 @@
     	<aspectj.version>1.8.13</aspectj.version>
     	<!-- JSON相关改为Jackson操作 -->
     	<gson.version>2.8.1</gson.version>
-    	<guava.version>23.5-jre</guava.version>
+    	<guava.version>29.0-jre</guava.version>
     	<!-- commons -->
     	<commons-io.version>2.6</commons-io.version>
     	<commons-fileupload.version>1.3.3</commons-fileupload.version>
