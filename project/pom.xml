@@ -18,7 +18,7 @@
     	<qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
     	<jstl.version>1.2</jstl.version>
     	<jsp-api.version>2.3.1</jsp-api.version>
-    	<jsoup.version>1.11.1</jsoup.version>
+    	<jsoup.version>1.14.2</jsoup.version>
     	<log4j.version>2.9.1</log4j.version>
     	<taglibs.version>1.2.5</taglibs.version>
     	<java.version>1.8</java.version>
